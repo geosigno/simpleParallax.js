@@ -1,5 +1,5 @@
 {
-  "name": "simple-parallax-image",
+  "name": "simpleParallax",
   "description": "Apply a nice Parallax effect on images in a minute",
   "main": "src/simpleParallax.js",
   "authors": [
