@@ -39,7 +39,7 @@ Giving this simple HTML markup
 Simply add the following JS code
 
 ```
-$('img').easyParallax();
+$('img').simpleParallax();
 ```
 
 ## 3. Settings
@@ -54,5 +54,5 @@ Here are the different settings you can apply to simpleParallax
 Please note that more the scale setting will be high, more the effect parallax will be visible. In return, the image will lose quality.
 
 ```
-$('img').easyParallax({scale: '1.30', orientation: 'down'});
+$('img').simpleParallax({scale: '1.30', orientation: 'down'});
 ```
