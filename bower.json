@@ -1,0 +1,28 @@
+{
+    "name": "simpleParallax",
+    "version": "1.0.0",
+    "description": "Apply a nice Parallax effect on images in a minute",
+    "homepage": "",
+    "main": "src/simpleParallax.js",
+    "homepage": "",
+    "authors": [
+        "Geoffrey Signorato <geoffrey.signorato@gmail.com>"
+    ],
+    "license": "MIT",
+    "keywords": [
+        "parallax",
+        "jquery",
+        "scroll",
+        "simple",
+        "easy",
+        "fast",
+        "light",
+        "image"
+    ],
+    "ignore": [
+
+    ],
+    "dependencies": {
+        "jquery": ">=1.7"
+    },
+}
