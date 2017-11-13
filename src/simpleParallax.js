@@ -174,5 +174,3 @@
     }
 
 })( jQuery, window, document );
-
-var test = $('.box__img').simpleParallax({scale: '1.15', orientation: 'up'});
