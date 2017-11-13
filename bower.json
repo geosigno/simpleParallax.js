@@ -1,28 +1,27 @@
 {
-    "name": "simpleParallax",
-    "version": "1.0.0",
-    "description": "Apply a nice Parallax effect on images in a minute",
-    "homepage": "",
-    "main": "src/simpleParallax.js",
-    "homepage": "",
-    "authors": [
-        "Geoffrey Signorato <geoffrey.signorato@gmail.com>"
-    ],
-    "license": "MIT",
-    "keywords": [
-        "parallax",
-        "jquery",
-        "scroll",
-        "simple",
-        "easy",
-        "fast",
-        "light",
-        "image"
-    ],
-    "ignore": [
-
-    ],
-    "dependencies": {
-        "jquery": ">=1.7"
-    },
+  "name": "simple-parallax",
+  "description": "Apply a nice Parallax effect on images in a minute",
+  "main": "src/simpleParallax.js",
+  "authors": [
+    "Geoffrey Signorato <geoffrey.signorato@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "parallax",
+    "jquery",
+    "scroll",
+    "simple",
+    "easy",
+    "fast",
+    "light",
+    "image"
+  ],
+  "homepage": "https://github.com/geosenna/simpleParallax",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
