@@ -6,19 +6,17 @@ Apply a nice Parallax effect on image in a minute.
 
 ## 1. Getting started
 
-Make sure jQuery is loaded before the plugin
+Make sure jQuery library is loaded before the plugin.
 
 ### Copy/paste
 
-Simply copy/paste the snippet below juste before the closing `<body>` tag
+Simply copy/paste the below snippet just before your closing `<body>` tag:
 
 ```
 <script src=""></script>
 ```
 
-### Use Bower
-
-Or enter the following commande line in your terminal
+### Install it via Bower
 
 ```
 bower install simpleParallax
@@ -26,33 +24,37 @@ bower install simpleParallax
 
 ## 2. Initialize the plugin
 
-Giving this simple HTML markup
+Giving the following HTML:
 
 ```
-<section>
-    <img src="image01.jpg" alt="image 01">
-    <img src="image02.jpg" alt="image 02">
-    <img src="image03.jpg" alt="image 03">
-</section>
+<img class="thumbnail" src="image.jpg" alt="image">
 ```
 
-Simply add the following JS code
+Simply add the following jQuery code:
 
 ```
-$('img').simpleParallax();
+$('.thumbnail').simpleParallax();
 ```
 
 ## 3. Settings
 
-Here are the different settings you can apply to simpleParallax
+Find below the different settings you can apply to simpleParallax:
 
 | setting     | default |   |
 |-------------|---------|---|
-| orientation | up      | choose the orientation of the parallax effect (*up* or *down*) |
-| scale       | 1.2     | choose the scale ratio (need to be above *1.0*)  |
+| orientation | up      | choose the parallax orientation effect - *up* or *down* |
+| scale       | 1.2     | choose the scale ratio - need to be above *1.0*  |
 
-Please note that more the scale setting will be high, more the effect parallax will be visible. In return, the image will lose quality.
+You can apply these settings with the following jQuery code:
 
 ```
 $('img').simpleParallax({scale: '1.30', orientation: 'down'});
 ```
+
+## 4. Good to know
+
+* Higher the scale setting is set, the more the parallax effect will be visible. In return, the image will lose in quality.
+
+* This plugin is defined directly on the image tag instead of background image. This gives you a lot of flexibility and can be added to any image.
+
+* You can apply simpleParallax on image tags even inside a picture tag. It also works with srcset function.
