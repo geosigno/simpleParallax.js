@@ -118,19 +118,17 @@
                 var percentage = (self.viewportBottomX - self.elementTopX) / ((self.viewportHeight + self.elementHeight) / 100);
 
                 //transform this % into the max range of the element
-                var translateValue = ((percentage / 100) * rangeMax) - (rangeMax / 2);
-                
-                return translateValue;
+                self.translateValue = ((percentage / 100) * rangeMax) - (rangeMax / 2);
                 
             },
 
-            applyStyle: function(translateValue) {
+            animate: function() {
 
                 var self = this,
                     inlineCss;
 
                 //prepare style to apply to the element
-                inlineCss = 'scale('+params.scale+') translateY('+translateValue+'px)';
+                inlineCss = 'scale('+params.scale+') translateY('+self.translateValue+'px)';
 
                 //add style depending the current vendor CSS of the browser
                 self.$element[0].style[vendor+'Transform'] = inlineCss;
@@ -153,7 +151,12 @@
                 
                 self.getElementOffset();
 
-                if (self.isVisible()) self.applyStyle(self.calculate());
+                if (self.isVisible()) {
+
+                    self.calculate();
+
+                    self.animate();
+                }
 
             },
 
