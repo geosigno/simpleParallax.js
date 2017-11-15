@@ -11,7 +11,8 @@
                 .join('') 
                 .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
             )[1];
-        return pre;
+        if (pre == 'moz') return 'Moz';
+        else return pre;
     })();
 
     $.fn.simpleParallax = function(options) {
