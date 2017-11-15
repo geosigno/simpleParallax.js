@@ -12,13 +12,13 @@ Make sure jQuery library is loaded before the plugin.
 
 Simply copy/paste the below snippet just before your closing `<body>` tag:
 
-```
+```javascript
 <script src=""></script>
 ```
 
 ### Install it via Bower
 
-```
+```sh
 bower install simpleParallax
 ```
 
@@ -26,13 +26,13 @@ bower install simpleParallax
 
 Giving the following HTML:
 
-```
+```html
 <img class="thumbnail" src="image.jpg" alt="image">
 ```
 
 Simply add the following jQuery code:
 
-```
+```javascript
 $('.thumbnail').simpleParallax();
 ```
 
@@ -47,7 +47,7 @@ Find below the different settings you can apply to simpleParallax:
 
 You can apply these settings with the following jQuery code:
 
-```
+```javascript
 $('img').simpleParallax({scale: '1.30', orientation: 'down'});
 ```
 
