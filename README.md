@@ -1,9 +1,5 @@
 # SimpleParallax
 
-Apply a nice Parallax effect on image in a minute.
-
-# What is this jQuery plugin for?
-
 simpleParallax is a simple and lightweight jQuery plugin that gives your website parallax animations on the images.
 
 # How to use it
