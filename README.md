@@ -21,6 +21,7 @@ Simply copy/paste the below snippet just before your closing `<body>` tag:
 ```sh
 #npm
 npm install simple-parallax-jquery
+
 #bower
 bower install simpleParallax
 ```
