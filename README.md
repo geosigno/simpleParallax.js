@@ -1,4 +1,4 @@
-![simpleParallax logo](https://anakao-theme.com/simpleparallax/img/social/base.png)
+![simpleParallax logo](https://anakao-theme.com/simpleparallax/img/social/base-github.png)
 
 # simpleParallax
 
