@@ -1,31 +1,33 @@
 {
-    "name": "simple-parallax",
-    "version": "1.0.0",
-    "description": "Apply a nice Parallax effect on images in a minute",
-    "homepage": "",
-    "main": "src/simpleParallax.js",
-    "repository": {
-        "type": "git",
-        "url": ""
-    },
-    "keywords": [
-        "parallax",
-        "jquery",
-        "scroll",
-        "simple",
-        "easy",
-        "fast",
-        "light",
-        "image"
-    ],
-    "author": [
-        "Geoffrey Signorato <geoffrey.signorato@gmail.com>"
-    ],
-    "license": "MIT",
-    "bugs": {
-      "url": ""
-    },
-    "dependencies": {
-      "jquery": ">=1.7"
-    }
+  "name": "simple-parallax-jquery",
+  "version": "1.0.0",
+  "description": "Apply parallax effects to images in a minute",
+  "homepage": "https://anakao-theme.com/simpleparallax/",
+  "main": "src/simpleParallax.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geosenna/simpleParallax.git"
+  },
+  "keywords": [
+    "parallax",
+    "jquery",
+    "scroll",
+    "simple",
+    "easy",
+    "fast",
+    "light",
+    "image",
+    "effect"
+  ],
+  "author": "geoffrey.signorato@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": ">=1.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/geosenna/simpleParallax/issues"
+  }
 }

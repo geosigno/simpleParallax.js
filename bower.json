@@ -1,6 +1,6 @@
 {
   "name": "simpleParallax",
-  "description": "Apply a nice Parallax effect on images in a minute",
+  "description": "Apply parallax effects to images in a minute",
   "main": "src/simpleParallax.js",
   "authors": [
     "Geoffrey Signorato <geoffrey.signorato@gmail.com>"

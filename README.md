@@ -16,9 +16,12 @@ Simply copy/paste the below snippet just before your closing `<body>` tag:
 <script src=""></script>
 ```
 
-### Install it via Bower
+### Install it via Package Managers
 
 ```sh
+#npm
+npm install simple-parallax-jquery
+#bower
 bower install simpleParallax
 ```
 
