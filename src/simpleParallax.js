@@ -1,6 +1,33 @@
 ;(function ( $, window, document, undefined ) {
     
     'use strict';
+    
+    // requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
+    // via: https://gist.github.com/paulirish/1579671
+    (function() {
+        var lastTime = 0;
+        var vendors = ['ms', 'moz', 'webkit', 'o'];
+        for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+            window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
+                                       || window[vendors[x]+'CancelRequestAnimationFrame'];
+        }
+     
+        if (!window.requestAnimationFrame)
+            window.requestAnimationFrame = function(callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+                  timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+     
+        if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = function(id) {
+                clearTimeout(id);
+            };
+    }());
 
     // Detect Vendor Prefix
     // via: https://davidwalsh.name/vendor-prefix
@@ -133,7 +160,7 @@
 
                 //add style depending the current vendor CSS of the browser
                 self.$element[0].style[vendor+'Transform'] = inlineCss;
-                
+            
             },
 
             scrollEvent: function() {
@@ -156,7 +183,8 @@
 
                     self.calculate();
 
-                    self.animate();
+                    window.requestAnimationFrame( function() { self.animate(); } );
+
                 }
 
             },
