@@ -64,3 +64,13 @@ $('img').simpleParallax({scale: '1.30', orientation: 'down'});
 * This plugin is defined directly on the image tag instead of background image. This gives you a lot of flexibility and can be added to any image.
 
 * You can apply simpleParallax on image tags even inside a picture tag. It also works with srcset function.
+
+## Author
+
+[Geoffrey Signorato](https://github.com/geosenna/)
+
+## Contributing
+
+Open an issue or a pull request to suggest changes or additions.
+
+
