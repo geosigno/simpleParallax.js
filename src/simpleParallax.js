@@ -59,9 +59,7 @@
             this.$element = element;
             this.$elementContainer = this.$element.closest('.easy-parallax');
 
-            if (!isInit) this.init();
-
-            this.proceedElement();
+            this.init();
 
             this.scrollEvent = this.scrollEvent.bind(this);
 
@@ -73,13 +71,17 @@
 
             init: function() {
 
-                if (isInit) return;
-
                 var self = this;
 
-                self.getViewportOffset();
+                if (!isInit) {
+                    self.getViewportOffset();
+                    isInit = true;
+                }
 
-                isInit = true;
+                //apply scale to every image for the first calculation
+                self.$element[0].style[vendor+'Transform'] = 'scale('+params.scale+')';
+
+                this.proceedElement();
 
             },
 
@@ -180,11 +182,8 @@
                 self.getElementOffset();
 
                 if (self.isVisible()) {
-
                     self.calculate();
-
                     window.requestAnimationFrame( function() { self.animate(); } );
-
                 }
 
             },
