@@ -1,9 +1,18 @@
+/**
+ * simpleParallax
+ * ------------
+ * Version : 1.0.3
+ * Website : https://anakao-theme.com/simpleparallax/
+ * Repo    : https://github.com/geosenna/simpleParallax
+ * Author  : Geoffrey Signorato (@geosenna)
+ */
+
 ;(function (factory) {
 
     if(typeof module === "object" && typeof module.exports === "object") {
-      factory(require("jquery"), window, document);
+        factory(require("jquery"), window, document);
     } else {
-      factory(jQuery, window, document);
+        factory(jQuery, window, document);
     }
     
 }(function($, window, document, undefined) {
