@@ -19,9 +19,14 @@
     "image",
     "effect"
   ],
-  "author": "geoffrey.signorato@gmail.com",
+  "author": "Geoffrey Signorato <geoffrey.signorato@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.13.3",
+    "browser-sync": "^2.18.13",
+    "express": "^4.15.4",
+    "morgan": "^1.8.2",
+    "pug": "^2.0.0-rc.4",
     "jquery": ">=1.7"
   },
   "scripts": {
@@ -29,5 +34,18 @@
   },
   "bugs": {
     "url": "https://github.com/geosenna/simpleParallax/issues"
+  },
+  "devDependencies": {
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp": "gulpjs/gulp#4.0",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-jshint": "^2.0.4",
+    "gulp-plumber": "^1.1.0",
+    "gulp-pug": "^3.3.0",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0",
+    "gulp-util": "^3.0.8",
+    "serve-favicon": "^2.4.4"
   }
 }
