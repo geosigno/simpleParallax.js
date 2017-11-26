@@ -112,8 +112,10 @@
                     edge = 20;
 
                 self.viewportHeight = $(window).height();
-                self.viewportTopX = $(window).scrollTop() - edge;
-                self.viewportBottomX = self.viewportTopX + self.viewportHeight + edge;
+                self.viewportTopX = $(window).scrollTop();
+                self.viewportBottomX = self.viewportTopX + self.viewportHeight;
+                self.viewportTopX -= edge;
+                self.viewportBottomX += edge;
 
             },
 
