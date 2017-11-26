@@ -125,6 +125,14 @@
                 self.elementHeight = self.$elementContainer.outerHeight();
                 self.elementTopX = self.$elementContainer.offset().top;
                 self.elementBottomX = self.elementTopX + self.elementHeight;
+
+            },
+
+            //calculate the current element dimension
+            getElementDimension: function() {
+
+                var self = this;
+
                 //get the real height of the image with the scaling apply to it
                 self.elementImageHeight = self.$element[0].getBoundingClientRect().height;
                 //get the range where the image can be translate without going out of its container
@@ -198,10 +206,13 @@
                 
                 self.getElementOffset();
 
-                if (self.isVisible()) {
-                    self.calculate();
-                    window.requestAnimationFrame( function() { self.animate(); } );
-                }
+                if (!self.isVisible()) return;
+
+                self.getElementDimension();
+
+                self.calculate();
+
+                window.requestAnimationFrame( function() { self.animate(); } );
 
             },
 
