@@ -74,7 +74,7 @@
 
             this.name = pluginName;
             this.$element = element;
-            this.$elementContainer = this.$element.closest('.easy-parallax');
+            this.$elementContainer = this.$element.closest('.simpleParallax');
 
             this.init();
 
@@ -226,7 +226,7 @@
 
             if ( $elementToWrap.closest('picture').length  ) $elementToWrap = $(this).closest('picture');
 
-            $elementToWrap.wrap('<div class="easy-parallax" style="overflow:hidden"></div>');
+            $elementToWrap.wrap('<div class="simpleParallax" style="overflow:hidden"></div>');
 
             new simpleParallax($(this));
 
