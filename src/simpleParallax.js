@@ -165,7 +165,7 @@
                 //range is calculate with the extra space of the scaled image comparing to its container
                 var rangeMax = self.elementRange;
 
-                if ( params['orientation'] === 'down' ) {
+                if ( params.orientation === 'down' ) {
                     rangeMax *= -1;
                 }
 
@@ -222,7 +222,7 @@
             
             var $elementToWrap = $(this);
 
-            if ( $elementToWrap.closest('picture').length ) $elementToWrap = $(this).parent('picture');
+            if ( $elementToWrap.closest('picture').length  ) $elementToWrap = $(this).closest('picture');
 
             $elementToWrap.wrap('<div class="easy-parallax" style="overflow:hidden"></div>');
 
