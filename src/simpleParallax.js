@@ -111,7 +111,7 @@
                 var self = this,
                     edge = 20;
 
-                self.viewportHeight = $(window).height();
+                self.viewportHeight = $(window).outerHeight();
                 self.viewportTopX = $(window).scrollTop();
                 self.viewportBottomX = self.viewportTopX + self.viewportHeight;
                 self.viewportTopX -= edge;
