@@ -74,7 +74,7 @@
 
             this.name = pluginName;
             this.$element = element;
-            this.$elementContainer = this.$element.closest('.easy-parallax');
+            this.$elementContainer = this.$element.closest('.simpleParallax');
 
             this.init();
 
@@ -111,9 +111,11 @@
                 var self = this,
                     edge = 20;
 
-                self.viewportHeight = $(window).height();
-                self.viewportTopX = $(window).scrollTop() - edge;
-                self.viewportBottomX = self.viewportTopX + self.viewportHeight + edge;
+                self.viewportHeight = $(window).outerHeight();
+                self.viewportTopX = $(window).scrollTop();
+                self.viewportBottomX = self.viewportTopX + self.viewportHeight;
+                self.viewportTopX -= edge;
+                self.viewportBottomX += edge;
 
             },
 
@@ -125,6 +127,14 @@
                 self.elementHeight = self.$elementContainer.outerHeight();
                 self.elementTopX = self.$elementContainer.offset().top;
                 self.elementBottomX = self.elementTopX + self.elementHeight;
+
+            },
+
+            //calculate the current element dimension
+            getElementDimension: function() {
+
+                var self = this;
+
                 //get the real height of the image with the scaling apply to it
                 self.elementImageHeight = self.$element[0].getBoundingClientRect().height;
                 //get the range where the image can be translate without going out of its container
@@ -157,7 +167,7 @@
                 //range is calculate with the extra space of the scaled image comparing to its container
                 var rangeMax = self.elementRange;
 
-                if ( params['orientation'] === 'down' ) {
+                if ( params.orientation === 'down' ) {
                     rangeMax *= -1;
                 }
 
@@ -198,10 +208,13 @@
                 
                 self.getElementOffset();
 
-                if (self.isVisible()) {
-                    self.calculate();
-                    window.requestAnimationFrame( function() { self.animate(); } );
-                }
+                if (!self.isVisible()) return;
+
+                self.getElementDimension();
+
+                self.calculate();
+
+                window.requestAnimationFrame( function() { self.animate(); } );
 
             },
 
@@ -211,9 +224,9 @@
             
             var $elementToWrap = $(this);
 
-            if ( $elementToWrap.closest('picture').length ) $elementToWrap = $(this).parent('picture');
+            if ( $elementToWrap.closest('picture').length  ) $elementToWrap = $(this).closest('picture');
 
-            $elementToWrap.wrap('<div class="easy-parallax" style="overflow:hidden"></div>');
+            $elementToWrap.wrap('<div class="simpleParallax" style="overflow:hidden"></div>');
 
             new simpleParallax($(this));
 
