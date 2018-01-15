@@ -170,7 +170,11 @@
                 //range is calculate with the extra space of the scaled image comparing to its container
                 var rangeMax = self.elementRange;
 
-                if ( params.orientation === 'down' ) {
+                //apply error rate 20%
+                //Unable to find where this gap is coming from
+                var rangeMax = rangeMax - (rangeMax * .20);
+
+                if ( params.orientation === 'down' || params.orientation === 'right' ) {
                     rangeMax *= -1;
                 }
 
