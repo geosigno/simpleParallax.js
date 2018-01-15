@@ -48,7 +48,7 @@ Find below the different settings you can apply to simpleParallax:
 
 | setting     | default |   |
 |-------------|---------|---|
-| orientation | up      | choose the parallax orientation effect - *up* or *down* |
+| orientation | up      | choose the parallax orientation effect - *up*, *right*, *down* or *left* |
 | scale       | 1.2     | choose the scale ratio - need to be above *1.0*  |
 
 You can apply these settings with the following jQuery code:
