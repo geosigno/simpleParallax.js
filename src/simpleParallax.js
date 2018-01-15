@@ -125,6 +125,7 @@
                 var self = this;
 
                 self.elementHeight = self.$elementContainer.outerHeight();
+                self.elementWidth = self.$elementContainer.outerWidth();
                 self.elementTopX = self.$elementContainer.offset().top;
                 self.elementBottomX = self.elementTopX + self.elementHeight;
 
@@ -137,6 +138,8 @@
 
                 //get the real height of the image with the scaling apply to it
                 self.elementImageHeight = self.$element[0].getBoundingClientRect().height;
+                //get the real width of the image with the scaling apply to it
+                self.elementImageWidth = self.$element[0].getBoundingClientRect().width;
                 //get the range where the image can be translate without going out of its container
                 self.elementRange = Math.abs(self.elementHeight - self.elementImageHeight);
 
@@ -182,10 +185,22 @@
             animate: function() {
 
                 var self = this,
+                    translateAxe,
                     inlineCss;
 
-                //prepare style to apply to the element
-                inlineCss = 'scale('+params.scale+') translateY('+self.translateValue+'px)';
+                //check the orientation to know which of X or Y axe should we use
+                if (params.orientation == 'up' || params.orientation == 'down' ) {
+
+                    translateAxe = 'translateY';
+                    
+                } else if (params.orientation == 'left' || params.orientation == 'right' ) {
+
+                    translateAxe = 'translateX';
+
+                }
+
+                //store style to apply to the element
+                inlineCss = 'scale('+params.scale+') '+translateAxe+'('+self.translateValue+'px)';
 
                 //add style depending the current vendor CSS of the browser
                 self.$element[0].style[vendor+'Transform'] = inlineCss;
