@@ -144,10 +144,11 @@
         //calculate the current element offset
         getElementOffset: function() {
 
-            var plugin = this;
+            var plugin = this,
+                elem = plugin.$elementContainer[0];
 
-            plugin.elementHeight = plugin.$elementContainer.outerHeight();
-            plugin.elementTopX = plugin.$elementContainer[0].offsetTop;
+            plugin.elementHeight = elem.offsetHeight;
+            plugin.elementTopX = elem.offsetTop;
             plugin.elementBottomX = plugin.elementTopX + plugin.elementHeight;
 
         },
@@ -250,16 +251,14 @@
                     
                     this.getElementOffset();
 
-                    if ( this.isVisible() ) {
-        
-                        var needAnimate = this.calculate();
-        
-                        if (!needAnimate) return;
-        
-                        this.animate();
-        
-                    }
+                    if ( !this.isVisible() ) return;
 
+                    var needAnimate = this.calculate();
+    
+                    if (!needAnimate) return;
+    
+                    this.animate();
+        
                 });
 
                 animationFrame(plugin.proceedElement.bind(plugin));           
