@@ -1,6 +1,6 @@
 {
   "name": "simple-parallax-jquery",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Apply parallax effects to images in a minute",
   "homepage": "https://anakao-theme.com/simpleparallax/",
   "main": "src/simpleParallax.js",
@@ -36,16 +36,17 @@
     "url": "https://github.com/geosenna/simpleParallax/issues"
   },
   "devDependencies": {
-    "gulp-autoprefixer": "^4.0.0",
     "gulp": "gulpjs/gulp#4.0",
+    "gulp-autoprefixer": "^4.0.0",
     "gulp-cssnano": "^2.1.2",
     "gulp-jshint": "^2.0.4",
+    "gulp-nodemon": "^2.2.1",
     "gulp-plumber": "^1.1.0",
     "gulp-pug": "^3.3.0",
-    "gulp-nodemon": "^2.2.1",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
-    "serve-favicon": "^2.4.4"
+    "serve-favicon": "^2.4.4",
+    "vinyl-ftp": "^0.6.1"
   }
 }
