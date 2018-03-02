@@ -1,256 +1,302 @@
 /**
  * simpleParallax
  * ------------
- * Version : 1.1.0
+ * Version : 2.0.0
  * Website : https://anakao-theme.com/simpleparallax/
  * Repo    : https://github.com/geosenna/simpleParallax
  * Author  : Geoffrey Signorato (@geosenna)
  */
 
 ;(function (factory) {
-
+    
     if(typeof module === "object" && typeof module.exports === "object") {
         factory(require("jquery"), window, document);
     } else {
         factory(jQuery, window, document);
     }
-    
+
 }(function($, window, document, undefined) {
-    
+
     'use strict';
     
-    // requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
-    // via: https://gist.github.com/paulirish/1579671
+    // Detect Vendor Prefix
+    // via: https://davidwalsh.name/vendor-prefix
+    // Detect css transform
+    var cssTransform = (function(){
+        var prefixes = 'transform webkitTransform mozTransform oTransform msTransform'.split(' ')
+        , el = document.createElement('div')
+        , cssTransform
+        , i = 0
+        while( cssTransform === undefined ){ 
+            cssTransform = document.createElement('div').style[prefixes[i]] != undefined ? prefixes[i] : undefined
+            i++
+        }
+        return cssTransform
+    })();
+    
+    //requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
+    //via: https://gist.github.com/paulirish/1579671
     (function() {
         var lastTime = 0;
         var vendors = ['ms', 'moz', 'webkit', 'o'];
         for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
             window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
             window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
-                                       || window[vendors[x]+'CancelRequestAnimationFrame'];
+                                    || window[vendors[x]+'CancelRequestAnimationFrame'];
         }
-     
+    
         if (!window.requestAnimationFrame)
             window.requestAnimationFrame = function(callback, element) {
                 var currTime = new Date().getTime();
                 var timeToCall = Math.max(0, 16 - (currTime - lastTime));
                 var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
-                  timeToCall);
+                timeToCall);
                 lastTime = currTime + timeToCall;
                 return id;
             };
-     
+    
         if (!window.cancelAnimationFrame)
             window.cancelAnimationFrame = function(id) {
                 clearTimeout(id);
             };
     }());
 
-    // Detect Vendor Prefix
-    // via: https://davidwalsh.name/vendor-prefix
-    var vendor = (function () {
-        var styles = window.getComputedStyle(document.documentElement, ''),
-            pre = (Array.prototype.slice
-                .call(styles)
-                .join('') 
-                .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
-            )[1];
-        if (pre == 'moz') return 'Moz';
-        else return pre;
-    })();
+    var animationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function(callback){ window.setTimeout(callback, 1000/60) }
 
-    $.fn.simpleParallax = function(options) {
+    var pluginName = 'simpleParallax',
+        edge = 20,
+        lastPosition = -1,
+        isInit = false;
+    
+    function SimpleParallax ( element, options ) {
 
-        var pluginName = 'simpleParallax',
-            defaultOptions = {
-                'orientation': 'up',
-                'scale': '1.2'
-            },
-            params = $.extend(defaultOptions, options);
+        this.element = element;
+        this.$element = $(this.element);
+        this._name = pluginName;
+        this._defaults = $.fn.simpleParallax.defaults;
+        this.options = $.extend( {}, this._defaults, options );
 
-        var isInit = false;
+        this.init();
+    }
 
-        function simpleParallax(element) {
+    $.extend(SimpleParallax, {
 
-            this.name = pluginName;
-            this.$element = element;
-            this.$elementContainer = this.$element.closest('.simpleParallax');
+        getViewportOffset: function() {
+            
+            var win = $(window);
 
-            this.init();
-
-            this.scrollEvent = this.scrollEvent.bind(this);
-
-            $(window).on('scroll', this.scrollEvent);
-
+            this.viewportHeight = win.outerHeight(),
+            this.viewportTop = win.scrollTop() - edge,
+            this.viewportBottom = win.scrollTop() + SimpleParallax.viewportHeight  + edge;
+    
         }
 
-        $.extend(simpleParallax.prototype, {
+    });
 
-            init: function() {
+    $.extend(SimpleParallax.prototype, {
 
-                var self = this;
+        occurence: [],
 
-                if (!isInit) {
-                    self.getViewportOffset();
-                    isInit = true;
-                }
+        //initialization of elements
+        init: function () {
 
-                //apply scale to every image for the first calculation
-                self.$element[0].style[vendor+'Transform'] = 'scale('+params.scale+')';
+            var plugin = this;
 
-                this.proceedElement();
+            plugin.wrapElement();
 
-            },
+            this.occurence.push(plugin);
 
-            //calculate the current viewport offset
-            getViewportOffset: function() {
+            if (!isInit) {
+                plugin.proceedElement();
+                isInit = true;
+            }
+            
+        },
 
-                //edge is use to increase the viewport size 
-                //so the translation effect can appear before element is getting visible
-                //and avoid any visual inconveniance when the image will suddently move from its axe 
-                var self = this,
-                    edge = 20;
+        //wrap the element with the .simpleParallax div and apply overflow hidden to hide the image excedant (cause of the scale)
+        wrapElement: function() {
 
-                self.viewportHeight = $(window).outerHeight();
-                self.viewportTopX = $(window).scrollTop();
-                self.viewportBottomX = self.viewportTopX + self.viewportHeight;
-                self.viewportTopX -= edge;
-                self.viewportBottomX += edge;
+            var plugin = this;
 
-            },
+            if ( plugin.$element.closest('picture').length ) {
 
-            //calculate the current element offset
-            getElementOffset: function() {
+                plugin.$elementToWrap = plugin.$element.parent('picture');
 
-                var self = this;
+            } else {
 
-                self.elementHeight = self.$elementContainer.outerHeight();
-                self.elementWidth = self.$elementContainer.outerWidth();
-                self.elementTopX = self.$elementContainer.offset().top;
-                self.elementBottomX = self.elementTopX + self.elementHeight;
+                plugin.$elementToWrap = plugin.$element;
 
-            },
+            } 
 
-            //calculate the current element dimension
-            getElementDimension: function() {
+            plugin.$elementToWrap.wrap('<div class="simpleParallax" style="overflow:hidden"></div>');
 
-                var self = this;
+            plugin.$elementContainer = plugin.$element.closest('.simpleParallax');
+        },
 
-                //get the real height of the image with the scaling apply to it
-                self.elementImageHeight = self.$element[0].getBoundingClientRect().height;
-                //get the real width of the image with the scaling apply to it
-                self.elementImageWidth = self.$element[0].getBoundingClientRect().width;
-                //get the range where the image can be translate without going out of its container
-                self.elementRange = Math.abs(self.elementHeight - self.elementImageHeight);
+        //unwrap the element from the .simpleParallax div
+        unWrapElement: function(element) {
 
-            },
+            var plugin = this;
 
-            isVisible: function() {
+            element.unwrap('simpleParallax');
+        },
 
-                var self = this;
+        //calculate the current element offset
+        getElementOffset: function() {
 
-                //return if the current element is visible in the Viewport
-                return ( 
-                    //if elementTopX is visible in the Viewport
-                    (self.elementTopX > self.viewportTopX && self.elementTopX < self.viewportBottomX)
-                    || 
-                    //if elementBottomX is visible in the viewport
-                    (self.elementBottomX < self.viewportBottomX && self.elementBottomX > self.viewportTopX)
-                    ||
-                    //if elementTopX is above the viewport and elementBottomX is below the viewport
-                    (self.elementTopX < self.viewportTopX && self.elementBottomX > self.viewportBottomX)
-                );
+            var plugin = this,
+                elem = plugin.$elementContainer[0];
 
-            },
+            plugin.elementHeight = elem.offsetHeight;
+            plugin.elementTopX = elem.offsetTop;
+            plugin.elementBottomX = plugin.elementTopX + plugin.elementHeight;
 
-            calculate: function() {
+        },
 
-                var self = this;
+        //check if the current element is visible in the Viewport
+        isVisible: function() {
 
-                //range is calculate with the extra space of the scaled image comparing to its container
-                var rangeMax = self.elementRange;
+            var plugin = this;
+            
+            return plugin.elementBottomX > SimpleParallax.viewportTop && plugin.elementTopX  < SimpleParallax.viewportBottom;
 
-                //apply error rate 20%
-                //Unable to find where this gap is coming from
-                var rangeMax = rangeMax - (rangeMax * .20);
+        },
 
-                if ( params.orientation === 'down' || params.orientation === 'right' ) {
-                    rangeMax *= -1;
-                }
+        calculateRange: function() {
 
-                //calculate the % position of the element comparing to the viewport
-                var percentage = (self.viewportBottomX - self.elementTopX) / ((self.viewportHeight + self.elementHeight) / 100);
+            var plugin = this;
 
-                //transform this % into the max range of the element
-                self.translateValue = ((percentage / 100) * rangeMax) - (rangeMax / 2);
+            //get the real height of the image with the scaling apply to it
+            plugin.elementImageHeight = plugin.$element[0].getBoundingClientRect().height;
+
+            //range is calculate with the extra space of the scaled image comparing to its container
+            plugin.rangeMax = Math.abs(plugin.elementHeight - plugin.elementImageHeight);
+
+            if ( plugin.options.orientation === 'down' || plugin.options.orientation === 'right' ) {
+                plugin.rangeMax *= -1;
+            }
+        },
+
+        //calculate the percentage and the translate value to apply on the element
+        calculate: function() {
+
+            var plugin = this,
                 
-            },
+            //get current percentage of the current alement
+            percentageData = plugin.$element.data(pluginName+'_percentage'),
 
-            animate: function() {
+            //calculate the % position of the element comparing to the viewport
+            percentage = ((SimpleParallax.viewportBottom - edge) - plugin.elementTopX) / ((SimpleParallax.viewportHeight + plugin.elementHeight) / 100);
 
-                var self = this,
-                    translateAxe,
-                    inlineCss;
+            //sometime the percentage exceeds 100 or goes below 0
+            if (percentage > 100) percentage = 100;
+            else if (percentage < 0) percentage = 0;
 
-                //check the orientation to know which of X or Y axe should we use
-                if (params.orientation == 'up' || params.orientation == 'down' ) {
+            //sometime the same percentage if returned, to avoid this if the old percentage is equal to the new one, we don't do aything
+            if (percentageData === percentage) return false;
 
-                    translateAxe = 'translateY';
+            plugin.calculateRange();
+
+            //transform this % into the max range of the element
+            plugin.translateValue = ((percentage / 100) * plugin.rangeMax) - (plugin.rangeMax / 2);
+
+            //apply the new percentage to the data of the current element
+            plugin.$element.data(pluginName+'_percentage', percentage);
+            
+            return true;
+        },
+
+        animate: function() {
+
+            var plugin = this,
+                inlineCss,
+                translateAxe;
+
+            //check the orientation to know which of X or Y axe should we use
+            if (plugin.options.orientation == 'up' || plugin.options.orientation == 'down' ) {
+
+                translateAxe = 'translateY';
+
+            } else if (plugin.options.orientation == 'left' || plugin.options.orientation == 'right' ) {
+
+                translateAxe = 'translateX';
+
+            }
+
+            //prepare style to apply to the element
+            inlineCss = 'scale('+plugin.options.scale+') '+translateAxe+'('+plugin.translateValue+'px)';
+
+            //add style depending the current vendor CSS of the browser
+            plugin.$element[0].style[cssTransform] = inlineCss;
+        
+        },
+
+        proceedElement: function() {
+
+            var plugin = this;
+
+            if (lastPosition === window.pageYOffset) {
+
+                animationFrame(plugin.proceedElement.bind(plugin));
+
+                return;
+
+            } else {
+
+                lastPosition = window.pageYOffset;
+
+                $.each( this.occurence, function(index) {
+
+                    if (index === 0) SimpleParallax.getViewportOffset();
                     
-                } else if (params.orientation == 'left' || params.orientation == 'right' ) {
+                    this.getElementOffset();
 
-                    translateAxe = 'translateX';
+                    if ( !this.isVisible() ) return;
 
-                }
+                    var needAnimate = this.calculate();
+    
+                    if (!needAnimate) return;
+    
+                    this.animate();
+        
+                });
 
-                //store style to apply to the element
-                inlineCss = 'scale('+params.scale+') '+translateAxe+'('+self.translateValue+'px)';
-
-                //add style depending the current vendor CSS of the browser
-                self.$element[0].style[vendor+'Transform'] = inlineCss;
+                animationFrame(plugin.proceedElement.bind(plugin));           
             
-            },
+            }
 
-            scrollEvent: function() {
 
-                var self = this;
+        },
 
-                self.getViewportOffset();
+        destroy: function() {
 
-                self.proceedElement();
+            var plugin = this;
 
-            },
+            $('.simpleParallax').each(function() {
+                $(this).find('img')[0].style[cssTransform] = '';
+                $(this).removeData();
+                plugin.unWrapElement($(this));
+            })
 
-            proceedElement: function() {
-                
-                var self = this;
-                
-                self.getElementOffset();
+            plugin.unbindEvents();
 
-                if (!self.isVisible()) return;
+        },
 
-                self.getElementDimension();
+    });
 
-                self.calculate();
-
-                window.requestAnimationFrame( function() { self.animate(); } );
-
-            },
-
+    $.fn.simpleParallax = function ( options ) {
+        this.each(function() {
+            if ( !$.data( this, pluginName ) ) {
+                $.data( this, pluginName, new SimpleParallax( this, options ) );
+            }
         });
 
-        return this.each(function() {
-            
-            var $elementToWrap = $(this);
+        return this;
+    };
 
-            if ( $elementToWrap.closest('picture').length  ) $elementToWrap = $(this).closest('picture');
-
-            $elementToWrap.wrap('<div class="simpleParallax" style="overflow:hidden"></div>');
-
-            new simpleParallax($(this));
-
-        });
-
-    }
+    $.fn.simpleParallax.defaults = {
+        'orientation': 'up',
+        'scale': '1.2'
+    };
 
 }));
