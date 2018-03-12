@@ -19,7 +19,7 @@ Make sure jQuery library is loaded before the plugin.
 Simply copy/paste the below snippet just before your closing `<body>` tag:
 
 ```html
-<script src=""></script>
+<script src="simpleParallax.js"></script>
 ```
 
 ### Install it via Package Managers
