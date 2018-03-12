@@ -84,8 +84,8 @@
             var win = $(window);
 
             this.viewportHeight = win.outerHeight(),
-            this.viewportTop = win.scrollTop() - edge,
-            this.viewportBottom = win.scrollTop() + SimpleParallax.viewportHeight  + edge;
+            this.viewportTop = win.scrollTop(),
+            this.viewportBottom = this.viewportTop + SimpleParallax.viewportHeight;
     
         }
 
@@ -115,15 +115,9 @@
 
             var plugin = this;
 
-            if ( plugin.$element.closest('picture').length ) {
+            plugin.$elementToWrap = plugin.$element;
 
-                plugin.$elementToWrap = plugin.$element.parent('picture');
-
-            } else {
-
-                plugin.$elementToWrap = plugin.$element;
-
-            } 
+            if ( plugin.$element.closest('picture').length ) plugin.$elementToWrap = plugin.$element.parent('picture');
 
             plugin.$elementToWrap.wrap('<div class="simpleParallax" style="overflow:hidden"></div>');
 
@@ -145,11 +139,10 @@
         //calculate the current element offset
         getElementOffset: function() {
 
-            var plugin = this,
-                elem = plugin.$elementContainer[0];
+            var plugin = this;
 
-            plugin.elementHeight = elem.offsetHeight;
-            plugin.elementTopX = elem.offsetTop;
+            plugin.elementHeight = plugin.$elementContainer[0].offsetHeight;
+            plugin.elementTopX = plugin.$elementContainer[0].offsetTop;
             plugin.elementBottomX = plugin.elementTopX + plugin.elementHeight;
 
         },
@@ -159,7 +152,7 @@
 
             var plugin = this;
             
-            return plugin.elementBottomX > SimpleParallax.viewportTop && plugin.elementTopX  < SimpleParallax.viewportBottom;
+            return plugin.elementBottomX > (SimpleParallax.viewportTop - edge) && plugin.elementTopX  < (SimpleParallax.viewportBottom + edge);
 
         },
 
@@ -182,12 +175,10 @@
         calculate: function() {
 
             var plugin = this,
-                
             //get current percentage of the current alement
             percentageData = plugin.$element.data(pluginName+'_percentage'),
-
             //calculate the % position of the element comparing to the viewport
-            percentage = ((SimpleParallax.viewportBottom - edge) - plugin.elementTopX) / ((SimpleParallax.viewportHeight + plugin.elementHeight) / 100);
+            percentage = (SimpleParallax.viewportBottom - plugin.elementTopX) / ((SimpleParallax.viewportHeight + plugin.elementHeight) / 100);
 
             //sometime the percentage exceeds 100 or goes below 0
             if (percentage > 100) percentage = 100;
@@ -211,18 +202,10 @@
 
             var plugin = this,
                 inlineCss,
-                translateAxe;
-
-            //check the orientation to know which of X or Y axe should we use
-            if (plugin.options.orientation == 'up' || plugin.options.orientation == 'down' ) {
-
                 translateAxe = 'translateY';
 
-            } else if (plugin.options.orientation == 'left' || plugin.options.orientation == 'right' ) {
-
-                translateAxe = 'translateX';
-
-            }
+            //check the orientation to know which of X or Y axe should we use
+            if (plugin.options.orientation == 'left' || plugin.options.orientation == 'right' ) translateAxe = 'translateX';
 
             //prepare style to apply to the element
             inlineCss = 'scale('+plugin.options.scale+') '+translateAxe+'('+plugin.translateValue+'px)';
