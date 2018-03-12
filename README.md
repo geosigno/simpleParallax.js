@@ -30,6 +30,8 @@ or use the below CDN link provided by jsDelivr.com
 <script src="https://cdn.jsdelivr.net/npm/simple-parallax-jquery@2.0.0/src/simpleParallax.min.js"></script>
 ```
 
+or
+
 ### Install it via Package Managers
 
 ```sh
