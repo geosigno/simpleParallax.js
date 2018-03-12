@@ -1,7 +1,7 @@
 {
   "name": "simple-parallax-jquery",
   "version": "2.0.0",
-  "description": "Apply parallax effects to images in a minute",
+  "description": "simpleParallax is a simple and lightweight jQuery plugin that gives your website parallax animations on the images",
   "homepage": "https://anakao-theme.com/simpleparallax/",
   "main": "src/simpleParallax.js",
   "repository": {
@@ -25,9 +25,9 @@
     "body-parser": "^1.13.3",
     "browser-sync": "^2.18.13",
     "express": "^4.15.4",
+    "jquery": ">=1.7",
     "morgan": "^1.8.2",
-    "pug": "^2.0.0-rc.4",
-    "jquery": ">=1.7"
+    "pug": "^2.0.0-rc.4"  
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

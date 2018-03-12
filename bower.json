@@ -1,6 +1,6 @@
 {
   "name": "simpleParallax",
-  "description": "Apply parallax effects to images in a minute",
+  "description": "simpleParallax is a simple and lightweight jQuery plugin that gives your website parallax animations on the images",
   "version": "2.0.0",
   "main": "src/simpleParallax.js",
   "authors": [
