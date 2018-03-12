@@ -1,6 +1,6 @@
 ![simpleParallax logo](https://anakao-theme.com/simpleparallax/img/social/base-github.png)
 
-# simpleParallax
+# Why use simpleParallax?
 
 simpleParallax is a very simple and lightweight jQuery plugin that improve your website with parallax animations on your images.
 
