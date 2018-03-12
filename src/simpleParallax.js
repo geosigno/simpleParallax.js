@@ -1,7 +1,7 @@
 /**
  * simpleParallax
  * ------------
- * Version : 2.0.0
+ * Version : 2.1.0
  * Website : https://anakao-theme.com/simpleparallax/
  * Repo    : https://github.com/geosenna/simpleParallax
  * Author  : Geoffrey Signorato (@geosenna)
