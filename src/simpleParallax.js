@@ -61,8 +61,6 @@
             };
     }());
 
-    var animationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function(callback){ window.setTimeout(callback, 1000/60) }
-
     var pluginName = 'simpleParallax',
         edge = 20,
         lastPosition = -1,
@@ -237,7 +235,7 @@
 
             if (lastPosition === window.pageYOffset) {
 
-                animationFrame(plugin.proceedElement.bind(plugin));
+                window.requestAnimationFrame(plugin.proceedElement.bind(plugin));
 
                 return;
 
@@ -261,7 +259,7 @@
         
                 });
 
-                animationFrame(plugin.proceedElement.bind(plugin));           
+                window.requestAnimationFrame(plugin.proceedElement.bind(plugin));           
             
             }
 
