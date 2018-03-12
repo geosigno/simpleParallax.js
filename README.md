@@ -2,7 +2,11 @@
 
 # simpleParallax
 
-simpleParallax is a simple and lightweight jQuery plugin that gives your website parallax animations on the images.
+simpleParallax is a very simple and lightweight jQuery plugin that improve your website with parallax animations on your images.
+
+Where it may be laborious to get results through other plugins, simpleParallax stands out for its ease and its visual rendering. The parallax effect is directly applied on image tags, there is no need to use background images.
+
+Any image will fit. Try it out!
 
 # How to use it
 
@@ -59,11 +63,11 @@ $('img').simpleParallax({scale: '1.30', orientation: 'down'});
 
 ## 4. Good to know
 
-* Higher the scale setting is set, the more the parallax effect will be visible. In return, the image will lose in quality.
+* The higher the scale setting is set, the more visible the parallax effect will be. In return, the image will lose in quality.
 
-* This plugin is defined directly on the image tag instead of background image. This gives you a lot of flexibility and can be added to any image.
+* This plugin apply parallax on the image tag and not the background image. This gives you a lot of flexibility and can be added to any image.
 
-* You can apply simpleParallax on image tags even inside a picture tag. It also works with srcset function.
+* You can apply simpleParallax on picture/srcset images
 
 ## Author
 
