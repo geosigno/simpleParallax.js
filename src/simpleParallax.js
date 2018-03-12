@@ -64,7 +64,7 @@
     var pluginName = 'simpleParallax',
         edge = 20,
         lastPosition = -1,
-        isInit = false;
+        isInitialized = false;
     
     function SimpleParallax ( element, options ) {
 
@@ -104,10 +104,9 @@
 
             this.occurence.push(plugin);
 
-            if (!isInit) {
-                plugin.proceedElement();
-                isInit = true;
-            }
+            plugin.proceedElement(plugin);
+
+            if (isInitialized) plugin.proceedLoop();
             
         },
 
@@ -233,13 +232,27 @@
         
         },
 
-        proceedElement: function() {
+        proceedElement: function(elem) {
+                    
+            elem.getElementOffset();
+
+            if ( !elem.isVisible() ) return;
+
+            var needAnimate = elem.calculate();
+
+            if (!needAnimate) return;
+
+            elem.animate();
+
+        },
+
+        proceedLoop: function() {
 
             var plugin = this;
 
             if (lastPosition === window.pageYOffset) {
 
-                window.requestAnimationFrame(plugin.proceedElement.bind(plugin));
+                window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));
 
                 return;
 
@@ -250,23 +263,15 @@
                 $.each( this.occurence, function(index) {
 
                     if (index === 0) SimpleParallax.getViewportOffset();
+
+                    plugin.proceedElement(this.occurence[index]);
                     
-                    this.getElementOffset();
-
-                    if ( !this.isVisible() ) return;
-
-                    var needAnimate = this.calculate();
-    
-                    if (!needAnimate) return;
-    
-                    this.animate();
         
                 });
 
-                window.requestAnimationFrame(plugin.proceedElement.bind(plugin));           
+                window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));           
             
             }
-
 
         },
 
@@ -287,8 +292,10 @@
     });
 
     $.fn.simpleParallax = function ( options ) {
-        this.each(function() {
+        var length = this.length;
+        this.each(function(index) {
             if ( !$.data( this, pluginName ) ) {
+                if ((length - 1) == index) isInitialized = true;
                 $.data( this, pluginName, new SimpleParallax( this, options ) );
             }
         });
