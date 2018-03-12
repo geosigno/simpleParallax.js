@@ -8,9 +8,9 @@ Where it may be laborious to get results through other plugins, simpleParallax s
 
 Any image will fit. Try it out!
 
-# How to use it
+# How to use it?
 
-## 1. Getting started
+## 1. Install the plugin
 
 Make sure jQuery library is loaded before the plugin.
 
@@ -19,7 +19,15 @@ Make sure jQuery library is loaded before the plugin.
 Simply copy/paste the below snippet just before your closing `<body>` tag:
 
 ```html
+<script src="jquery.js"></script>
 <script src="simpleParallax.js"></script>
+```
+
+or use the below CDN link provided by jsDelivr.com
+
+```html
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-jquery@2.0.0/src/simpleParallax.min.js"></script>
 ```
 
 ### Install it via Package Managers
@@ -27,6 +35,9 @@ Simply copy/paste the below snippet just before your closing `<body>` tag:
 ```sh
 #npm
 npm install simple-parallax-jquery
+
+#yarn
+yarn add simple-parallax-jquery
 
 #bower
 bower install simpleParallax
