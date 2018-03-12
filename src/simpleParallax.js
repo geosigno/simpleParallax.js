@@ -129,6 +129,10 @@
             plugin.$elementToWrap.wrap('<div class="simpleParallax" style="overflow:hidden"></div>');
 
             plugin.$elementContainer = plugin.$element.closest('.simpleParallax');
+
+            //add scale option to ensure correct calculation of the rangeMax value
+            plugin.$element[0].style[cssTransform] = 'scale('+plugin.options.scale+')';
+            
         },
 
         //unwrap the element from the .simpleParallax div
