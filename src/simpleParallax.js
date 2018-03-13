@@ -104,8 +104,6 @@
 
             this.occurence.push(plugin);
 
-            plugin.proceedElement(plugin);
-
             if (isInitialized) plugin.proceedLoop();
             
         },
