@@ -175,8 +175,6 @@
         calculate: function() {
 
             var plugin = this,
-            //get current percentage of the current alement
-            percentageData = plugin.$element.data(pluginName+'_percentage'),
             //calculate the % position of the element comparing to the viewport
             percentage = (SimpleParallax.viewportBottom - plugin.elementTopX) / ((SimpleParallax.viewportHeight + plugin.elementHeight) / 100);
 
@@ -185,16 +183,15 @@
             else if (percentage < 0) percentage = 0;
 
             //sometime the same percentage if returned, to avoid this if the old percentage is equal to the new one, we don't do aything
-            if (percentageData === percentage) return false;
+            if (plugin.oldPercentage === percentage) return false;
 
             plugin.calculateRange();
 
             //transform this % into the max range of the element
             plugin.translateValue = ((percentage / 100) * plugin.rangeMax) - (plugin.rangeMax / 2);
 
-            //apply the new percentage to the data of the current element
-            plugin.$element.data(pluginName+'_percentage', percentage);
-            
+            plugin.oldPercentage = percentage;
+
             return true;
         },
 
@@ -216,7 +213,7 @@
         },
 
         proceedElement: function(elem) {
-                    
+      
             elem.getElementOffset();
 
             if ( !elem.isVisible() ) return;
