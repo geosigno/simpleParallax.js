@@ -79,13 +79,18 @@
 
     $.extend(SimpleParallax, {
 
+        getViewportOffsetTop: function() {
+
+            this.viewportTop = window.pageYOffset;
+
+        },
+
         getViewportOffset: function() {
             
             var win = $(window);
 
             this.viewportHeight = win.outerHeight(),
-            this.viewportTop = win.scrollTop(),
-            this.viewportBottom = this.viewportTop + SimpleParallax.viewportHeight;
+            this.viewportBottom = SimpleParallax.viewportTop + SimpleParallax.viewportHeight;
     
         }
 
@@ -228,7 +233,9 @@
 
             var plugin = this;
 
-            if (lastPosition === window.pageYOffset) {
+            SimpleParallax.getViewportOffsetTop();
+
+            if (lastPosition === SimpleParallax.viewportTop) {
 
                 window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));
 
@@ -236,7 +243,7 @@
 
             } else {
 
-                lastPosition = window.pageYOffset;
+                lastPosition = SimpleParallax.viewportTop;
 
                 $.each( this.occurence, function(index) {
 
@@ -244,7 +251,6 @@
 
                     plugin.proceedElement(this.occurence[index]);
                     
-        
                 });
 
                 window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));           
