@@ -181,12 +181,15 @@
             //calculate the % position of the element comparing to the viewport
             percentage = (SimpleParallax.viewportBottom - plugin.elementTopX) / ((SimpleParallax.viewportHeight + plugin.elementHeight) / 100);
 
+            //Rounded to percentage to the nearest 0.1 to increase perfomance
+            percentage = Number((percentage).toFixed(1));
+            
+            //sometime the same percentage if returned, to avoid this if the old percentage is equal to the new one, we don't do aything
+            if (plugin.oldPercentage === percentage) return false;
+
             //sometime the percentage exceeds 100 or goes below 0
             if (percentage > 100) percentage = 100;
             else if (percentage < 0) percentage = 0;
-
-            //sometime the same percentage if returned, to avoid this if the old percentage is equal to the new one, we don't do aything
-            if (plugin.oldPercentage === percentage) return false;
 
             plugin.calculateRange();
 
