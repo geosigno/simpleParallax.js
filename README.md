@@ -74,7 +74,17 @@ You can apply these settings with the following jQuery code:
 $('img').simpleParallax({scale: '1.30', orientation: 'down'});
 ```
 
-## 4. Good to know
+## 4. Methods
+
+Find below the different methods you can use:
+
+### destroy
+
+```javascript
+$('.thumbnail').data('simpleParallax').destroy();
+```
+
+# Good to know
 
 * The higher the scale setting is set, the more visible the parallax effect will be. In return, the image will lose in quality.
 
@@ -82,11 +92,11 @@ $('img').simpleParallax({scale: '1.30', orientation: 'down'});
 
 * You can apply simpleParallax on picture/srcset images
 
-## Author
+# Author
 
 [Geoffrey Signorato](https://github.com/geosenna/)
 
-## Contributing
+# Contributing
 
 Open an issue or a pull request to suggest changes or additions.
 
