@@ -19,8 +19,6 @@
 
     'use strict';
     
-    // Detect Vendor Prefix
-    // via: https://davidwalsh.name/vendor-prefix
     // Detect css transform
     var cssTransform = (function(){
         var prefixes = 'transform webkitTransform mozTransform oTransform msTransform'.split(' ')
@@ -136,7 +134,7 @@
 
             var plugin = this;
 
-            element.unwrap('simpleParallax');
+            plugin.$elementToWrap.unwrap('.simpleParallax');
         },
 
         //calculate the current element offset
@@ -239,7 +237,7 @@
 
             if (lastPosition === SimpleParallax.viewportTop) {
 
-                window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));
+                plugin.frameID = window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));
 
                 return;
 
@@ -255,7 +253,7 @@
                     
                 });
 
-                window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));           
+                plugin.frameID = window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));           
             
             }
 
@@ -263,15 +261,17 @@
 
         destroy: function() {
 
-            var plugin = this;
+            $.each( this.occurence, function(index) {
 
-            $('.simpleParallax').each(function() {
-                $(this).find('img')[0].style[cssTransform] = '';
-                $(this).removeData();
-                plugin.unWrapElement($(this));
-            })
+                this.occurence[index].$element.removeData();
 
-            plugin.unbindEvents();
+                this.occurence[index].$element[0].style[cssTransform] = '';
+
+                this.occurence[index].unWrapElement();
+    
+                window.cancelAnimationFrame(this.occurence[index].frameID);  
+
+            });
 
         },
 
