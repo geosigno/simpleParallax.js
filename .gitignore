@@ -1,5 +1,7 @@
 demo
 /
+src/analytics.min.js
+src/main.min.js
 node_modules/
 gulpfile.js
 server.js
