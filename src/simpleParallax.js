@@ -1,7 +1,7 @@
 /**
  * simpleParallax
  * ------------
- * Version : 2.1.0
+ * Version : 2.2.1
  * Website : https://anakao-theme.com/simpleparallax/
  * Repo    : https://github.com/geosenna/simpleParallax
  * Author  : Geoffrey Signorato (@geosenna)
@@ -140,11 +140,10 @@
         //calculate the current element offset
         getElementOffset: function() {
 
-            var plugin = this,
-                elem = plugin.$elementContainer[0];
+            var plugin = this;
 
-            plugin.elementHeight = elem.offsetHeight;
-            plugin.elementTopX = elem.offsetTop;
+            plugin.elementHeight = plugin.$elementContainer[0].offsetHeight;
+            plugin.elementTopX = plugin.$elementContainer.offset().top;
             plugin.elementBottomX = plugin.elementTopX + plugin.elementHeight;
 
         },
