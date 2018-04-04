@@ -1,7 +1,7 @@
 /**
  * simpleParallax
  * ------------
- * Version : 2.2.1
+ * Version : 2.3.0
  * Website : https://anakao-theme.com/simpleparallax/
  * Repo    : https://github.com/geosenna/simpleParallax
  * Author  : Geoffrey Signorato (@geosenna)
@@ -203,13 +203,17 @@
 
             var plugin = this,
                 inlineCss,
-                translateAxe = 'translateY';
+                translateValueY = plugin.translateValue,
+                translateValueX = 0;
 
             //check the orientation to know which of X or Y axe should we use
-            if (plugin.options.orientation == 'left' || plugin.options.orientation == 'right' ) translateAxe = 'translateX';
+            if (plugin.options.orientation == 'left' || plugin.options.orientation == 'right' ) {
+                translateValueY = 0;
+                translateValueX = plugin.translateValue;
+            } 
 
             //prepare style to apply to the element
-            inlineCss = 'scale('+plugin.options.scale+') '+translateAxe+'('+plugin.translateValue+'px)';
+            inlineCss = 'scale('+plugin.options.scale+') translate3d('+translateValueX+'px, '+translateValueY+'px, 0)';
 
             //add style depending the current vendor CSS of the browser
             plugin.$element[0].style[cssTransform] = inlineCss;
