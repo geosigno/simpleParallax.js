@@ -27,7 +27,7 @@ or use the below CDN link provided by jsDelivr.com
 
 ```html
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-jquery@2.0.0/src/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-jquery@2.3.0/src/simpleParallax.min.js"></script>
 ```
 
 or
