@@ -2,6 +2,8 @@
 
 [![GitHub version](https://badge.fury.io/gh/geosenna%2FsimpleParallax.svg)](https://badge.fury.io/gh/geosenna%2FsimpleParallax)
 [![](https://data.jsdelivr.com/v1/package/npm/simple-parallax-jquery/badge?style=rounded)](https://www.jsdelivr.com/package/npm/simple-parallax-jquery)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 
 # Why use simpleParallax?
 
