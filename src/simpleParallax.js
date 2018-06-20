@@ -1,7 +1,7 @@
 /**
  * simpleParallax
  * ------------
- * Version : 2.3.0
+ * Version : 2.4.0
  * Website : https://anakao-theme.com/simpleparallax/
  * Repo    : https://github.com/geosenna/simpleParallax
  * Author  : Geoffrey Signorato (@geosenna)
@@ -22,7 +22,6 @@
     // Detect css transform
     var cssTransform = (function(){
         var prefixes = 'transform webkitTransform mozTransform oTransform msTransform'.split(' ')
-        , el = document.createElement('div')
         , cssTransform
         , i = 0
         while( cssTransform === undefined ){ 
@@ -129,11 +128,16 @@
 
             //add will-change CSs property to improve persomance
             plugin.$element[0].style.willChange = 'transform';
+
+            //if animation is set, add a transition CSS
+            if (plugin.options.delay > 0) {
+                plugin.$element[0].style.transition = 'transform '+plugin.options.delay+'s cubic-bezier(0,0,0,1)';
+            }
             
         },
 
         //unwrap the element from the .simpleParallax div
-        unWrapElement: function(element) {
+        unWrapElement: function() {
 
             var plugin = this;
 
@@ -297,7 +301,8 @@
 
     $.fn.simpleParallax.defaults = {
         'orientation': 'up',
-        'scale': '1.2'
+        'scale': 1.2,
+        'delay': 0
     };
 
 }));

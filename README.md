@@ -67,11 +67,12 @@ Find below the different settings you can apply to simpleParallax:
 |-------------|---------|---|
 | orientation | up      | choose the parallax orientation effect - *up*, *right*, *down* or *left* |
 | scale       | 1.2     | choose the scale ratio - need to be above *1.0*  |
+| delay       | 0       | add some delay for parallax animations - in second |
 
 You can apply these settings with the following jQuery code:
 
 ```javascript
-$('img').simpleParallax({scale: '1.30', orientation: 'down'});
+$('img').simpleParallax({scale: '1.30', orientation: 'down', delay: '0.6'});
 ```
 
 ## 4. Methods
