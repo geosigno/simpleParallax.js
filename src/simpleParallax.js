@@ -126,6 +126,9 @@
 
             //add scale option to ensure correct calculation of the rangeMax value
             plugin.$element[0].style[cssTransform] = 'scale('+plugin.options.scale+')';
+
+            //add will-change CSs property to improve persomance
+            plugin.$element[0].style.willChange = 'transform';
             
         },
 
