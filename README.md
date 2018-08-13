@@ -70,14 +70,16 @@ Find below the different settings you can apply to simpleParallax:
 
 | setting     | default |   |
 |-------------|---------|---|
+| delay       | 0.6     | add some delay for parallax animations - in second |
 | orientation | up      | choose the parallax orientation effect - *up*, *right*, *down* or *left* |
 | scale       | 1.2     | choose the scale ratio - need to be above *1.0*  |
-| delay       | 0       | add some delay for parallax animations - in second |
+| overflow    | true    | by default, the image is scaled to apply a parallax effect without any overflow on the original image. If set to false, the image will be translated out of its orignal flow |
+
 
 You can apply these settings with the following jQuery code:
 
 ```javascript
-$('img').simpleParallax({scale: '1.30', orientation: 'down', delay: '0.6'});
+$('img').simpleParallax({delay: 0, orientation: 'down', scale: 1.30, overfow: true });
 ```
 
 ## 4. Methods
@@ -92,7 +94,7 @@ $('.thumbnail').data('simpleParallax').destroy();
 
 # Good to know
 
-* The higher the scale setting is set, the more visible the parallax effect will be. In return, the image will lose in quality.
+* The higher the scale setting is set, the more visible the parallax effect will be. In return, the image will lose in quality (no loss of quality if overlow option is set to false)
 
 * This plugin apply parallax on the image tag and not the background image. This gives you a lot of flexibility and can be added to any image.
 
