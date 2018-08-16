@@ -1,12 +1,3 @@
-/**
- * simpleParallax
- * ------------
- * Version : 2.4.0
- * Website : https://anakao-theme.com/simpleparallax/
- * Repo    : https://github.com/geosenna/simpleParallax
- * Author  : Geoffrey Signorato (@geosenna)
- */
-
 (function(factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         factory(require('jquery'), window, document);
@@ -56,7 +47,6 @@
     })();
 
     var pluginName = 'simpleParallax',
-        edge = 20,
         lastPosition = -1,
         isInitialized = false;
 
@@ -66,19 +56,19 @@
         this._name = pluginName;
         this._defaults = $.fn.simpleParallax.defaults;
         this.options = $.extend({}, this._defaults, options);
-
         this.init();
     }
 
     $.extend(SimpleParallax, {
+        //get the viewport offset top
         getViewportOffsetTop: function() {
             this.viewportTop = window.pageYOffset;
         },
 
+        //get other viewport offsets ( height and bottom )
         getViewportOffset: function() {
-            var win = $(window);
-
-            (this.viewportHeight = win.outerHeight()), (this.viewportBottom = SimpleParallax.viewportTop + SimpleParallax.viewportHeight);
+            this.viewportHeight = document.documentElement.clientHeight;
+            this.viewportBottom = SimpleParallax.viewportTop + this.viewportHeight;
         }
     });
 
@@ -89,39 +79,64 @@
         init: function() {
             var plugin = this;
 
+            //wrap the element into a div to apply overflow - if overflow is set to true
             plugin.wrapElement();
+
+            //apply the dfault style on the image
+            plugin.setStyle();
 
             this.occurence.push(plugin);
 
-            if (isInitialized) plugin.proceedLoop();
+            if (isInitialized) {
+                $(window).on('resize.simpleParallax', function() {
+                    plugin.rangeMax = 0;
+                });
+                plugin.proceedLoop();
+            }
         },
 
-        //wrap the element with the .simpleParallax div and apply overflow hidden to hide the image excedant (cause of the scale)
+        //if overflow is set to true
+        // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
         wrapElement: function() {
             var plugin = this;
 
-            //wrap into a div only if overflow is set to true
             if (plugin.options.overflow == true) {
-                plugin.$elementToWrap = plugin.$element;
+                //check if image is inside a picture tag
+                if (plugin.element.closest('picture')) {
+                    plugin.elementToWrap = plugin.element.closest('picture');
+                } else {
+                    plugin.elementToWrap = plugin.element;
+                }
 
-                if (plugin.$element.closest('picture').length) plugin.$elementToWrap = plugin.$element.parent('picture');
+                // create wrapper container
+                var wrapper = document.createElement('div');
+                wrapper.classList.add('simpleParallax');
+                wrapper.style.overflow = 'hidden';
+                plugin.elementToWrap.parentNode.insertBefore(wrapper, plugin.elementToWrap);
+                wrapper.appendChild(plugin.elementToWrap);
 
-                plugin.$elementToWrap.wrap('<div class="simpleParallax" style="overflow:hidden"></div>');
-
-                plugin.$elementContainer = plugin.$element.closest('.simpleParallax');
-
-                //add scale option to ensure correct calculation of the rangeMax value
-                plugin.$element[0].style[cssTransform] = 'scale(' + plugin.options.scale + ')';
+                //set the container for calculation
+                plugin.elementContainer = plugin.element.closest('.simpleParallax');
             } else {
-                plugin.$elementContainer = plugin.$element;
+                //set the container for calculation - elemnt itself when overflow is set to false
+                plugin.elementContainer = plugin.element;
+            }
+        },
+
+        setStyle: function() {
+            var plugin = this;
+
+            if (plugin.options.overflow == true) {
+                //add scale option to ensure correct calculation of the rangeMax value
+                plugin.element.style[cssTransform] = 'scale(' + plugin.options.scale + ')';
             }
 
-            //add will-change CSs property to improve persomance
-            plugin.$element[0].style.willChange = 'transform';
+            //add will-change CSS property to improve perfomance
+            plugin.element.style.willChange = 'transform';
 
             //if animation is set, add a transition CSS
             if (plugin.options.delay > 0) {
-                plugin.$element[0].style.transition = 'transform ' + plugin.options.delay + 's cubic-bezier(0,0,0,1)';
+                plugin.element.style.transition = 'transform ' + plugin.options.delay + 's cubic-bezier(0,0,0,1)';
             }
         },
 
@@ -130,16 +145,30 @@
             var plugin = this;
 
             if (plugin.options.overflow == true) {
-                plugin.$elementToWrap.unwrap('.simpleParallax');
+                // get the element's parent node
+                var parent = plugin.elementContainer.parentNode;
+
+                // move all children out of the element
+                while (plugin.elementContainer.firstChild) parent.insertBefore(plugin.elementContainer.firstChild, plugin.elementContainer);
+
+                // remove the empty element
+                parent.removeChild(plugin.elementContainer);
             }
+        },
+
+        unSetStyle: function() {
+            var plugin = this;
+
+            //remove all style added by simple Parallax
+            plugin.element.removeAttribute('style');
         },
 
         //calculate the current element offset
         getElementOffset: function() {
             var plugin = this;
 
-            plugin.elementHeight = plugin.$elementContainer[0].offsetHeight;
-            plugin.elementTopX = plugin.$elementContainer.offset().top;
+            plugin.elementHeight = plugin.elementContainer.offsetHeight;
+            plugin.elementTopX = plugin.elementContainer.offsetTop;
             plugin.elementBottomX = plugin.elementTopX + plugin.elementHeight;
         },
 
@@ -147,48 +176,46 @@
         isVisible: function() {
             var plugin = this;
 
-            return plugin.elementBottomX > SimpleParallax.viewportTop - edge && plugin.elementTopX < SimpleParallax.viewportBottom + edge;
+            return plugin.elementBottomX > SimpleParallax.viewportTop && plugin.elementTopX < SimpleParallax.viewportBottom;
         },
 
         calculateRange: function() {
             var plugin = this;
 
             //get the real height of the image with the scaling apply to it
-            plugin.elementImageHeight = plugin.$element[0].getBoundingClientRect().height;
+            plugin.elementImageHeight = plugin.element.getBoundingClientRect().height;
 
-            if (plugin.options.overflow == true) {
-                //range is calculate with the extra space of the scaled image comparing to its container
-                plugin.rangeMax = Math.abs(plugin.elementHeight - plugin.elementImageHeight);
-            } else {
-                //range is calculate with the image height by the scale
-                plugin.rangeMax = plugin.elementImageHeight * plugin.options.scale - plugin.elementImageHeight;
-            }
+            //range is calculate with the image height by the scale
+            plugin.rangeMax = plugin.elementImageHeight * plugin.options.scale - plugin.elementImageHeight;
 
             if (plugin.options.orientation === 'down' || plugin.options.orientation === 'right') {
                 plugin.rangeMax *= -1;
             }
+
+            console.log(plugin.rangeMax);
         },
 
         //calculate the percentage and the translate value to apply on the element
         calculate: function() {
-            var plugin = this,
-                //calculate the % position of the element comparing to the viewport
-                percentage = (SimpleParallax.viewportBottom - plugin.elementTopX) / ((SimpleParallax.viewportHeight + plugin.elementHeight) / 100);
+            var plugin = this;
 
-            //Rounded to percentage to the nearest 0.1 to increase perfomance
-            percentage = Number(percentage.toFixed(1));
-
-            //sometime the same percentage if returned, to avoid this if the old percentage is equal to the new one, we don't do aything
-            if (plugin.oldPercentage === percentage) return false;
+            //calculate the % position of the element comparing to the viewport
+            //rounding percentage to a 1 number float to avoid unn unnecessary calculation
+            var percentage = ((SimpleParallax.viewportBottom - plugin.elementTopX) / ((SimpleParallax.viewportHeight + plugin.elementHeight) / 100)).toFixed(1);
 
             //sometime the percentage exceeds 100 or goes below 0
             if (percentage > 100) percentage = 100;
             else if (percentage < 0) percentage = 0;
 
-            plugin.calculateRange();
+            //sometime the same percentage if returned, to avoid this if the old percentage is equal to the new one, we don't do aything
+            if (plugin.oldPercentage === percentage) return false;
+
+            //is not range max has been set yet, recalculate it
+            if (!plugin.rangeMax) plugin.calculateRange();
 
             //transform this % into the max range of the element
-            plugin.translateValue = (percentage / 100) * plugin.rangeMax - plugin.rangeMax / 2;
+            //rounding translateValue to a non float int - as minimum pixel for browser to render to 1 (no 0.5)
+            plugin.translateValue = ((percentage / 100) * plugin.rangeMax - plugin.rangeMax / 2).toFixed(0);
 
             plugin.oldPercentage = percentage;
 
@@ -198,33 +225,38 @@
         animate: function() {
             var plugin = this,
                 inlineCss,
-                translateValueY = plugin.translateValue,
-                translateValueX = 0;
+                translateValueY,
+                translateValueX;
 
             //check the orientation to know which of X or Y axe should we use
             if (plugin.options.orientation == 'left' || plugin.options.orientation == 'right') {
                 translateValueY = 0;
-                translateValueX = plugin.translateValue;
+                translateValueX = plugin.translateValue + 'px';
+            } else {
+                (translateValueY = plugin.translateValue + 'px'), (translateValueX = 0);
             }
 
             //prepare style to apply to the element
             if (plugin.options.overflow == true) {
-                inlineCss = 'scale(' + plugin.options.scale + ') translate3d(' + translateValueX + 'px, ' + translateValueY + 'px, 0)';
+                inlineCss = 'scale(' + plugin.options.scale + ') translate3d(' + translateValueX + ', ' + translateValueY + ', 0)';
             } else {
-                inlineCss = 'translate3d(' + translateValueX + 'px, ' + translateValueY + 'px, 0)';
+                inlineCss = 'translate3d(' + translateValueX + ', ' + translateValueY + ', 0)';
             }
 
             //add style depending the current vendor CSS of the browser
-            plugin.$element[0].style[cssTransform] = inlineCss;
+            plugin.element.style[cssTransform] = inlineCss;
         },
 
         proceedElement: function(elem) {
             elem.getElementOffset();
 
+            //if element not visible, no need to continue
             if (!elem.isVisible()) return;
 
+            //if percentage is equal to the last, no need to continue
             if (!elem.calculate()) return;
 
+            //else animate the image
             elem.animate();
         },
 
@@ -252,12 +284,14 @@
             for (var i = 0; i < this.occurence.length; i++) {
                 this.occurence[i].$element.removeData();
 
-                this.occurence[i].$element[0].style[cssTransform] = '';
+                this.occurence[i].unSetStyle();
 
                 this.occurence[i].unWrapElement();
 
                 window.cancelAnimationFrame(this.occurence[i].frameID);
             }
+
+            $(window).off('resize.simpleParallax');
         }
     });
 
