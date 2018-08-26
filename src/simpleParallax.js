@@ -49,6 +49,7 @@
     //simpleParallax PLUGIN
     var pluginName = 'simpleParallax',
         lastPosition = -1,
+        gap = 100,
         isInitialized = false;
 
     function SimpleParallax(element, options) {
@@ -201,8 +202,9 @@
         //check if the current element is visible in the Viewport
         isVisible: function() {
             var plugin = this;
-
-            return plugin.elementBottomX > SimpleParallax.viewportTop && plugin.elementTopX < SimpleParallax.viewportBottom;
+            // add a gap in order to translate the image before the user see the image
+            // to avoid visible init translation
+            return plugin.elementBottomX > ( SimpleParallax.viewportTop - gap ) && plugin.elementTopX < ( SimpleParallax.viewportBottom + gap );
         },
 
         //calculate the range between image will be translated
@@ -380,7 +382,7 @@
     $.fn.simpleParallax.defaults = {
         delay: 0.6,
         orientation: 'up',
-        scale: 1.2,
+        scale: 1.3,
         overflow: false,
         transition: 'cubic-bezier(0,0,0,1)'
     };
