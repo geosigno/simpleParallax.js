@@ -85,6 +85,13 @@
                 plugin.wrapElement();
             }
 
+            //store to 0 the axe that will not be use
+            if (plugin.options.orientation == 'left' || plugin.options.orientation == 'right') {
+                plugin.translateValueY = 0;
+            } else {
+                plugin.translateValueX = 0;
+            }
+
             //apply the default style on the image
             plugin.setStyle();
 
@@ -251,29 +258,25 @@
         //animate the image
         animate: function() {
             var plugin = this,
-                inlineCss,
-                translateValueY,
-                translateValueX;
+                inlineCss;
 
             if (plugin.options.orientation == 'left' || plugin.options.orientation == 'right') {
                 //if orientation option is left or right
                 //use horizontal axe - X axe
-                translateValueY = 0;
-                translateValueX = plugin.translateValue + 'px';
+                plugin.translateValueX = plugin.translateValue + 'px';
             } else {
                 //if orientation option is left or right
                 //use vertical axe - Y axe
-                translateValueY = plugin.translateValue + 'px';
-                translateValueX = 0;
+                plugin.translateValueY = plugin.translateValue + 'px';
             }
 
             //set style to apply to the element
             if (plugin.options.overflow == true) {
                 //if overflow option is set to true
                 //add the scale style
-                inlineCss = 'scale(' + plugin.options.scale + ') translate3d(' + translateValueX + ', ' + translateValueY + ', 0)';
+                inlineCss = 'scale(' + plugin.options.scale + ') translate3d(' + plugin.translateValueX + ', ' + plugin.translateValueY + ', 0)';
             } else {
-                inlineCss = 'translate3d(' + translateValueX + ', ' + translateValueY + ', 0)';
+                inlineCss = 'translate3d(' + plugin.translateValueX + ', ' + plugin.translateValueY + ', 0)';
             }
 
             //add style on the element using the adequate CSS transform
@@ -378,6 +381,6 @@
         delay: 0.6,
         orientation: 'up',
         scale: 1.2,
-        overflow: true
+        overflow: false,
     };
 });
