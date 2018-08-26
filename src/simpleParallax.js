@@ -79,8 +79,8 @@
         init: function() {
             var plugin = this;
 
-            if (plugin.options.overflow == true) {
-                //if overflow option is set to true
+            if (plugin.options.overflow == false) {
+                //if overflow option is set to false
                 //wrap the element into a div to apply overflow
                 plugin.wrapElement();
             }
@@ -111,7 +111,7 @@
             }
         },
 
-        //if overflow option is set to true
+        //if overflow option is set to false
         // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
         wrapElement: function() {
             var plugin = this;
@@ -137,8 +137,8 @@
         setStyle: function() {
             var plugin = this;
 
-            if (plugin.options.overflow == true) {
-                //if overflow option is set to true
+            if (plugin.options.overflow == false) {
+                //if overflow option is set to false
                 //add scale style so the image can be translated without getting out of its container
                 plugin.element.style[cssTransform] = 'scale(' + plugin.options.scale + ')';
             }
@@ -148,7 +148,7 @@
 
             if (plugin.options.delay > 0) {
                 //if delay option is set to true
-                //add a transition CSS using cubic-bezier
+                //add transition option
                 plugin.element.style.transition = 'transform ' + plugin.options.delay + 's ' + plugin.options.transition;
             }
         },
@@ -173,8 +173,8 @@
             //remove will change inline style
             plugin.element.style.willChange = '';
 
-            if (plugin.options.overflow == true) {
-                //if overflow option is set to true
+            if (plugin.options.overflow == false) {
+                //if overflow option is set to false
                 //remove transform inline style
                 plugin.element.style[cssTransform] = '';
             }
@@ -271,8 +271,8 @@
             }
 
             //set style to apply to the element
-            if (plugin.options.overflow == true) {
-                //if overflow option is set to true
+            if (plugin.options.overflow == false) {
+                //if overflow option is set to false
                 //add the scale style
                 inlineCss = 'scale(' + plugin.options.scale + ') translate3d(' + plugin.translateValueX + ', ' + plugin.translateValueY + ', 0)';
             } else {
@@ -344,8 +344,8 @@
                 //remove all style added from simpleParallax
                 this.occurence[i].unSetStyle();
 
-                if (plugin.options.overflow == true) {
-                    //if overflow option is set to true
+                if (plugin.options.overflow == false) {
+                    //if overflow option is set to false
                     //unwrap the element from .simpleParallax wrapper container
                     this.occurence[i].unWrapElement();
                 }

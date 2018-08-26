@@ -73,7 +73,8 @@ Find below the different settings you can apply to simpleParallax:
 | delay       | 0.6     | add some delay for parallax animations - in second |
 | orientation | up      | choose the parallax orientation effect - *up*, *right*, *down* or *left* |
 | scale       | 1.2     | choose the scale ratio - need to be above *1.0*  |
-| overflow    | true    | by default, the image is scaled to apply a parallax effect without any overflow on the original image. If set to false, the image will be translated out of its orignal flow |
+| overflow    | false   | by default, the image is scaled to apply a parallax effect without any overflow on the original image container. If overflow is set to true, the image will be translated out of its natural flow without any scale. |
+| transition  | cubic-bezier(0,0,0,1) | choose the css transition (will work only if delay is different that 0) - *ease*, *linear*, *ease-in*, etc.  |
 
 
 You can apply these settings with the following jQuery code:
