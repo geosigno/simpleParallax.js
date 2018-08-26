@@ -149,7 +149,7 @@
             if (plugin.options.delay > 0) {
                 //if delay option is set to true
                 //add a transition CSS using cubic-bezier
-                plugin.element.style.transition = 'transform ' + plugin.options.delay + 's cubic-bezier(0,0,0,1)';
+                plugin.element.style.transition = 'transform ' + plugin.options.delay + 's ' + plugin.options.transition;
             }
         },
 
@@ -382,5 +382,6 @@
         orientation: 'up',
         scale: 1.2,
         overflow: false,
+        transition: 'cubic-bezier(0,0,0,1)'
     };
 });
