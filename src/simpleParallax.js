@@ -211,7 +211,7 @@
             var plugin = this;
 
             //get the real height of the image without scale
-            plugin.elementImageHeight = plugin.element.getBoundingClientRect().height;
+            plugin.elementImageHeight = plugin.element.clientHeight;
 
             //range is calculate with the image height by the scale
             plugin.rangeMax = plugin.elementImageHeight * plugin.options.scale - plugin.elementImageHeight;
