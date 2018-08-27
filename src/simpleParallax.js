@@ -95,6 +95,9 @@
             //apply the default style on the image
             plugin.setStyle();
 
+            //get the current element offset
+            plugin.getElementOffset();
+
             //push the current occurence into an array
             occurence.push(plugin);
 
@@ -286,9 +289,6 @@
 
         //proceed the element
         proceedElement: function(elem) {
-            //get the current element offset
-            elem.getElementOffset();
-
             //if element not visible, no need to continue
             if (!elem.isVisible()) {
                 return;
