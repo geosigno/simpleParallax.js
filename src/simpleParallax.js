@@ -67,10 +67,14 @@
             this.viewportTop = window.pageYOffset;
         },
 
-        //get other viewport height and offset bottom
-        getViewportOffset: function() {
+        //get other viewport height
+        getViewportOffsetHeight: function() {
             this.viewportHeight = document.documentElement.clientHeight;
-            this.viewportBottom = SimpleParallax.viewportTop + this.viewportHeight;
+        },
+
+        //get other viewport offset bottom
+        getViewportOffsetBottom: function() {
+            this.viewportBottom = SimpleParallax.viewportTop + SimpleParallax.viewportHeight;
         }
     });
 
@@ -104,14 +108,33 @@
             if (isInitialized) {
                 //when all occurences have been initialized
                 //add a resize event on the window
-                $(window).on('resize.simpleParallax', function() {
-                    //put the rangeMax at 0 to force a recalculation
-                    plugin.rangeMax = 0;
-                });
+                plugin.bindEvent();
+
+                //get the document height
+                SimpleParallax.getViewportOffsetHeight();
 
                 //proceed with the loop
                 plugin.proceedLoop();
             }
+        },
+
+        //bind resize event
+        bindEvent: function() {
+            //when resize, some coordonates need to be re-calculate
+            $(window).on('resize.simpleParallax', function() {
+                setTimeout(function() {
+                    //re-get the document height
+                    SimpleParallax.getViewportOffsetHeight();
+
+                    for (var i = 0; i < occurence.length; i++) {
+                        //re-get the current element offset
+                        occurence[i].getElementOffset();
+
+                        //put the rangeMax at 0 to force a recalculation
+                        occurence[i].calculateRange();
+                    }
+                }, 500);
+            });
         },
 
         //if overflow option is set to false
@@ -154,6 +177,11 @@
                 //add transition option
                 plugin.element.style.transition = 'transform ' + plugin.options.delay + 's ' + plugin.options.transition;
             }
+        },
+
+        //unbind resize event
+        bindEvent: function() {
+            $(window).off('resize.simpleParallax');
         },
 
         //unwrap the element from .simpleParallax wrapper container
@@ -206,7 +234,7 @@
             var plugin = this;
             // add a gap in order to translate the image before the user see the image
             // to avoid visible init translation
-            return plugin.elementBottomX > ( SimpleParallax.viewportTop - gap ) && plugin.elementTopX < ( SimpleParallax.viewportBottom + gap );
+            return plugin.elementBottomX > SimpleParallax.viewportTop - gap && plugin.elementTopX < SimpleParallax.viewportBottom + gap;
         },
 
         //calculate the range between image will be translated
@@ -317,22 +345,20 @@
 
                 return;
             } else {
-                //store the last position
-                lastPosition = SimpleParallax.viewportTop;
+                //get the offset bottom of the viewport
+                SimpleParallax.getViewportOffsetBottom();
 
                 //for each occurence, proceed with the element
                 for (var i = 0; i < occurence.length; i++) {
-                    if (i === 0) {
-                        //for the first occurence only, recalculate the viewport top
-                        SimpleParallax.getViewportOffset();
-                    }
-
                     //proceed with the current element
                     plugin.proceedElement(occurence[i]);
                 }
 
                 //callback the proceedLoop
                 plugin.frameID = window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));
+
+                //store the last position
+                lastPosition = SimpleParallax.viewportTop;
             }
         },
 
