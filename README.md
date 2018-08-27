@@ -75,6 +75,7 @@ Find below the different settings you can apply to simpleParallax:
 | scale       | 1.2     | choose the scale ratio - need to be above *1.0*  |
 | overflow    | false   | by default, the image is scaled to apply a parallax effect without any overflow on the original image container. If overflow is set to true, the image will be translated out of its natural flow without any scale. |
 | transition  | cubic-bezier(0,0,0,1) | choose the css transition (will work only if delay is different that 0) - *ease*, *linear*, *ease-in*, etc.  |
+| breakpoint  | false | choose the minimum breakpoint (in pixel) where simpleParallax will be initialized - *768* |
 
 
 You can apply these settings with the following jQuery code:

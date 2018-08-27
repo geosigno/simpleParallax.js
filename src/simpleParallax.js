@@ -58,6 +58,10 @@
         this.element = element;
         this.elementContainer = element;
         this.options = $.extend({}, $.fn.simpleParallax.defaults, options);
+        //check if breakpoint is set and superior to user browser width
+        if (this.options.breakpoint && (document.documentElement.clientWidth <= this.options.breakpoint)) {
+            return;
+        }
         this.init();
     }
 
@@ -409,6 +413,7 @@
         orientation: 'up',
         scale: 1.3,
         overflow: false,
-        transition: 'cubic-bezier(0,0,0,1)'
+        transition: 'cubic-bezier(0,0,0,1)',
+        breakpoint: false
     };
 });
