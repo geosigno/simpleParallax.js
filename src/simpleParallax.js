@@ -50,7 +50,9 @@
     var pluginName = 'simpleParallax',
         lastPosition = -1,
         gap = 100,
-        isInitialized = false;
+        isInitialized = false,
+        //occurence array - will contains every occurence of simpleParallax
+        occurence = [];
 
     function SimpleParallax(element, options) {
         this.element = element;
@@ -73,9 +75,6 @@
     });
 
     $.extend(SimpleParallax.prototype, {
-        //occurence array - will contains every occurence of simpleParallax
-        occurence: [],
-
         //initialization of elements
         init: function() {
             var plugin = this;
@@ -97,7 +96,7 @@
             plugin.setStyle();
 
             //push the current occurence into an array
-            this.occurence.push(plugin);
+            occurence.push(plugin);
 
             if (isInitialized) {
                 //when all occurences have been initialized
@@ -322,14 +321,14 @@
                 lastPosition = SimpleParallax.viewportTop;
 
                 //for each occurence, proceed with the element
-                for (var i = 0; i < this.occurence.length; i++) {
+                for (var i = 0; i < occurence.length; i++) {
                     if (i === 0) {
                         //for the first occurence only, recalculate the viewport top
                         SimpleParallax.getViewportOffset();
                     }
 
                     //proceed with the current element
-                    plugin.proceedElement(this.occurence[i]);
+                    plugin.proceedElement(occurence[i]);
                 }
 
                 //callback the proceedLoop
@@ -339,21 +338,21 @@
 
         //destroy the simpleParallax instance
         destroy: function() {
-            for (var i = 0; i < this.occurence.length; i++) {
+            for (var i = 0; i < occurence.length; i++) {
                 //remove jQuery Plugin datas
-                $(this.occurence[i].element).removeData();
+                $(occurence[i].element).removeData();
 
                 //remove all style added from simpleParallax
-                this.occurence[i].unSetStyle();
+                occurence[i].unSetStyle();
 
                 if (plugin.options.overflow == false) {
                     //if overflow option is set to false
                     //unwrap the element from .simpleParallax wrapper container
-                    this.occurence[i].unWrapElement();
+                    occurence[i].unWrapElement();
                 }
 
                 //cancel the animation frame
-                window.cancelAnimationFrame(this.occurence[i].frameID);
+                window.cancelAnimationFrame(occurence[i].frameID);
             }
 
             //detach the resize event
