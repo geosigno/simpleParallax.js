@@ -1,4 +1,4 @@
-![simpleParallax logo](https://anakao-theme.com/simpleparallax/img/social/base-github-2.png)
+![simpleParallax logo](https://anakao-theme.com/build/images/logo.png)
 
 [![GitHub version](https://badge.fury.io/gh/geosenna%2FsimpleParallax.svg)](https://badge.fury.io/gh/geosenna%2FsimpleParallax)
 [![](https://data.jsdelivr.com/v1/package/npm/simple-parallax-jquery/badge?style=rounded)](https://www.jsdelivr.com/package/npm/simple-parallax-jquery)
