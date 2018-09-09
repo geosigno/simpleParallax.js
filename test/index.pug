@@ -1,0 +1,52 @@
+doctype html
+
+html(lang='en')
+
+  head
+
+    meta(charset='UTF-8')
+    meta(http-equiv='x-ua-compatible', content='ie=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no')
+    title='Horizon Boilerplate'
+    meta(name='description', content='Front-End Boilerplate is a starter kit that uses Gulp 4, Express.js, Webpack/Babel/ES6, SASS, PUG and foundation-sites framework')
+
+  body
+
+    style.
+        .container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .simpleParallax {
+            margin: 0 0 48px;
+        }
+
+    block content
+
+        .container
+            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
+            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
+            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
+            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
+            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
+            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
+            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
+
+
+    script(src='https://code.jquery.com/jquery-3.3.1.min.js')
+    script(src='./simpleParallax.min.js')
+
+    script.
+        window.onload = function() {
+            $('img').simpleParallax();
+        }
+        
