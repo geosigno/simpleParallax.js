@@ -193,7 +193,7 @@
         },
 
         //unbind resize event
-        bindEvent: function() {
+        unBindEvent: function() {
             $(window).off('resize.simpleParallax');
         },
 
@@ -395,7 +395,7 @@
             }
 
             //detach the resize event
-            $(window).off('resize.simpleParallax');
+            plugin.unBindEvent();
         }
     });
 
