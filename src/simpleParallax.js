@@ -85,7 +85,7 @@
         }
 
         //check if images has not been loaded yet
-        if (!plugin.naturalWidth) {
+        if (!plugin.element.naturalWidth) {
             plugin.element.addEventListener('load', plugin.init.bind(plugin));
         } else {
             plugin.init();
@@ -114,6 +114,8 @@
         init: function() {
             var plugin = this;
 
+            if (plugin.isInit == true) return;
+
             if (plugin.options.overflow == false) {
                 //if overflow option is set to false
                 //wrap the element into a div to apply overflow
@@ -135,6 +137,8 @@
 
             //push the current occurence into an array
             occurence.push(plugin);
+
+            plugin.isInit = true;
 
             //check if this the last instance to init
             if (length == occurence.length) {
@@ -423,7 +427,6 @@
     //initiliaze elements with simpleParallax plugin
     $.fn.simpleParallax = function(options) {
         length = this.length;
-
         this.each(function() {
             if (!$.data(this, pluginName)) {
                 $.data(this, pluginName, new SimpleParallax(this, options));
