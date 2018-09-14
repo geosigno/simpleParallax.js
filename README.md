@@ -61,9 +61,7 @@ Giving the following HTML:
 Simply add the following jQuery code:
 
 ```javascript
-window.onload = function() {
-  $('.thumbnail').simpleParallax();
-}
+$('.thumbnail').simpleParallax();
 ```
 
 ## 3. Settings

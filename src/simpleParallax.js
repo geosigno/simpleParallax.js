@@ -55,14 +55,23 @@
         occurence = [];
 
     function SimpleParallax(element, options) {
-        this.element = element;
-        this.elementContainer = element;
-        this.options = $.extend({}, $.fn.simpleParallax.defaults, options);
+        var plugin = this;
+
+        plugin.element = element;
+        plugin.elementContainer = element;
+        plugin.options = $.extend({}, $.fn.simpleParallax.defaults, options);
+
         //check if breakpoint is set and superior to user browser width
-        if (this.options.breakpoint && (document.documentElement.clientWidth <= this.options.breakpoint)) {
+        if (plugin.options.breakpoint && document.documentElement.clientWidth <= plugin.options.breakpoint) {
             return;
         }
-        this.init();
+
+        //check if images has not been loaded yet
+        if (!plugin.naturalWidth) {
+            plugin.element.addEventListener('load', plugin.init.bind(plugin));
+        } else {
+            plugin.init();
+        }
     }
 
     $.extend(SimpleParallax, {
