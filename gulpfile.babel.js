@@ -66,14 +66,15 @@ export const build = () =>
         .pipe(uglify())
         .pipe(header(banner, { pkg: pkg, now: now }))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest(PATHS.DEST));
+        .pipe(gulp.dest(PATHS.DEST))
+        .pipe(browserSync.reload({ stream: true }));
 
 /*
   ES Lint
 */
 export const esLint = () =>
     gulp
-        .src(['app/js/**/*.js'])
+        .src(['src/simpleParallax.js'])
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
