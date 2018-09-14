@@ -49,7 +49,7 @@
     //simpleParallax PLUGIN
     var pluginName = 'simpleParallax',
         lastPosition = -1,
-        gap = 100,
+        gap = 200,
         length,
         //occurence array - will contains every occurence of simpleParallax
         occurence = [];
