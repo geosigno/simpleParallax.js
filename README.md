@@ -45,9 +45,6 @@ npm install simple-parallax-jquery
 
 #yarn
 yarn add simple-parallax-jquery
-
-#bower
-bower install simpleParallax
 ```
 
 ## 2. Initialize the plugin
