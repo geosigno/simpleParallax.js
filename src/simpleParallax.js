@@ -50,7 +50,7 @@
     var pluginName = 'simpleParallax',
         lastPosition = -1,
         gap = 100,
-        isInitialized = false,
+        length,
         //occurence array - will contains every occurence of simpleParallax
         occurence = [];
 
@@ -118,7 +118,8 @@
             //push the current occurence into an array
             occurence.push(plugin);
 
-            if (isInitialized) {
+            //check if this the last instance to init
+            if (length == (occurence.length)) {
                 //when all occurences have been initialized
                 //add a resize event on the window
                 plugin.bindEvent();
@@ -377,6 +378,8 @@
 
         //destroy the simpleParallax instance
         destroy: function() {
+            var plugin = this;
+
             for (var i = 0; i < occurence.length; i++) {
                 //remove jQuery Plugin datas
                 $(occurence[i].element).removeData();
@@ -401,14 +404,10 @@
 
     //initiliaze elements with simpleParallax plugin
     $.fn.simpleParallax = function(options) {
-        var length = this.length;
+        length = this.length;
 
-        this.each(function(index) {
+        this.each(function() {
             if (!$.data(this, pluginName)) {
-                if (length - 1 == index) {
-                    //for the last instance, isInitialized is true
-                    isInitialized = true;
-                }
                 $.data(this, pluginName, new SimpleParallax(this, options));
             }
         });
