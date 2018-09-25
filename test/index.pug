@@ -30,46 +30,27 @@ html(lang='en')
             margin: 0 0 48px;
         }
 
+        .relative {
+            position: relative;
+        }
+
+        .absolute {
+            position: absolute;
+        }
+
     block content
 
         .container
-            picture
-                source(
-                    media='(min-width: 769px)', 
-                    srcset=('https://anakao-theme.com/simpleparallax/images/image03.jpg')
-                )
-                img.lazy(src='https://anakao-theme.com/simpleparallax/images/image03_mobile.jpg', width='768', height='768', alt='simpleParallax image')
-            picture
-                source(
-                    media='(min-width: 769px)', 
-                    srcset=('https://anakao-theme.com/simpleparallax/images/image04.jpg')
-                )
-                img.lazy(src='https://anakao-theme.com/simpleparallax/images/image04_mobile.jpg', width='768', height='768', alt='simpleParallax image')
-            picture
-                source(
-                    media='(min-width: 769px)', 
-                    srcset=('https://anakao-theme.com/simpleparallax/images/image03.jpg')
-                )
-                img.lazy(src='https://anakao-theme.com/simpleparallax/images/image03_mobile.jpg', width='768', height='768', alt='simpleParallax image')
-            picture
-                source(
-                    media='(min-width: 769px)', 
-                    srcset=('https://anakao-theme.com/simpleparallax/images/image04.jpg')
-                )
-                img.lazy(src='https://anakao-theme.com/simpleparallax/images/image04_mobile.jpg', width='768', height='768', alt='simpleParallax image')
-
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+        
     script(src='https://code.jquery.com/jquery-3.3.1.min.js')
     script(src='./simpleParallax.min.js')
 
     script.
         $(function(){
             $('img').simpleParallax();
-            //- $('img:eq(0)').simpleParallax();
-            //- $('img:eq(1)').simpleParallax();
-            //- $('img:eq(2)').simpleParallax();
-            //- $('img:eq(3)').simpleParallax();
-            //- $('img:eq(4)').simpleParallax();
-            //- $('img:eq(5)').simpleParallax();
-            //- $('img:eq(6)').simpleParallax();
         });
         

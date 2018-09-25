@@ -275,10 +275,13 @@
         getElementOffset: function() {
             var plugin = this;
 
+            //get position of the element
+            var pos = plugin.elementContainer.getBoundingClientRect();
+
             //get height
-            plugin.elementHeight = plugin.elementContainer.offsetHeight;
+            plugin.elementHeight = pos.height;
             //get offset top
-            plugin.elementTopX = plugin.elementContainer.offsetTop;
+            plugin.elementTopX = pos.top + window.pageYOffset;
             //get offset bottom
             plugin.elementBottomX = plugin.elementTopX + plugin.elementHeight;
         },
