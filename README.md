@@ -32,7 +32,7 @@ or use the below CDN link provided by jsDelivr.com
 
 ```html
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-jquery@3.1.0/dist/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-jquery@3.1.1/dist/simpleParallax.min.js"></script>
 ```
 
 or
