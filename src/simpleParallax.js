@@ -85,10 +85,10 @@
         }
 
         //check if images has not been loaded yet
-        if (!plugin.element.naturalWidth) {
-            plugin.element.addEventListener('load', plugin.init.bind(plugin));
-        } else {
+        if (plugin.checkImage(plugin.element)) {
             plugin.init();
+        } else {
+            plugin.element.addEventListener('load', plugin.init.bind(plugin));
         }
     }
 
@@ -152,6 +152,24 @@
                 //proceed with the loop
                 plugin.proceedLoop();
             }
+        },
+
+        //check if image is fully loaded
+        checkImage: function() {
+
+            var plugin = this;
+
+            //check if image has been fully loaded
+            if (!plugin.element.complete) {
+                return false;
+            }
+
+            //check if the image is displayed
+            if (typeof plugin.element.naturalWidth != 'undefined' && plugin.element.naturalWidth == 0) {
+                return false;
+            }
+
+            return true;
         },
 
         //bind resize event
