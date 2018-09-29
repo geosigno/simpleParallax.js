@@ -30,23 +30,27 @@ html(lang='en')
             margin: 0 0 48px;
         }
 
+        .relative {
+            position: relative;
+        }
+
+        .absolute {
+            position: absolute;
+        }
+
     block content
 
         .container
-            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
-            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
-            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
-            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
-            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
-            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
-            img(src='https://anakao-theme.com/simpleparallax/img/image-05-2048.jpg')
-
-
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+        
     script(src='https://code.jquery.com/jquery-3.3.1.min.js')
     script(src='./simpleParallax.min.js')
 
     script.
-        window.onload = function() {
+        $(function(){
             $('img').simpleParallax();
-        }
+        });
         

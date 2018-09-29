@@ -46,23 +46,50 @@
             };
     })();
 
+    //closest polyfill for IE 11
+    //https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+    if (!Element.prototype.matches) {
+        Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+    }
+
+    if (!Element.prototype.closest) {
+        Element.prototype.closest = function(s) {
+            var el = this;
+            if (!document.documentElement.contains(el)) return null;
+            do {
+                if (el.matches(s)) return el;
+                el = el.parentElement || el.parentNode;
+            } while (el !== null && el.nodeType === 1);
+            return null;
+        };
+    }
+
     //simpleParallax PLUGIN
     var pluginName = 'simpleParallax',
         lastPosition = -1,
-        gap = 100,
-        isInitialized = false,
+        gap = 200,
+        length,
         //occurence array - will contains every occurence of simpleParallax
         occurence = [];
 
     function SimpleParallax(element, options) {
-        this.element = element;
-        this.elementContainer = element;
-        this.options = $.extend({}, $.fn.simpleParallax.defaults, options);
+        var plugin = this;
+
+        plugin.element = element;
+        plugin.elementContainer = element;
+        plugin.options = $.extend({}, $.fn.simpleParallax.defaults, options);
+
         //check if breakpoint is set and superior to user browser width
-        if (this.options.breakpoint && (document.documentElement.clientWidth <= this.options.breakpoint)) {
+        if (plugin.options.breakpoint && document.documentElement.clientWidth <= plugin.options.breakpoint) {
             return;
         }
-        this.init();
+
+        //check if images has not been loaded yet
+        if (plugin.checkImage(plugin.element)) {
+            plugin.init();
+        } else {
+            plugin.element.addEventListener('load', plugin.init.bind(plugin));
+        }
     }
 
     $.extend(SimpleParallax, {
@@ -87,6 +114,8 @@
         init: function() {
             var plugin = this;
 
+            if (plugin.isInit == true) return;
+
             if (plugin.options.overflow == false) {
                 //if overflow option is set to false
                 //wrap the element into a div to apply overflow
@@ -109,7 +138,10 @@
             //push the current occurence into an array
             occurence.push(plugin);
 
-            if (isInitialized) {
+            plugin.isInit = true;
+
+            //check if this the last instance to init
+            if (length == occurence.length) {
                 //when all occurences have been initialized
                 //add a resize event on the window
                 plugin.bindEvent();
@@ -120,6 +152,24 @@
                 //proceed with the loop
                 plugin.proceedLoop();
             }
+        },
+
+        //check if image is fully loaded
+        checkImage: function() {
+
+            var plugin = this;
+
+            //check if image has been fully loaded
+            if (!plugin.element.complete) {
+                return false;
+            }
+
+            //check if the image is displayed
+            if (typeof plugin.element.naturalWidth != 'undefined' && plugin.element.naturalWidth == 0) {
+                return false;
+            }
+
+            return true;
         },
 
         //bind resize event
@@ -184,7 +234,7 @@
         },
 
         //unbind resize event
-        bindEvent: function() {
+        unBindEvent: function() {
             $(window).off('resize.simpleParallax');
         },
 
@@ -225,10 +275,13 @@
         getElementOffset: function() {
             var plugin = this;
 
+            //get position of the element
+            var pos = plugin.elementContainer.getBoundingClientRect();
+
             //get height
-            plugin.elementHeight = plugin.elementContainer.offsetHeight;
+            plugin.elementHeight = pos.height;
             //get offset top
-            plugin.elementTopX = plugin.elementContainer.offsetTop;
+            plugin.elementTopX = pos.top + window.pageYOffset;
             //get offset bottom
             plugin.elementBottomX = plugin.elementTopX + plugin.elementHeight;
         },
@@ -368,6 +421,8 @@
 
         //destroy the simpleParallax instance
         destroy: function() {
+            var plugin = this;
+
             for (var i = 0; i < occurence.length; i++) {
                 //remove jQuery Plugin datas
                 $(occurence[i].element).removeData();
@@ -386,20 +441,15 @@
             }
 
             //detach the resize event
-            $(window).off('resize.simpleParallax');
+            plugin.unBindEvent();
         }
     });
 
     //initiliaze elements with simpleParallax plugin
     $.fn.simpleParallax = function(options) {
-        var length = this.length;
-
-        this.each(function(index) {
+        length = this.length;
+        this.each(function() {
             if (!$.data(this, pluginName)) {
-                if (length - 1 == index) {
-                    //for the last instance, isInitialized is true
-                    isInitialized = true;
-                }
                 $.data(this, pluginName, new SimpleParallax(this, options));
             }
         });
