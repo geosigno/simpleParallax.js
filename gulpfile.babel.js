@@ -60,9 +60,6 @@ export function clearJS() {
 export const build = () =>
     gulp
         .src(PATHS.SRC)
-        .pipe(babel({
-            presets: ['env']
-        }))
         .pipe(uglify())
         .pipe(header(banner, { pkg: pkg, now: now }))
         .pipe(rename({ suffix: '.min' }))
