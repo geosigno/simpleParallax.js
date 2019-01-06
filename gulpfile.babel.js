@@ -63,8 +63,8 @@ export const build = () =>
         .pipe(babel({
             presets: ['env']
         }))
-        //.pipe(uglify())
-        //.pipe(header(banner, { pkg: pkg, now: now }))
+        .pipe(uglify())
+        .pipe(header(banner, { pkg: pkg, now: now }))
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(PATHS.DEST))
         .pipe(browserSync.reload({ stream: true }));

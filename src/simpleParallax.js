@@ -78,10 +78,12 @@
     };
 
     function handle(element, options) {
-        let nodes = document.querySelectorAll(element);
-
-        for (var i = 0; i < nodes.length; i++) { 
-            new SimpleParallax(nodes[i], options);
+        if (element.length) {
+            for (var i = 0; i < element.length; i++) { 
+                new SimpleParallax(element[i], options);
+            }
+        } else {
+            new SimpleParallax(element, options);
         }
     }
 
