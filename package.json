@@ -46,7 +46,7 @@
     "gulp": "4.0.0",
     "gulp-babel": "^7.0.1",
     "gulp-eslint": "^5.0.0",
-    "gulp-header": "^2.0.5",
+    "gulp-header": "^2.0.7",
     "gulp-rename": "^1.4.0",
     "gulp-uglify": "^3.0.1",
     "husky": "^0.14.3",
@@ -54,6 +54,6 @@
     "moment": "^2.22.2",
     "nodemon": "^1.18.3",
     "npm": "^6.4.0",
-    "prettier": "^1.14.2"
+    "prettier": "^1.15.3"
   }
 }
