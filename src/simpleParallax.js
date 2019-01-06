@@ -77,6 +77,14 @@
         breakpoint: false
     };
 
+    function handle(element, options) {
+        let nodes = document.querySelectorAll(element);
+
+        for (var i = 0; i < nodes.length; i++) { 
+            new SimpleParallax(nodes[i], options);
+        }
+    }
+
     class SimpleParallax {
         constructor(element, options) {
             //set the element & settings
@@ -237,8 +245,6 @@
 
             //re-get the range if the current element
             this.getRangeMax();
-
-            console.log(this);
         }
 
         //calculate the range between image will be translated
@@ -386,5 +392,5 @@
 
     }
 
-    return SimpleParallax;
+    return handle;
 });
