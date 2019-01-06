@@ -68,15 +68,6 @@
         };
     }
 
-    let defaults = {
-        delay: 0.6,
-        orientation: 'up',
-        scale: 1.3,
-        overflow: false,
-        transition: 'cubic-bezier(0,0,0,1)',
-        breakpoint: false
-    };
-
     function handle(element, options) {
         if (element.length) {
             for (var i = 0; i < element.length; i++) { 
@@ -94,8 +85,15 @@
             this.elementContainer = element;
             this.lastPosition = -1;
             this.gap = 200;
-            this.settings = Object.assign(defaults, options);
-
+            this.defaults = {
+                delay: 0.6,
+                orientation: 'up',
+                scale: 1.3,
+                overflow: false,
+                transition: 'cubic-bezier(0,0,0,1)',
+                breakpoint: false
+            };
+            this.settings = Object.assign(this.defaults, options);
             this.init = this.init.bind(this);
             this.animationFrame = this.animationFrame.bind(this);
             this.handleResize = this.handleResize.bind(this);
