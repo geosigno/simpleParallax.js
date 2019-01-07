@@ -28,7 +28,7 @@ Simply copy/paste the below snippet just before your closing `<body>` tag:
 or use the below CDN link provided by jsDelivr.com
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-jquery@4.0.0/dist/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@4.0.0/dist/simpleParallax.min.js"></script>
 ```
 
 or
@@ -37,16 +37,16 @@ or
 
 ```sh
 #npm
-npm install simple-parallax-jquery
+npm install simple-parallax-js
 
 #yarn
-yarn add simple-parallax-jquery
+yarn add simple-parallax-js
 ```
 
 Then you can simply import it:
 
 ```sh
-import simpleParallax from 'simple-parallax-jquery';
+import simpleParallax from 'simple-parallax-js';
 ```
 
 ## 2. Initialize the plugin
