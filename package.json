@@ -1,5 +1,5 @@
 {
-  "name": "simple-parallax-jquery",
+  "name": "simple-parallax-js",
   "version": "4.0.0",
   "description": "simpleParallax is a simple and lightweight jQuery plugin that gives your website parallax animations on the images",
   "homepage": "https://anakao-theme.com/simpleparallax/",
@@ -10,14 +10,15 @@
   },
   "keywords": [
     "parallax",
-    "jquery",
     "scroll",
     "simple",
     "easy",
     "fast",
     "light",
     "image",
-    "effect"
+    "effect",
+    "vanilla",
+    "es6"
   ],
   "author": "Geoffrey Signorato <geoffrey.signorato@gmail.com>",
   "license": "MIT",
