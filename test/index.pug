@@ -18,7 +18,7 @@ html(lang='en')
             align-items: center;
             flex-wrap: wrap;
             max-width: 900px;
-            margin: 0 auto;
+            margin: 600px auto;
         }
 
         img {
@@ -41,16 +41,46 @@ html(lang='en')
     block content
 
         .container
+            img#1(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img#2(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img#3(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img#4(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
             img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
             img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
             img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
             img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
-        
-    script(src='https://code.jquery.com/jquery-3.3.1.min.js')
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image')
+            img(src='https://anakao-theme.com/simpleparallax/images/image03.jpg', width='768', height='768', alt='simpleParallax image') 
+
     script(src='./simpleParallax.min.js')
 
     script.
-        $(function(){
-            $('img').simpleParallax();
+        let item1 = document.getElementById('1');
+        var myPluginInstance = new simpleParallax(item1, {
+            orientation: 'up'
         });
+        let item2 = document.getElementById('2');
+        var myPluginInstance = new simpleParallax(item2, {
+            orientation: 'right'
+        });
+        let item3 = document.getElementById('3');
+        var myPluginInstance = new simpleParallax(item3, {
+            orientation: 'bottom'
+        });
+        let item4 = document.getElementById('4');
+        var myPluginInstance = new simpleParallax(item4, {
+            orientation: 'left',
+            overflow: true
+        });
+        //- setTimeout(function() {
+        //-     myPluginInstance.destroy();
+        //- }, 2000);
+  
+
+        
+        //- $(function(){
+        //-     $('img').simpleParallax();
+        //- });
         
