@@ -7,7 +7,7 @@
 
 # Why use simpleParallax?
 
-simpleParallax is a very simple and lightweight jQuery plugin that improve your website with parallax animations on your images.
+simpleParallax is a very simple and lightweight Vanilla JS plugin that improve your website with parallax animations on your images.
 
 Where it may be laborious to get results through other plugins, simpleParallax stands out for its ease and its visual rendering. The parallax effect is directly applied on image tags, there is no need to use background images.
 
@@ -17,27 +17,23 @@ Any image will fit. Try it out!
 
 ## 1. Install the plugin
 
-Make sure jQuery library is loaded before the plugin.
-
 ### Copy/paste
 
 Simply copy/paste the below snippet just before your closing `<body>` tag:
 
 ```html
-<script src="jquery.js"></script>
 <script src="simpleParallax.js"></script>
 ```
 
 or use the below CDN link provided by jsDelivr.com
 
 ```html
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-jquery@3.1.1/dist/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-jquery@4.0.0/dist/simpleParallax.min.js"></script>
 ```
 
 or
 
-### Install it via Package Managers
+### Module
 
 ```sh
 #npm
@@ -45,6 +41,12 @@ npm install simple-parallax-jquery
 
 #yarn
 yarn add simple-parallax-jquery
+```
+
+Then you can simply import it:
+
+```sh
+import simpleParallax from 'simple-parallax-jquery';
 ```
 
 ## 2. Initialize the plugin
@@ -55,10 +57,11 @@ Giving the following HTML:
 <img class="thumbnail" src="image.jpg" alt="image">
 ```
 
-Simply add the following jQuery code:
+Simply add the following JS code:
 
 ```javascript
-$('.thumbnail').simpleParallax();
+var image = document.getElementsByClassName('thumbnail');
+new simpleParallax(image);
 ```
 
 ## 3. Settings
@@ -75,20 +78,16 @@ Find below the different settings you can apply to simpleParallax:
 | breakpoint  | false | choose the minimum breakpoint (in pixel) where simpleParallax will be initialized - *768* |
 
 
-You can apply these settings with the following jQuery code:
+You can apply these settings with the following JS code:
 
 ```javascript
-$('img').simpleParallax({delay: 0, orientation: 'down', scale: 1.30, overfow: true });
-```
-
-## 4. Methods
-
-Find below the different methods you can use:
-
-### destroy
-
-```javascript
-$('.thumbnail').data('simpleParallax').destroy();
+var images = document.querySelectorAll('.thumbnail');
+new simpleParallax(images, {
+    delay: 0, 
+    orientation: 'down', 
+    scale: 1.30, 
+    overfow: true 
+});
 ```
 
 # Good to know

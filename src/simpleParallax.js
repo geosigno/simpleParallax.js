@@ -94,6 +94,12 @@
                 breakpoint: false
             };
             this.settings = Object.assign(this.defaults, options);
+
+            //check if breakpoint is set and superior to user browser width
+            if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
+                return;
+            }
+
             this.init = this.init.bind(this);
             this.animationFrame = this.animationFrame.bind(this);
             this.handleResize = this.handleResize.bind(this);
