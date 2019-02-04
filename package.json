@@ -1,9 +1,9 @@
 {
   "name": "simple-parallax-js",
-  "version": "4.0.0",
-  "description": "simpleParallax is a simple and lightweight jQuery plugin that gives your website parallax animations on the images",
-  "homepage": "https://anakao-theme.com/simpleparallax/",
-  "main": "src/simpleParallax.js",
+  "version": "4.0.1",
+  "description": "simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on the images",
+  "homepage": "https://simpleparallax.com/",
+  "main": "dist/simpleParallax.min.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/geosenna/simpleParallax.git"
