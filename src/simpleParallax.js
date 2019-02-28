@@ -70,11 +70,13 @@
 
     function handle(element, options) {
         if (element.length) {
-            for (var i = 0; i < element.length; i++) { 
-                new SimpleParallax(element[i], options);
+            var handles = [];
+            for (var i = 0; i < element.length; i++) {
+                handles.push(new SimpleParallax(element[i], options));
             }
+            return handles;
         } else {
-            new SimpleParallax(element, options);
+            return new SimpleParallax(element, options);
         }
     }
 
@@ -181,7 +183,7 @@
             // move all children out of .simpleParallax wrapper container
             while (this.elementContainer.firstChild) {
                 parent.insertBefore(this.elementContainer.firstChild, this.elementContainer);
-            } 
+            }
 
             // remove .simpleParallax wrapper container
             parent.removeChild(this.elementContainer);
@@ -281,12 +283,12 @@
             //if so we don't do aything
             if (this.oldPercentage === percentage) {
                 return false;
-            } 
+            }
 
             //if not range max is set, recalculate it
             if (!this.rangeMax) {
                 this.getRangeMax();
-            } 
+            }
 
             //transform this % into the max range of the element
             //rounding translateValue to a non float int - as minimum pixel for browser to render is 1 (no 0.5)
@@ -296,7 +298,7 @@
             //if so we don't do aything
             if (this.oldTranslateValue === this.translateValue) {
                 return false;
-            } 
+            }
 
             //store the current percentage
             this.oldPercentage = percentage;
@@ -374,12 +376,10 @@
 
             //store the last position
             this.lastPosition = this.viewportTop;
-
         }
 
         //destroy the simpleParallax instance
         destroy() {
-
             //remove all style added from simpleParallax
             this.unSetStyle();
 
@@ -395,7 +395,6 @@
             //detach the resize event
             window.removeEventListener('resize', this.handleResize);
         }
-
     }
 
     return handle;
