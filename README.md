@@ -67,9 +67,9 @@ var parallax = new simpleParallax(images[0]);
 ```
 Clean up
 ```javascript
-parallaxArray.forEach(p => p.destory());
+parallaxArray.forEach(p => p.destroy());
 // or
-parallax.destory()
+parallax.destroy()
 ```
 
 ## 3. Settings
