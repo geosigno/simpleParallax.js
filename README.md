@@ -91,7 +91,7 @@ new simpleParallax(images, {
     overfow: true 
 });
 ```
-## 3. Methods
+## 4. Methods
 
 ### Destroy
 destroy a single instance
