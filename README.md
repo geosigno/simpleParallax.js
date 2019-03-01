@@ -61,15 +61,9 @@ Simply add the following JS code:
 
 ```javascript
 var images = document.getElementsByClassName('thumbnail');
-var parallaxArray = new simpleParallax(images);
+var instances = new simpleParallax(images);
 // or
-var parallax = new simpleParallax(images[0]);
-```
-Clean up
-```javascript
-parallaxArray.forEach(p => p.destroy());
-// or
-parallax.destroy()
+var instance = new simpleParallax(images[0]);
 ```
 
 ## 3. Settings
@@ -97,7 +91,20 @@ new simpleParallax(images, {
     overfow: true 
 });
 ```
+## 3. Methods
 
+###Destroy
+destroy a single instance
+
+```javascript
+instance.destroy();
+```
+
+destroy several instances
+
+```javascript
+instances.forEach(instance => instance.destroy());
+```
 # Good to know
 
 * The higher the scale setting is set, the more visible the parallax effect will be. In return, the image will lose in quality (no loss of quality if overlow option is set to false)
