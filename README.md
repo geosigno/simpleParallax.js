@@ -93,7 +93,7 @@ new simpleParallax(images, {
 ```
 ## 3. Methods
 
-###Destroy
+### Destroy
 destroy a single instance
 
 ```javascript
