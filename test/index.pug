@@ -57,23 +57,23 @@ html(lang='en')
     script(src='./simpleParallax.min.js')
 
     script.
-        let item1 = document.getElementById('1');
+        let item1 = document.querySelectorAll('img');
         var myPluginInstance = new simpleParallax(item1, {
             orientation: 'up'
         });
-        let item2 = document.getElementById('2');
-        var myPluginInstance = new simpleParallax(item2, {
-            orientation: 'right'
-        });
-        let item3 = document.getElementById('3');
-        var myPluginInstance = new simpleParallax(item3, {
-            orientation: 'bottom'
-        });
-        let item4 = document.getElementById('4');
-        var myPluginInstance = new simpleParallax(item4, {
-            orientation: 'left',
-            overflow: true
-        });
+        //- let item2 = document.getElementById('2');
+        //- var myPluginInstance = new simpleParallax(item2, {
+        //-     orientation: 'right'
+        //- });
+        //- let item3 = document.getElementById('3');
+        //- var myPluginInstance = new simpleParallax(item3, {
+        //-     orientation: 'bottom'
+        //- });
+        //- let item4 = document.getElementById('4');
+        //- var myPluginInstance = new simpleParallax(item4, {
+        //-     orientation: 'left',
+        //-     overflow: true
+        //- });
         //- setTimeout(function() {
         //-     myPluginInstance.destroy();
         //- }, 2000);

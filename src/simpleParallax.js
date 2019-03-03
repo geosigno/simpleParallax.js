@@ -161,15 +161,12 @@
         // if overflow option is set to false
         // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
         wrapElement() {
-            //check if image is inside a picture tag
-            let elementToWrap = this.element.closest('picture') || this.element;
-
             // create a .simpleParallax wrapper container
             const wrapper = document.createElement('div');
             wrapper.classList.add('simpleParallax');
             wrapper.style.overflow = 'hidden';
-            elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
-            wrapper.appendChild(elementToWrap);
+            this.element.parentNode.insertBefore(wrapper, this.element);
+            wrapper.appendChild(this.element);
 
             //set the container for calculation
             this.elementContainer = wrapper;
@@ -179,12 +176,6 @@
         unWrapElement() {
             // get .simpleParallax wrapper container
             let parent = this.elementContainer.parentNode;
-
-            // If the parent doesn't exist then the
-            // image no longer exists in the DOM
-            // e.g. a SPA `destroy()`ing the
-            // instance after changing the route.
-            if (!parent) return;
 
             // move all children out of .simpleParallax wrapper container
             while (this.elementContainer.firstChild) {
