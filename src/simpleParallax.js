@@ -177,6 +177,12 @@
             // get .simpleParallax wrapper container
             let parent = this.elementContainer.parentNode;
 
+            // If the parent doesn't exist then the 
+            // image no longer exists in the DOM 
+            // e.g. a SPA `destroy()`ing the 
+            // instance after changing the route. 
+            if (!parent) return; 
+
             // move all children out of .simpleParallax wrapper container
             while (this.elementContainer.firstChild) {
                 parent.insertBefore(this.elementContainer.firstChild, this.elementContainer);
