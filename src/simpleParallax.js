@@ -124,8 +124,6 @@
             instances.push(this);
 
             //if all instances have been initialized
-            console.log('instances.length '+instances.length );
-            console.log('handleLength '+handleLength );
             if (instances.length === handleLength) {
                 //get the document height
                 this.getViewportOffsetHeight();
@@ -147,6 +145,12 @@
 
             //get the current element offset
             this.getElementOffset();
+
+            //get its translated value
+            this.getTranslateValue();
+            
+            //apply its translation even if not visible for the first init
+            this.animate();
 
             window.addEventListener('resize', this.handleResize);
         }
@@ -317,7 +321,6 @@
             if (this.oldTranslateValue === this.translateValue) {
                 return false;
             }
-
             //store the current percentage
             this.oldPercentage = percentage;
             this.oldTranslateValue = this.translateValue;
