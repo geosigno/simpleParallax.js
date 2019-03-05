@@ -93,7 +93,6 @@
             //set the element & settings
             this.element = element;
             this.elementContainer = element;
-            this.gap = 200;
             this.defaults = {
                 delay: 0.6,
                 orientation: 'up',
@@ -172,9 +171,7 @@
 
         //check if the current element is visible in the Viewport
         isVisible() {
-            // add a gap in order to translate the image before the user see the image
-            // to avoid visible init translation
-            return this.elementBottomX > viewportTop - this.gap && this.elementTopX < viewportBottom + this.gap;
+            return this.elementBottomX > viewportTop && this.elementTopX < viewportBottom;
         }
 
         // if overflow option is set to false
