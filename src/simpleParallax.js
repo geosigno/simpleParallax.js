@@ -399,8 +399,16 @@
             lastPosition = viewportTop;
         }
 
+        // Returns true if the instance has been destroyed.
+        get isDestroyed() {
+            return instances.indexOf(this) === -1;
+        }
+
         //destroy the simpleParallax instance
         destroy() {
+            // Make sure we don't re-destroy an instance.
+            if (this.isDestroyed) return;
+
             //remove all style added from simpleParallax
             this.unSetStyle();
 
