@@ -1,10 +1,14 @@
-(function(factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        factory(require('jquery'), window, document);
+(function(root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define([], function() {
+            return factory(root);
+        });
+    } else if (typeof exports === 'object') {
+        module.exports = factory(root);
     } else {
-        factory(jQuery, window, document);
+        root.simpleParallax = factory(root);
     }
-})(function($, window, document, undefined) {
+})(typeof global !== 'undefined' ? global : typeof window !== 'undefined' ? window : this, function(window) {
     'use strict';
 
     // Detect css transform
@@ -64,406 +68,337 @@
         };
     }
 
-    //simpleParallax PLUGIN
-    var pluginName = 'simpleParallax',
-        lastPosition = -1,
-        gap = 200,
-        length,
-        //occurence array - will contains every occurence of simpleParallax
-        occurence = [];
-
-    function SimpleParallax(element, options) {
-        var plugin = this;
-
-        plugin.element = element;
-        plugin.elementContainer = element;
-        plugin.options = $.extend({}, $.fn.simpleParallax.defaults, options);
-
-        //check if breakpoint is set and superior to user browser width
-        if (plugin.options.breakpoint && document.documentElement.clientWidth <= plugin.options.breakpoint) {
-            return;
-        }
-
-        //check if images has not been loaded yet
-        if (plugin.checkImage(plugin.element)) {
-            plugin.init();
+    function handle(element, options) {
+        if (element.length) {
+            var handles = [];
+            for (var i = 0; i < element.length; i++) {
+                handles.push(new SimpleParallax(element[i], options));
+            }
+            return handles;
         } else {
-            plugin.element.addEventListener('load', plugin.init.bind(plugin));
+            return new SimpleParallax(element, options);
         }
     }
 
-    $.extend(SimpleParallax, {
-        //get the viewport offset top
-        getViewportOffsetTop: function() {
-            this.viewportTop = window.pageYOffset;
-        },
+    class SimpleParallax {
+        constructor(element, options) {
+            //set the element & settings
+            this.element = element;
+            this.elementContainer = element;
+            this.lastPosition = -1;
+            this.gap = 200;
+            this.defaults = {
+                delay: 0.6,
+                orientation: 'up',
+                scale: 1.3,
+                overflow: false,
+                transition: 'cubic-bezier(0,0,0,1)',
+                breakpoint: false
+            };
+            this.settings = Object.assign(this.defaults, options);
 
-        //get other viewport height
-        getViewportOffsetHeight: function() {
-            this.viewportHeight = document.documentElement.clientHeight;
-        },
-
-        //get other viewport offset bottom
-        getViewportOffsetBottom: function() {
-            this.viewportBottom = SimpleParallax.viewportTop + SimpleParallax.viewportHeight;
-        }
-    });
-
-    $.extend(SimpleParallax.prototype, {
-        //initialization of elements
-        init: function() {
-            var plugin = this;
-
-            if (plugin.isInit == true) return;
-
-            if (plugin.options.overflow == false) {
-                //if overflow option is set to false
-                //wrap the element into a div to apply overflow
-                plugin.wrapElement();
+            //check if breakpoint is set and superior to user browser width
+            if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
+                return;
             }
 
-            //store to 0 the axe that will not be use
-            if (plugin.options.orientation == 'left' || plugin.options.orientation == 'right') {
-                plugin.translateValueY = 0;
+            this.init = this.init.bind(this);
+            this.animationFrame = this.animationFrame.bind(this);
+            this.handleResize = this.handleResize.bind(this);
+
+            //check if images has not been loaded yet
+            if (this.isImageLoaded(this.element)) {
+                this.init();
             } else {
-                plugin.translateValueX = 0;
+                this.element.addEventListener('load', this.init);
+            }
+        }
+
+        init() {
+            if (this.settings.overflow === false) {
+                //if overflow option is set to false
+                //wrap the element into a div to apply overflow
+                this.wrapElement();
             }
 
             //apply the default style on the image
-            plugin.setStyle();
+            this.setStyle();
 
             //get the current element offset
-            plugin.getElementOffset();
+            this.getElementOffset();
 
-            //push the current occurence into an array
-            occurence.push(plugin);
+            //get the document height
+            this.getViewportOffsetHeight();
 
-            plugin.isInit = true;
+            //proceed with the loop
+            this.animationFrame();
 
-            //check if this the last instance to init
-            if (length == occurence.length) {
-                //when all occurences have been initialized
-                //add a resize event on the window
-                plugin.bindEvent();
-
-                //get the document height
-                SimpleParallax.getViewportOffsetHeight();
-
-                //proceed with the loop
-                plugin.proceedLoop();
-            }
-        },
+            window.addEventListener('resize', this.handleResize);
+        }
 
         //check if image is fully loaded
-        checkImage: function() {
-
-            var plugin = this;
-
+        isImageLoaded() {
             //check if image has been fully loaded
-            if (!plugin.element.complete) {
+            if (!this.element.complete) {
                 return false;
             }
 
             //check if the image is displayed
-            if (typeof plugin.element.naturalWidth != 'undefined' && plugin.element.naturalWidth == 0) {
+            if (typeof this.element.naturalWidth !== 'undefined' && this.element.naturalWidth === 0) {
                 return false;
             }
 
             return true;
-        },
+        }
 
-        //bind resize event
-        bindEvent: function() {
-            //when resize, some coordonates need to be re-calculate
-            $(window).on('resize.simpleParallax', function() {
-                setTimeout(function() {
-                    //re-get the document height
-                    SimpleParallax.getViewportOffsetHeight();
+        //check if the current element is visible in the Viewport
+        isVisible() {
+            // add a gap in order to translate the image before the user see the image
+            // to avoid visible init translation
+            return this.elementBottomX > this.viewportTop - this.gap && this.elementTopX < this.viewportBottom + this.gap;
+        }
 
-                    for (var i = 0; i < occurence.length; i++) {
-                        //re-get the current element offset
-                        occurence[i].getElementOffset();
-
-                        //put the rangeMax at 0 to force a recalculation
-                        occurence[i].calculateRange();
-                    }
-                }, 500);
-            });
-        },
-
-        //if overflow option is set to false
+        // if overflow option is set to false
         // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
-        wrapElement: function() {
-            var plugin = this;
-
-            //check if image is inside a picture tag
-            if (plugin.element.closest('picture')) {
-                plugin.elementToWrap = plugin.element.closest('picture');
-            } else {
-                plugin.elementToWrap = plugin.element;
-            }
-
+        wrapElement() {
             // create a .simpleParallax wrapper container
-            var wrapper = document.createElement('div');
+            const wrapper = document.createElement('div');
             wrapper.classList.add('simpleParallax');
             wrapper.style.overflow = 'hidden';
-            plugin.elementToWrap.parentNode.insertBefore(wrapper, plugin.elementToWrap);
-            wrapper.appendChild(plugin.elementToWrap);
+            this.element.parentNode.insertBefore(wrapper, this.element);
+            wrapper.appendChild(this.element);
 
             //set the container for calculation
-            plugin.elementContainer = plugin.element.closest('.simpleParallax');
-        },
+            this.elementContainer = wrapper;
+        }
 
-        setStyle: function() {
-            var plugin = this;
+        //unwrap the element from .simpleParallax wrapper container
+        unWrapElement() {
+            // get .simpleParallax wrapper container
+            let parent = this.elementContainer.parentNode;
 
-            if (plugin.options.overflow == false) {
+            // If the parent doesn't exist then the 
+            // image no longer exists in the DOM 
+            // e.g. a SPA `destroy()`ing the 
+            // instance after changing the route. 
+            if (!parent) return; 
+
+            // move all children out of .simpleParallax wrapper container
+            while (this.elementContainer.firstChild) {
+                parent.insertBefore(this.elementContainer.firstChild, this.elementContainer);
+            }
+
+            // remove .simpleParallax wrapper container
+            parent.removeChild(this.elementContainer);
+        }
+
+        //apply default style on element
+        setStyle() {
+            if (this.settings.overflow === false) {
                 //if overflow option is set to false
                 //add scale style so the image can be translated without getting out of its container
-                plugin.element.style[cssTransform] = 'scale(' + plugin.options.scale + ')';
+                this.element.style[cssTransform] = 'scale(' + this.settings.scale + ')';
+            }
+
+            if (this.settings.delay > 0) {
+                //if delay option is set to true
+                //add transition option
+                this.element.style.transition = 'transform ' + this.settings.delay + 's ' + this.settings.transition;
             }
 
             //add will-change CSS property to improve perfomance
-            plugin.element.style.willChange = 'transform';
+            this.element.style.willChange = 'transform';
+        }
 
-            if (plugin.options.delay > 0) {
-                //if delay option is set to true
-                //add transition option
-                plugin.element.style.transition = 'transform ' + plugin.options.delay + 's ' + plugin.options.transition;
-            }
-        },
-
-        //unbind resize event
-        unBindEvent: function() {
-            $(window).off('resize.simpleParallax');
-        },
-
-        //unwrap the element from .simpleParallax wrapper container
-        unWrapElement: function() {
-            var plugin = this;
-
-            // get .simpleParallax wrapper container
-            var parent = plugin.elementContainer.parentNode;
-
-            // move all children out of .simpleParallax wrapper container
-            while (plugin.elementContainer.firstChild) parent.insertBefore(plugin.elementContainer.firstChild, plugin.elementContainer);
-
-            // remove .simpleParallax wrapper container
-            parent.removeChild(plugin.elementContainer);
-        },
-
-        unSetStyle: function() {
-            var plugin = this;
-
+        //remove style of the element
+        unSetStyle() {
             //remove will change inline style
-            plugin.element.style.willChange = '';
-
-            if (plugin.options.overflow == false) {
-                //if overflow option is set to false
-                //remove transform inline style
-                plugin.element.style[cssTransform] = '';
-            }
-
-            if (plugin.options.delay > 0) {
-                //if delay option is set to true
-                //remove transition inline style
-                plugin.element.style.transition = '';
-            }
-        },
+            this.element.style.willChange = '';
+            this.element.style[cssTransform] = '';
+            this.element.style.transition = '';
+        }
 
         //get the current element offset
-        getElementOffset: function() {
-            var plugin = this;
-
+        getElementOffset() {
             //get position of the element
-            var pos = plugin.elementContainer.getBoundingClientRect();
+            let pos = this.elementContainer.getBoundingClientRect();
 
             //get height
-            plugin.elementHeight = pos.height;
+            this.elementHeight = pos.height;
             //get offset top
-            plugin.elementTopX = pos.top + window.pageYOffset;
+            this.elementTopX = pos.top + window.pageYOffset;
             //get offset bottom
-            plugin.elementBottomX = plugin.elementTopX + plugin.elementHeight;
-        },
+            this.elementBottomX = this.elementHeight + this.elementTopX;
+        }
 
-        //check if the current element is visible in the Viewport
-        isVisible: function() {
-            var plugin = this;
-            // add a gap in order to translate the image before the user see the image
-            // to avoid visible init translation
-            return plugin.elementBottomX > SimpleParallax.viewportTop - gap && plugin.elementTopX < SimpleParallax.viewportBottom + gap;
-        },
+        //get the viewport offset top
+        getViewportOffsetTop() {
+            this.viewportTop = window.pageYOffset;
+        }
+
+        //get other viewport height
+        getViewportOffsetHeight() {
+            this.viewportHeight = document.documentElement.clientHeight;
+        }
+
+        //get other viewport offset bottom
+        getViewportOffsetBottom() {
+            this.viewportBottom = this.viewportTop + this.viewportHeight;
+        }
+
+        handleResize() {
+            //when resize, some coordonates need to be re-calculate
+            //re-get the document height
+            this.getViewportOffsetHeight();
+
+            //re-get the current element offset
+            this.getElementOffset();
+
+            //re-get the range if the current element
+            this.getRangeMax();
+        }
 
         //calculate the range between image will be translated
-        calculateRange: function() {
-            var plugin = this;
-
+        getRangeMax() {
             //get the real height of the image without scale
-            plugin.elementImageHeight = plugin.element.clientHeight;
+            let elementImageHeight = this.element.clientHeight;
 
             //range is calculate with the image height by the scale
-            plugin.rangeMax = plugin.elementImageHeight * plugin.options.scale - plugin.elementImageHeight;
+            this.rangeMax = elementImageHeight * this.settings.scale - elementImageHeight;
 
             //if orientation option is down or right
             //inverse the range max to translate in the other way
-            if (plugin.options.orientation === 'down' || plugin.options.orientation === 'right') {
-                plugin.rangeMax *= -1;
+            if (this.settings.orientation === 'down' || this.settings.orientation === 'right') {
+                this.rangeMax *= -1;
             }
-        },
+        }
 
-        //calculate the percentage and the translate value to apply on the element
-        calculate: function() {
-            var plugin = this;
-
+        //get the percentage and the translate value to apply on the element
+        getTranslateValue() {
             //calculate the % position of the element comparing to the viewport
             //rounding percentage to a 1 number float to avoid unn unnecessary calculation
-            var percentage = ((SimpleParallax.viewportBottom - plugin.elementTopX) / ((SimpleParallax.viewportHeight + plugin.elementHeight) / 100)).toFixed(1);
+            let percentage = ((this.viewportBottom - this.elementTopX) / ((this.viewportHeight + this.elementHeight) / 100)).toFixed(1);
 
             //sometime the percentage exceeds 100 or goes below 0
-            //if so, remove the extra
-            if (percentage > 100) {
-                percentage = 100;
-            } else if (percentage < 0) {
-                percentage = 0;
-            }
+            percentage = Math.min(100, Math.max(0, percentage));
 
             //sometime the same percentage is returned
             //if so we don't do aything
-            if (plugin.oldPercentage === percentage) return false;
+            if (this.oldPercentage === percentage) {
+                return false;
+            }
 
             //if not range max is set, recalculate it
-            if (!plugin.rangeMax) plugin.calculateRange();
+            if (!this.rangeMax) {
+                this.getRangeMax();
+            }
 
             //transform this % into the max range of the element
             //rounding translateValue to a non float int - as minimum pixel for browser to render is 1 (no 0.5)
-            plugin.translateValue = ((percentage / 100) * plugin.rangeMax - plugin.rangeMax / 2).toFixed(0);
+            this.translateValue = ((percentage / 100) * this.rangeMax - this.rangeMax / 2).toFixed(0);
+
+            //sometime the same translate value is returned
+            //if so we don't do aything
+            if (this.oldTranslateValue === this.translateValue) {
+                return false;
+            }
 
             //store the current percentage
-            plugin.oldPercentage = percentage;
+            this.oldPercentage = percentage;
+            this.oldTranslateValue = this.translateValue;
 
             return true;
-        },
+        }
 
         //animate the image
-        animate: function() {
-            var plugin = this,
+        animate() {
+            let translateValueY = 0,
+                translateValueX = 0,
                 inlineCss;
 
-            if (plugin.options.orientation == 'left' || plugin.options.orientation == 'right') {
+            if (this.settings.orientation === 'left' || this.settings.orientation === 'right') {
                 //if orientation option is left or right
                 //use horizontal axe - X axe
-                plugin.translateValueX = plugin.translateValue + 'px';
+                translateValueX = this.translateValue + 'px';
             } else {
                 //if orientation option is left or right
                 //use vertical axe - Y axe
-                plugin.translateValueY = plugin.translateValue + 'px';
+                translateValueY = this.translateValue + 'px';
             }
 
             //set style to apply to the element
-            if (plugin.options.overflow == false) {
+            if (this.settings.overflow === false) {
                 //if overflow option is set to false
                 //add the scale style
-                inlineCss = 'scale(' + plugin.options.scale + ') translate3d(' + plugin.translateValueX + ', ' + plugin.translateValueY + ', 0)';
+                inlineCss = 'scale(' + this.settings.scale + ') translate3d(' + translateValueX + ', ' + translateValueY + ', 0)';
             } else {
-                inlineCss = 'translate3d(' + plugin.translateValueX + ', ' + plugin.translateValueY + ', 0)';
+                inlineCss = 'translate3d(' + translateValueX + ', ' + translateValueY + ', 0)';
             }
 
             //add style on the element using the adequate CSS transform
-            plugin.element.style[cssTransform] = inlineCss;
-        },
+            this.element.style[cssTransform] = inlineCss;
+        }
 
         //proceed the element
-        proceedElement: function(elem) {
+        proceedElement() {
             //if element not visible, no need to continue
-            if (!elem.isVisible()) {
+            if (!this.isVisible()) {
                 return;
             }
 
             //if percentage is equal to the last one, no need to continue
-            if (!elem.calculate()) {
+            if (!this.getTranslateValue()) {
                 return;
             }
 
             //animate the image
-            elem.animate();
-        },
+            this.animate();
+        }
 
-        //proceed Loop with all occurences
-        proceedLoop: function() {
-            var plugin = this;
-
+        //animation frame
+        animationFrame() {
             //get the offset top of the viewport
-            SimpleParallax.getViewportOffsetTop();
+            this.getViewportOffsetTop();
 
-            if (lastPosition === SimpleParallax.viewportTop) {
+            if (this.lastPosition === this.viewportTop) {
                 //if last position if the same than the curent one
-                //callback the proceedLoop and exit the current loop
-                plugin.frameID = window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));
+                //callback the animationFrame and exit the current loop
+                this.frameID = window.requestAnimationFrame(this.animationFrame);
 
                 return;
-            } else {
-                //get the offset bottom of the viewport
-                SimpleParallax.getViewportOffsetBottom();
-
-                //for each occurence, proceed with the element
-                for (var i = 0; i < occurence.length; i++) {
-                    //proceed with the current element
-                    plugin.proceedElement(occurence[i]);
-                }
-
-                //callback the proceedLoop
-                plugin.frameID = window.requestAnimationFrame(plugin.proceedLoop.bind(plugin));
-
-                //store the last position
-                lastPosition = SimpleParallax.viewportTop;
             }
-        },
+
+            //get the offset bottom of the viewport
+            this.getViewportOffsetBottom();
+
+            //proceed with the current element
+            this.proceedElement();
+
+            //callback the animationFrame
+            this.frameID = window.requestAnimationFrame(this.animationFrame);
+
+            //store the last position
+            this.lastPosition = this.viewportTop;
+        }
 
         //destroy the simpleParallax instance
-        destroy: function() {
-            var plugin = this;
+        destroy() {
+            //remove all style added from simpleParallax
+            this.unSetStyle();
 
-            for (var i = 0; i < occurence.length; i++) {
-                //remove jQuery Plugin datas
-                $(occurence[i].element).removeData();
-
-                //remove all style added from simpleParallax
-                occurence[i].unSetStyle();
-
-                if (plugin.options.overflow == false) {
-                    //if overflow option is set to false
-                    //unwrap the element from .simpleParallax wrapper container
-                    occurence[i].unWrapElement();
-                }
-
-                //cancel the animation frame
-                window.cancelAnimationFrame(occurence[i].frameID);
+            if (this.settings.overflow === false) {
+                //if overflow option is set to false
+                //unwrap the element from .simpleParallax wrapper container
+                this.unWrapElement();
             }
+
+            //cancel the animation frame
+            window.cancelAnimationFrame(this.frameID);
 
             //detach the resize event
-            plugin.unBindEvent();
+            window.removeEventListener('resize', this.handleResize);
         }
-    });
+    }
 
-    //initiliaze elements with simpleParallax plugin
-    $.fn.simpleParallax = function(options) {
-        length = this.length;
-        this.each(function() {
-            if (!$.data(this, pluginName)) {
-                $.data(this, pluginName, new SimpleParallax(this, options));
-            }
-        });
-
-        return this;
-    };
-
-    //simpleParallax default options
-    $.fn.simpleParallax.defaults = {
-        delay: 0.6,
-        orientation: 'up',
-        scale: 1.3,
-        overflow: false,
-        transition: 'cubic-bezier(0,0,0,1)',
-        breakpoint: false
-    };
+    return handle;
 });
