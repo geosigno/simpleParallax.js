@@ -68,24 +68,31 @@
         };
     }
 
+    let handles = [];
+    let handleLength;
     function handle(element, options) {
+        handleLength = element.length || 1;
         if (element.length) {
-            var handles = [];
             for (var i = 0; i < element.length; i++) {
                 handles.push(new SimpleParallax(element[i], options));
             }
-            return handles;
         } else {
-            return new SimpleParallax(element, options);
+            handles.push(new SimpleParallax(element, options));
         }
+        return handles;
     }
+    
+    let instances = [],
+        lastPosition = -1,
+        viewportTop, 
+        viewportBottom, 
+        viewportHeight;
 
     class SimpleParallax {
         constructor(element, options) {
             //set the element & settings
             this.element = element;
             this.elementContainer = element;
-            this.lastPosition = -1;
             this.gap = 200;
             this.defaults = {
                 delay: 0.6,
@@ -112,6 +119,20 @@
             } else {
                 this.element.addEventListener('load', this.init);
             }
+
+            //push the instance into the array of all instances
+            instances.push(this);
+
+            //if all instances have been initialized
+            console.log('instances.length '+instances.length );
+            console.log('handleLength '+handleLength );
+            if (instances.length === handleLength) {
+                //get the document height
+                this.getViewportOffsetHeight();
+
+                //proceed with the loop
+                this.animationFrame();
+            }
         }
 
         init() {
@@ -126,12 +147,6 @@
 
             //get the current element offset
             this.getElementOffset();
-
-            //get the document height
-            this.getViewportOffsetHeight();
-
-            //proceed with the loop
-            this.animationFrame();
 
             window.addEventListener('resize', this.handleResize);
         }
@@ -155,7 +170,7 @@
         isVisible() {
             // add a gap in order to translate the image before the user see the image
             // to avoid visible init translation
-            return this.elementBottomX > this.viewportTop - this.gap && this.elementTopX < this.viewportBottom + this.gap;
+            return this.elementBottomX > viewportTop - this.gap && this.elementTopX < viewportBottom + this.gap;
         }
 
         // if overflow option is set to false
@@ -233,17 +248,17 @@
 
         //get the viewport offset top
         getViewportOffsetTop() {
-            this.viewportTop = window.pageYOffset;
+            viewportTop = window.pageYOffset;
         }
 
         //get other viewport height
         getViewportOffsetHeight() {
-            this.viewportHeight = document.documentElement.clientHeight;
+            viewportHeight = document.documentElement.clientHeight;
         }
 
         //get other viewport offset bottom
         getViewportOffsetBottom() {
-            this.viewportBottom = this.viewportTop + this.viewportHeight;
+            viewportBottom = viewportTop + viewportHeight;
         }
 
         handleResize() {
@@ -277,7 +292,7 @@
         getTranslateValue() {
             //calculate the % position of the element comparing to the viewport
             //rounding percentage to a 1 number float to avoid unn unnecessary calculation
-            let percentage = ((this.viewportBottom - this.elementTopX) / ((this.viewportHeight + this.elementHeight) / 100)).toFixed(1);
+            let percentage = ((viewportBottom - this.elementTopX) / ((viewportHeight + this.elementHeight) / 100)).toFixed(1);
 
             //sometime the percentage exceeds 100 or goes below 0
             percentage = Math.min(100, Math.max(0, percentage));
@@ -340,19 +355,19 @@
         }
 
         //proceed the element
-        proceedElement() {
+        proceedElement(element) {
             //if element not visible, no need to continue
-            if (!this.isVisible()) {
+            if (!element.isVisible()) {
                 return;
             }
 
             //if percentage is equal to the last one, no need to continue
-            if (!this.getTranslateValue()) {
+            if (!element.getTranslateValue()) {
                 return;
             }
 
             //animate the image
-            this.animate();
+            element.animate();
         }
 
         //animation frame
@@ -360,7 +375,7 @@
             //get the offset top of the viewport
             this.getViewportOffsetTop();
 
-            if (this.lastPosition === this.viewportTop) {
+            if (lastPosition === viewportTop) {
                 //if last position if the same than the curent one
                 //callback the animationFrame and exit the current loop
                 this.frameID = window.requestAnimationFrame(this.animationFrame);
@@ -372,13 +387,15 @@
             this.getViewportOffsetBottom();
 
             //proceed with the current element
-            this.proceedElement();
+            for(let i=0; i<instances.length; i++) {
+                this.proceedElement(instances[i])
+            }
 
             //callback the animationFrame
             this.frameID = window.requestAnimationFrame(this.animationFrame);
 
             //store the last position
-            this.lastPosition = this.viewportTop;
+            lastPosition = viewportTop;
         }
 
         //destroy the simpleParallax instance
