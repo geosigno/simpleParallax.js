@@ -345,7 +345,7 @@
             if (this.settings.overflow === false) {
                 //if overflow option is set to false
                 //add the scale style
-                inlineCss = 'scale(' + this.settings.scale + ') translate3d(' + translateValueX + ', ' + translateValueY + ', 0)';
+                inlineCss = 'translate3d(' + translateValueX + ', ' + translateValueY + ', 0) scale(' + this.settings.scale + ')';
             } else {
                 inlineCss = 'translate3d(' + translateValueX + ', ' + translateValueY + ', 0)';
             }
