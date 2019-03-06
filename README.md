@@ -28,7 +28,7 @@ Simply copy/paste the below snippet just before your closing `<body>` tag:
 or use the below CDN link provided by jsDelivr.com
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@4.1.1/dist/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@4.2.0/dist/simpleParallax.min.js"></script>
 ```
 
 or
