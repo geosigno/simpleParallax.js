@@ -68,10 +68,8 @@
         };
     }
 
-    let handles = [];
-    let handleLength;
     function handle(element, options) {
-        handleLength = element.length || 1;
+        let handles = [];
         if (element.length) {
             for (var i = 0; i < element.length; i++) {
                 handles.push(new SimpleParallax(element[i], options));
@@ -86,7 +84,9 @@
         lastPosition = -1,
         viewportTop,
         viewportBottom,
-        viewportHeight;
+        viewportHeight,
+        frameID,
+        parallaxActive = false;
 
     class SimpleParallax {
         constructor(element, options) {
@@ -122,8 +122,9 @@
             //push the instance into the array of all instances
             instances.push(this);
 
-            //if all instances have been initialized
-            if (instances.length === handleLength) {
+            // Only do this once for all instances
+            if (!parallaxActive) {
+                parallaxActive = true;
                 //get the document height
                 this.getViewportOffsetHeight();
 
@@ -378,7 +379,7 @@
             if (lastPosition === viewportTop) {
                 //if last position if the same than the curent one
                 //callback the animationFrame and exit the current loop
-                this.frameID = window.requestAnimationFrame(this.animationFrame);
+                frameID = window.requestAnimationFrame(this.animationFrame);
 
                 return;
             }
@@ -392,14 +393,22 @@
             }
 
             //callback the animationFrame
-            this.frameID = window.requestAnimationFrame(this.animationFrame);
+            frameID = window.requestAnimationFrame(this.animationFrame);
 
             //store the last position
             lastPosition = viewportTop;
         }
 
+        // Returns true if the instance has been destroyed.
+        get isDestroyed() {
+            return instances.indexOf(this) === -1;
+        }
+
         //destroy the simpleParallax instance
         destroy() {
+            // Make sure we don't re-destroy an instance.
+            if (this.isDestroyed) return;
+
             //remove all style added from simpleParallax
             this.unSetStyle();
 
@@ -409,8 +418,20 @@
                 this.unWrapElement();
             }
 
-            //cancel the animation frame
-            window.cancelAnimationFrame(this.frameID);
+            // Remove this instance from the array
+            instances.splice(instances.indexOf(this), 1);
+
+            // If there aren't any more active parallax
+            // images then we can clean up even more.
+            if (!instances.length) {
+                // Make sure that if `new simpleParallax()` is called
+                // after this point that the animation frame will
+                // restart.
+                parallaxActive = false;
+
+                //cancel the animation frame
+                window.cancelAnimationFrame(frameID);
+            }
 
             //detach the resize event
             window.removeEventListener('resize', this.handleResize);
