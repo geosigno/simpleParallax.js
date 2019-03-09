@@ -134,6 +134,9 @@
         }
 
         init() {
+            //return is instance already init
+            if (this.isInit) return;
+
             if (this.settings.overflow === false) {
                 //if overflow option is set to false
                 //wrap the element into a div to apply overflow
@@ -153,6 +156,8 @@
             this.animate();
 
             window.addEventListener('resize', this.handleResize);
+
+            this.isInit = true;
         }
 
         //check if image is fully loaded
@@ -178,12 +183,17 @@
         // if overflow option is set to false
         // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
         wrapElement() {
+            //check is current image is in a <picture> tag
+            let element = this.element.closest('picture') || this.element;
+
             // create a .simpleParallax wrapper container
             const wrapper = document.createElement('div');
             wrapper.classList.add('simpleParallax');
             wrapper.style.overflow = 'hidden';
-            this.element.parentNode.insertBefore(wrapper, this.element);
-            wrapper.appendChild(this.element);
+
+            //append the image inside the new wrapper
+            element.parentNode.insertBefore(wrapper, element);
+            wrapper.appendChild(element);
 
             //set the container for calculation
             this.elementContainer = wrapper;
