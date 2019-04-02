@@ -86,5 +86,5 @@
         "vars-on-top": 1,
         "wrap-iife": [1, "inside"],
         "yoda": [1, "never"]
-    }    
+    }
 }
