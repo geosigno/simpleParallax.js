@@ -1,6 +1,4 @@
-import simpleParallax from './simpleParallax';
+import simpleParallax from './app';
 
 let images = document.querySelectorAll('img');
-var myPluginInstance = new simpleParallax(images, {
-    orientation: 'up'
-});
+new simpleParallax(images, null);

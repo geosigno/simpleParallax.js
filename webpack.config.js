@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const uglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 const htmlPlugin = new HtmlWebPackPlugin({
@@ -10,8 +9,8 @@ const htmlPlugin = new HtmlWebPackPlugin({
 
 module.exports = {
     entry: {
-        simpleParallax: './src/simpleParallax.js',
-        test: './src/index.js'
+        simpleParallax: './src/app.js',
+        index: './src/index.js'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -29,5 +28,5 @@ module.exports = {
             }
         ]
     },
-    plugins: [new uglifyJsPlugin(), new webpack.HotModuleReplacementPlugin(), htmlPlugin]
+    plugins: [htmlPlugin]
 };
