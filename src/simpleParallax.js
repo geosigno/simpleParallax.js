@@ -1,5 +1,4 @@
-
-import cssTransform from './helpers/cssTransform'
+import cssTransform from './helpers/cssTransform';
 
 //global variables
 let instances = [],
@@ -33,6 +32,8 @@ class Parallax {
         this.init = this.init.bind(this);
         this.animationFrame = this.animationFrame.bind(this);
         this.handleResize = this.handleResize.bind(this);
+
+        this.isVisible = false;
 
         //check if images has not been loaded yet
         if (this.isImageLoaded(this.element)) {
@@ -71,6 +72,9 @@ class Parallax {
         //get the current element offset
         this.getElementOffset();
 
+        //init the Intesection Observer
+        this.intersectionObserver();
+
         //get its translated value
         this.getTranslateValue();
 
@@ -97,9 +101,32 @@ class Parallax {
         return true;
     }
 
-    //check if the current element is visible in the Viewport
-    isVisible() {
-        return this.elementBottomX > viewportTop && this.elementTopX < viewportBottom;
+    buildThresholdList() {
+        let thresholds = [];
+        for (var i = 1.0; i <= this.elementHeight; i++) {
+            let ratio = i / this.elementHeight;
+            thresholds.push(ratio);
+        }
+        return thresholds;
+    }
+
+    intersectionObserver() {
+        const options = {
+            root: null,
+            threshold: this.buildThresholdList()
+        };
+        this.observer = new IntersectionObserver(this.intersectionObserverCallback.bind(this), options);
+        this.observer.observe(this.element);
+    }
+
+    intersectionObserverCallback(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                this.isVisible = true;
+            } else {
+                this.isVisible = false;
+            }
+        });
     }
 
     // if overflow option is set to false
@@ -171,13 +198,10 @@ class Parallax {
     getElementOffset() {
         //get position of the element
         let pos = this.elementContainer.getBoundingClientRect();
-
         //get height
         this.elementHeight = pos.height;
         //get offset top
         this.elementTopX = pos.top + window.pageYOffset;
-        //get offset bottom
-        this.elementBottomX = this.elementHeight + this.elementTopX;
     }
 
     //get the viewport offset top
@@ -289,8 +313,7 @@ class Parallax {
 
     //proceed the element
     proceedElement(element) {
-        //if element not visible, no need to continue
-        if (!element.isVisible()) {
+        if (!element.isVisible) {
             return;
         }
 
@@ -369,7 +392,5 @@ class Parallax {
         window.removeEventListener('resize', this.handleResize);
     }
 }
-
-
 
 export default Parallax;

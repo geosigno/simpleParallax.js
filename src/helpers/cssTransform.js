@@ -8,6 +8,6 @@ const cssTransform = () => {
         i++;
     }
     return cssTransform;
-}
+};
 
 export default cssTransform();
