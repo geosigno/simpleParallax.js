@@ -29,8 +29,16 @@
         "lint": "npx eslint ./src/**/*.js",
         "test": "jest"
     },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
     "lint-staged": {
-        "*": "format"
+        "**/**.{js,json,html}": [
+            "prettier --write",
+            "git add"
+        ]
     },
     "bugs": {
         "url": "https://github.com/geosigno/simpleParallax/issues"
