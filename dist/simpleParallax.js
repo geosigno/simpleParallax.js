@@ -1,1 +1,650 @@
-!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define("simpleParallax",[],t):"object"==typeof exports?exports.simpleParallax=t():e.simpleParallax=t()}(window,function(){return function(e){var t={};function n(i){if(t[i])return t[i].exports;var s=t[i]={i:i,l:!1,exports:{}};return e[i].call(s.exports,s,s.exports,n),s.l=!0,s.exports}return n.m=e,n.c=t,n.d=function(e,t,i){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:i})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var i=Object.create(null);if(n.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var s in e)n.d(i,s,function(t){return e[t]}.bind(null,s));return i},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="",n(n.s=2)}([function(e,t){!function(){for(var e=0,t=["ms","moz","webkit","o"],n=0;n<t.length&&!window.requestAnimationFrame;++n)window.requestAnimationFrame=window[t[n]+"RequestAnimationFrame"],window.cancelAnimationFrame=window[t[n]+"CancelAnimationFrame"]||window[t[n]+"CancelRequestAnimationFrame"];window.requestAnimationFrame||(window.requestAnimationFrame=function(t,n){var i=(new Date).getTime(),s=Math.max(0,16-(i-e)),a=window.setTimeout(function(){t(i+s)},s);return e=i+s,a}),window.cancelAnimationFrame||(window.cancelAnimationFrame=function(e){clearTimeout(e)})}()},function(e,t){Element.prototype.matches||(Element.prototype.matches=Element.prototype.msMatchesSelector||Element.prototype.webkitMatchesSelector),Element.prototype.closest||(Element.prototype.closest=function(e){var t=this;if(!document.documentElement.contains(t))return null;do{if(t.matches(e))return t;t=t.parentElement||t.parentNode}while(null!==t&&1===t.nodeType);return null})},function(e,t,n){"use strict";n.r(t);n(0),n(1);var i=function(){for(var e,t="transform webkitTransform mozTransform oTransform msTransform".split(" "),n=0;void 0===e;)e=null!=document.createElement("div").style[t[n]]?t[n]:void 0,n++;return e}();function s(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}var a,o,r,l,u=[],h=-1,m=!1,f=function(){function e(t,n){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),this.element=t,this.elementContainer=t,this.defaults={delay:.6,orientation:"up",scale:1.3,overflow:!1,transition:"cubic-bezier(0,0,0,1)",breakpoint:!1},this.settings=Object.assign(this.defaults,n),this.settings.breakpoint&&document.documentElement.clientWidth<=this.settings.breakpoint||(this.init=this.init.bind(this),this.animationFrame=this.animationFrame.bind(this),this.handleResize=this.handleResize.bind(this),this.isImageLoaded(this.element)?this.init():this.element.addEventListener("load",this.init),u.push(this),m||(m=!0,this.getViewportOffsetHeight(),this.animationFrame()))}var t,n,f;return t=e,(n=[{key:"init",value:function(){this.isInit||(!1===this.settings.overflow&&this.wrapElement(),this.setStyle(),this.getElementOffset(),this.getTranslateValue(),this.animate(),window.addEventListener("resize",this.handleResize),this.isInit=!0)}},{key:"isImageLoaded",value:function(){return!!this.element.complete&&(void 0===this.element.naturalWidth||0!==this.element.naturalWidth)}},{key:"isVisible",value:function(){return this.elementBottomX>a&&this.elementTopX<o}},{key:"wrapElement",value:function(){var e=this.element.closest("picture")||this.element,t=document.createElement("div");t.classList.add("simpleParallax"),t.style.overflow="hidden",e.parentNode.insertBefore(t,e),t.appendChild(e),this.elementContainer=t}},{key:"unWrapElement",value:function(){var e=this.elementContainer.parentNode;if(e){for(;this.elementContainer.firstChild;)e.insertBefore(this.elementContainer.firstChild,this.elementContainer);e.removeChild(this.elementContainer)}}},{key:"setStyle",value:function(){!1===this.settings.overflow&&(this.element.style[i]="scale("+this.settings.scale+")"),this.settings.delay>0&&(this.element.style.transition="transform "+this.settings.delay+"s "+this.settings.transition),this.element.style.willChange="transform"}},{key:"unSetStyle",value:function(){this.element.style.willChange="",this.element.style[i]="",this.element.style.transition=""}},{key:"getElementOffset",value:function(){var e=this.elementContainer.getBoundingClientRect();this.elementHeight=e.height,this.elementTopX=e.top+window.pageYOffset,this.elementBottomX=this.elementHeight+this.elementTopX}},{key:"getViewportOffsetTop",value:function(){a=window.pageYOffset}},{key:"getViewportOffsetHeight",value:function(){r=document.documentElement.clientHeight}},{key:"getViewportOffsetBottom",value:function(){o=a+r}},{key:"handleResize",value:function(){this.getViewportOffsetHeight(),this.getElementOffset(),this.getRangeMax()}},{key:"getRangeMax",value:function(){var e=this.element.clientHeight;this.rangeMax=e*this.settings.scale-e,"down"!==this.settings.orientation&&"right"!==this.settings.orientation||(this.rangeMax*=-1)}},{key:"getTranslateValue",value:function(){var e=((o-this.elementTopX)/((r+this.elementHeight)/100)).toFixed(1);return e=Math.min(100,Math.max(0,e)),this.oldPercentage!==e&&(this.rangeMax||this.getRangeMax(),this.translateValue=(e/100*this.rangeMax-this.rangeMax/2).toFixed(0),this.oldTranslateValue!==this.translateValue&&(this.oldPercentage=e,this.oldTranslateValue=this.translateValue,!0))}},{key:"animate",value:function(){var e,t=0,n=0;"left"===this.settings.orientation||"right"===this.settings.orientation?n=this.translateValue+"px":t=this.translateValue+"px",e=!1===this.settings.overflow?"translate3d("+n+", "+t+", 0) scale("+this.settings.scale+")":"translate3d("+n+", "+t+", 0)",this.element.style[i]=e}},{key:"proceedElement",value:function(e){e.isVisible()&&e.getTranslateValue()&&e.animate()}},{key:"animationFrame",value:function(){if(this.getViewportOffsetTop(),h!==a){this.getViewportOffsetBottom();for(var e=0;e<u.length;e++)this.proceedElement(u[e]);l=window.requestAnimationFrame(this.animationFrame),h=a}else l=window.requestAnimationFrame(this.animationFrame)}},{key:"destroy",value:function(){this.isDestroyed||(this.unSetStyle(),!1===this.settings.overflow&&this.unWrapElement(),u.splice(u.indexOf(this),1),u.length||(m=!1,window.cancelAnimationFrame(l)),window.removeEventListener("resize",this.handleResize))}},{key:"isDestroyed",get:function(){return-1===u.indexOf(this)}}])&&s(t.prototype,n),f&&s(t,f),e}();t.default=function(e,t){for(var n=0;n<e.length;n++)new f(e[n],t)}}])});
+/*!
+ * simpleParallax - simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on images, 
+ * @date: 15-05-2019 10:32:7, 
+ * @version: 5.0.0,
+ * @link: https://simpleparallax.com/
+ */
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("simpleParallax", [], factory);
+	else if(typeof exports === 'object')
+		exports["simpleParallax"] = factory();
+	else
+		root["simpleParallax"] = factory();
+})(window, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./src/polyfills/raf.js
+var raf = __webpack_require__(1);
+
+// EXTERNAL MODULE: ./src/polyfills/closest.js
+var closest = __webpack_require__(2);
+
+// CONCATENATED MODULE: ./src/helpers/viewport.js
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Viewport =
+/*#__PURE__*/
+function () {
+  function Viewport() {
+    _classCallCheck(this, Viewport);
+
+    this.positions = {
+      top: 0,
+      bottom: 0,
+      height: 0
+    };
+  }
+
+  _createClass(Viewport, [{
+    key: "setViewportTop",
+    value: function setViewportTop() {
+      this.positions.top = window.pageYOffset;
+      return this.positions;
+    }
+  }, {
+    key: "setViewportBottom",
+    value: function setViewportBottom() {
+      this.positions.bottom = this.positions.top + this.positions.height;
+      return this.positions;
+    }
+  }, {
+    key: "setViewportHeight",
+    value: function setViewportHeight() {
+      this.positions.height = document.documentElement.clientHeight;
+      return this.positions;
+    }
+  }, {
+    key: "setViewportAll",
+    value: function setViewportAll() {
+      this.positions.top = window.pageYOffset;
+      this.positions.bottom = this.positions.top + this.positions.height;
+      this.positions.height = document.documentElement.clientHeight;
+      return this.positions;
+    }
+  }]);
+
+  return Viewport;
+}();
+
+/* harmony default export */ var viewport = (Viewport);
+// CONCATENATED MODULE: ./src/helpers/cssTransform.js
+// Detect css transform
+var cssTransform = function cssTransform() {
+  var prefixes = 'transform webkitTransform mozTransform oTransform msTransform'.split(' '),
+      cssTransform,
+      i = 0;
+
+  while (cssTransform === undefined) {
+    cssTransform = document.createElement('div').style[prefixes[i]] !== undefined ? prefixes[i] : undefined;
+    i++;
+  }
+
+  return cssTransform;
+};
+
+/* harmony default export */ var helpers_cssTransform = (cssTransform());
+// CONCATENATED MODULE: ./src/helpers/isImageLoaded.js
+//check if image is fully loaded
+var isImageLoaded = function isImageLoaded(image) {
+  //check if image is set as the parameter
+  if (!image) {
+    return false;
+  } //check if image has been 100% loaded
+
+
+  if (!image.complete) {
+    return false;
+  } //check if the image is displayed
+
+
+  if (typeof image.naturalWidth !== 'undefined' && image.naturalWidth === 0) {
+    return false;
+  }
+
+  return true;
+};
+
+/* harmony default export */ var helpers_isImageLoaded = (isImageLoaded);
+// CONCATENATED MODULE: ./src/instances/parallax.js
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function parallax_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function parallax_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function parallax_createClass(Constructor, protoProps, staticProps) { if (protoProps) parallax_defineProperties(Constructor.prototype, protoProps); if (staticProps) parallax_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+
+var parallax_ParallaxInstance =
+/*#__PURE__*/
+function () {
+  function ParallaxInstance(element, options) {
+    parallax_classCallCheck(this, ParallaxInstance);
+
+    //set the element & settings
+    this.element = element;
+    this.elementContainer = element;
+    this.settings = options;
+    this.isVisible = true;
+    this.oldTranslateValue = -1;
+    this.init = this.init.bind(this); //check if images has not been loaded yet
+
+    if (helpers_isImageLoaded(element)) {
+      this.init();
+    } else {
+      this.element.addEventListener('load', this.init);
+    }
+  }
+
+  parallax_createClass(ParallaxInstance, [{
+    key: "init",
+    value: function init() {
+      if (this.settings.overflow === false) {
+        //if overflow option is set to false
+        //wrap the element into a div to apply overflow
+        this.wrapElement(this.element);
+      } //apply the default style on the image
+
+
+      this.setStyle(); //get the current element offset
+
+      this.getElementOffset(); //init the Intesection Observer
+
+      this.intersectionObserver(); //get its translated value
+
+      this.getTranslateValue(); //apply its translation even if not visible for the first init
+
+      this.animate();
+    } // if overflow option is set to false
+    // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
+
+  }, {
+    key: "wrapElement",
+    value: function wrapElement() {
+      //check is current image is in a <picture> tag
+      var elementToWrap = this.element.closest('picture') || this.element; // create a .simpleParallax wrapper container
+
+      var wrapper = document.createElement('div');
+      wrapper.classList.add('simpleParallax');
+      wrapper.style.overflow = 'hidden'; //append the image inside the new wrapper
+
+      elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
+      wrapper.appendChild(elementToWrap);
+      this.elementContainer = wrapper;
+    } //unwrap the element from .simpleParallax wrapper container
+
+  }, {
+    key: "unWrapElement",
+    value: function unWrapElement() {
+      var wrapper = this.elementContainer;
+      wrapper.replaceWith.apply(wrapper, _toConsumableArray(wrapper.childNodes));
+    } //apply default style on element
+
+  }, {
+    key: "setStyle",
+    value: function setStyle() {
+      if (this.settings.overflow === false) {
+        //if overflow option is set to false
+        //add scale style so the image can be translated without getting out of its container
+        this.element.style[helpers_cssTransform] = 'scale(' + this.settings.scale + ')';
+      }
+
+      if (this.settings.delay > 0) {
+        //if delay option is set to true
+        //add transition option
+        this.element.style.transition = 'transform ' + this.settings.delay + 's ' + this.settings.transition;
+      } //add will-change CSS property to improve perfomance
+
+
+      this.element.style.willChange = 'transform';
+    } //remove style of the element
+
+  }, {
+    key: "unSetStyle",
+    value: function unSetStyle() {
+      //remove will change inline style
+      this.element.style.willChange = '';
+      this.element.style[helpers_cssTransform] = '';
+      this.element.style.transition = '';
+    } //get the current element offset
+
+  }, {
+    key: "getElementOffset",
+    value: function getElementOffset() {
+      //get position of the element
+      var positions = this.elementContainer.getBoundingClientRect(); //get height
+
+      this.elementHeight = positions.height; //get offset top
+
+      this.elementTop = positions.top + simpleParallax_viewport.positions.top;
+    } //build the Threshold array to cater change for every pixel scrolled
+
+  }, {
+    key: "buildThresholdList",
+    value: function buildThresholdList() {
+      var thresholds = [];
+
+      for (var i = 1.0; i <= this.elementHeight; i++) {
+        var ratio = i / this.elementHeight;
+        thresholds.push(ratio);
+      }
+
+      return thresholds;
+    } //create the Intersection Observer
+
+  }, {
+    key: "intersectionObserver",
+    value: function intersectionObserver() {
+      var options = {
+        root: null,
+        threshold: this.buildThresholdList()
+      };
+      this.observer = new IntersectionObserver(this.intersectionObserverCallback.bind(this), options);
+      this.observer.observe(this.element);
+    } //Intersection Observer Callback to set the element at visible state or not
+
+  }, {
+    key: "intersectionObserverCallback",
+    value: function intersectionObserverCallback(entries) {
+      for (var i = entries.length - 1; i >= 0; i--) {
+        if (entries[i].isIntersecting) {
+          this.isVisible = true;
+        } else {
+          this.isVisible = false;
+        }
+      }
+    } //calculate the range between image will be translated
+
+  }, {
+    key: "getRangeMax",
+    value: function getRangeMax() {
+      //get the real height of the image without scale
+      var elementImageHeight = this.element.clientHeight; //range is calculate with the image height by the scale
+
+      this.rangeMax = elementImageHeight * this.settings.scale - elementImageHeight; // let test = this.elementHeight * this.settings.scale - this.elementHeight;
+      //if orientation option is down or right
+      //inverse the range max to translate in the other way
+
+      if (this.settings.orientation === 'down' || this.settings.orientation === 'right') {
+        this.rangeMax *= -1;
+      }
+    } //get the percentage and the translate value to apply on the element
+
+  }, {
+    key: "getTranslateValue",
+    value: function getTranslateValue() {
+      //calculate the % position of the element comparing to the viewport
+      //rounding percentage to a 1 number float to avoid unn unnecessary calculation
+      var percentage = ((simpleParallax_viewport.positions.bottom - this.elementTop) / ((simpleParallax_viewport.positions.height + this.elementHeight) / 100)).toFixed(1); //sometime the percentage exceeds 100 or goes below 0
+
+      percentage = Math.min(100, Math.max(0, percentage)); //sometime the same percentage is returned
+      //if so we don't do aything
+
+      if (this.oldPercentage === percentage) {
+        return false;
+      } //if not range max is set, recalculate it
+
+
+      if (!this.rangeMax) {
+        this.getRangeMax();
+      } //transform this % into the max range of the element
+      //rounding translateValue to a non float int - as minimum pixel for browser to render is 1 (no 0.5)
+
+
+      this.translateValue = (percentage / 100 * this.rangeMax - this.rangeMax / 2).toFixed(0); //sometime the same translate value is returned
+      //if so we don't do aything
+
+      if (this.oldTranslateValue === this.translateValue) {
+        return false;
+      } //store the current percentage
+
+
+      this.oldPercentage = percentage;
+      this.oldTranslateValue = this.translateValue;
+      return true;
+    } //animate the image
+
+  }, {
+    key: "animate",
+    value: function animate() {
+      var translateValueY = 0,
+          translateValueX = 0,
+          inlineCss;
+
+      if (this.settings.orientation === 'left' || this.settings.orientation === 'right') {
+        //if orientation option is left or right
+        //use horizontal axe - X axe
+        translateValueX = this.translateValue + 'px';
+      } else {
+        //if orientation option is left or right
+        //use vertical axe - Y axe
+        translateValueY = this.translateValue + 'px';
+      } //set style to apply to the element
+
+
+      if (this.settings.overflow === false) {
+        //if overflow option is set to false
+        //add the scale style
+        inlineCss = 'translate3d(' + translateValueX + ', ' + translateValueY + ', 0) scale(' + this.settings.scale + ')';
+      } else {
+        inlineCss = 'translate3d(' + translateValueX + ', ' + translateValueY + ', 0)';
+      } //add style on the element using the adequate CSS transform
+
+
+      this.element.style[helpers_cssTransform] = inlineCss;
+    }
+  }]);
+
+  return ParallaxInstance;
+}();
+
+/* harmony default export */ var parallax = (parallax_ParallaxInstance);
+// CONCATENATED MODULE: ./src/simpleParallax.js
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "viewport", function() { return simpleParallax_viewport; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return simpleParallax_SimpleParallax; });
+function simpleParallax_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function simpleParallax_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function simpleParallax_createClass(Constructor, protoProps, staticProps) { if (protoProps) simpleParallax_defineProperties(Constructor.prototype, protoProps); if (staticProps) simpleParallax_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var simpleParallax_viewport = new viewport();
+
+
+var simpleParallax_SimpleParallax =
+/*#__PURE__*/
+function () {
+  function SimpleParallax(elements, options) {
+    simpleParallax_classCallCheck(this, SimpleParallax);
+
+    this.elements = typeof elements !== 'undefined' && NodeList.prototype.isPrototypeOf(elements) ? elements : [elements];
+    this.defaults = {
+      delay: 0.6,
+      orientation: 'up',
+      scale: 1.3,
+      overflow: false,
+      transition: 'cubic-bezier(0,0,0,1)',
+      breakpoint: false
+    };
+    this.settings = Object.assign(this.defaults, options); //check if breakpoint is set and superior to user browser width
+
+    if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
+      return;
+    }
+
+    this.instances = [];
+    this.lastPosition = -1;
+    this.frameID; //this.init = this.init.bind(this);
+
+    this.handleResize = this.handleResize.bind(this);
+    this.proceedRequestAnimationFrame = this.proceedRequestAnimationFrame.bind(this);
+    this.init();
+  }
+
+  simpleParallax_createClass(SimpleParallax, [{
+    key: "init",
+    value: function init() {
+      simpleParallax_viewport.setViewportAll();
+
+      for (var i = this.elements.length - 1; i >= 0; i--) {
+        var instance = new parallax(this.elements[i], this.settings);
+        this.instances.push(instance);
+      }
+
+      this.instancesLength = this.instances.length; //init the frame
+
+      this.proceedRequestAnimationFrame();
+      window.addEventListener('resize', this.handleResize);
+    } //when resize, some coordonates need to be re-calculate
+
+  }, {
+    key: "handleResize",
+    value: function handleResize() {
+      //re-get all the viewport positions
+      simpleParallax_viewport.setViewportAll();
+
+      if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
+        this.destroy();
+      }
+
+      for (var i = this.instancesLength - 1; i >= 0; i--) {
+        //re-get the current element offset
+        this.instances[i].getElementOffset(); //re-get the range if the current element
+
+        this.instances[i].getRangeMax();
+      }
+    } //animation frame
+
+  }, {
+    key: "proceedRequestAnimationFrame",
+    value: function proceedRequestAnimationFrame() {
+      //get the offset top of the viewport
+      simpleParallax_viewport.setViewportTop();
+
+      if (this.lastPosition === simpleParallax_viewport.positions.top) {
+        //if last position if the same than the curent one
+        //callback the animationFrame and exit the current loop
+        this.frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
+        return;
+      } //get the offset bottom of the viewport
+
+
+      simpleParallax_viewport.setViewportBottom(); //proceed with the current element
+
+      for (var i = this.instancesLength - 1; i >= 0; i--) {
+        this.proceedElement(this.instances[i]);
+      } //callback the animationFrame
+
+
+      this.frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame); //store the last position
+
+      this.lastPosition = simpleParallax_viewport.positions.top;
+    } //proceed the element
+
+  }, {
+    key: "proceedElement",
+    value: function proceedElement(instance) {
+      if (!instance.isVisible) {
+        return;
+      } //if percentage is equal to the last one, no need to continue
+
+
+      if (!instance.getTranslateValue()) {
+        return;
+      } //animate the image
+
+
+      instance.animate();
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      for (var i = this.instancesLength - 1; i >= 0; i--) {
+        //remove all style added from simpleParallax
+        this.instances[i].unSetStyle();
+
+        if (this.settings.overflow === false) {
+          //if overflow option is set to false
+          //unwrap the element from .simpleParallax wrapper container
+          this.instances[i].unWrapElement();
+        }
+      } //cancel the animation frame
+
+
+      window.cancelAnimationFrame(this.frameID); //detach the resize event
+
+      window.removeEventListener('resize', this.handleResize);
+    }
+  }]);
+
+  return SimpleParallax;
+}();
+
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+//requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
+//via: https://gist.github.com/paulirish/1579671
+(function () {
+  var lastTime = 0;
+  var vendors = ['ms', 'moz', 'webkit', 'o'];
+
+  for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+    window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+  }
+
+  if (!window.requestAnimationFrame) window.requestAnimationFrame = function (callback, element) {
+    var currTime = new Date().getTime();
+    var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+    var id = window.setTimeout(function () {
+      callback(currTime + timeToCall);
+    }, timeToCall);
+    lastTime = currTime + timeToCall;
+    return id;
+  };
+  if (!window.cancelAnimationFrame) window.cancelAnimationFrame = function (id) {
+    clearTimeout(id);
+  };
+})();
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+//closest polyfill for IE 11
+//https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+if (!Element.prototype.matches) {
+  Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+}
+
+if (!Element.prototype.closest) {
+  Element.prototype.closest = function (s) {
+    var el = this;
+    if (!document.documentElement.contains(el)) return null;
+
+    do {
+      if (el.matches(s)) return el;
+      el = el.parentElement || el.parentNode;
+    } while (el !== null && el.nodeType === 1);
+
+    return null;
+  };
+}
+
+/***/ })
+/******/ ]);
+});

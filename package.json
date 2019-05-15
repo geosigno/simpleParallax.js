@@ -1,12 +1,12 @@
 {
     "name": "simple-parallax-js",
-    "version": "4.2.1",
-    "description": "simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on the images",
+    "version": "5.0.0",
+    "description": "simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on images",
     "homepage": "https://simpleparallax.com/",
     "main": "dist/simpleParallax.min.js",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/geosenna/simpleParallax.git"
+        "url": "git+https://github.com/geosigno/simpleParallax.git"
     },
     "keywords": [
         "parallax",
@@ -26,15 +26,19 @@
         "start": "webpack-dev-server --mode development --open",
         "build": "webpack --mode production",
         "format": "prettier --write '**/**.{js,json,html}'",
-        "lint": "npx eslint ./src/simpleParallax.js"
+        "lint": "npx eslint ./src/**/*.js",
+        "test": "jest"
+    },
+    "lint-staged": {
+        "*": "format"
     },
     "bugs": {
-        "url": "https://github.com/geosenna/simpleParallax/issues"
+        "url": "https://github.com/geosigno/simpleParallax/issues"
     },
     "dependencies": {
         "@babel/core": "^7.4.4",
         "@babel/preset-env": "^7.4.4",
-        "babel-loader": "^8.0.5",
+        "babel-loader": "^8.0.6",
         "html-webpack-plugin": "^3.2.0",
         "webpack": "^4.31.0",
         "webpack-cli": "^3.3.2",
@@ -42,6 +46,11 @@
     },
     "devDependencies": {
         "eslint": "^5.16.0",
-        "prettier": "1.16.4"
+        "husky": "^2.3.0",
+        "jest": "^24.8.0",
+        "lint-staged": "^8.1.7",
+        "moment": "^2.24.0",
+        "prettier": "1.16.4",
+        "uglifyjs-webpack-plugin": "^2.1.2"
     }
 }
