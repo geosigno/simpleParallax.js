@@ -25,7 +25,7 @@ const BannerPlugin = new webpack.BannerPlugin({
 
 module.exports = {
     entry: {
-        'simpleParallax': './src/simpleParallax.js',
+        simpleParallax: './src/simpleParallax.js',
         'simpleParallax.min': './src/simpleParallax.js',
         index: './test/index.js'
     },
@@ -38,9 +38,11 @@ module.exports = {
     },
     optimization: {
         minimize: true,
-        minimizer: [new UglifyJsPlugin({
-          include: /\.min\.js$/
-        })]
+        minimizer: [
+            new UglifyJsPlugin({
+                include: /\.min\.js$/
+            })
+        ]
     },
     module: {
         rules: [
