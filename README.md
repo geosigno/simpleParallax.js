@@ -45,7 +45,7 @@ yarn add simple-parallax-js
 Then you can simply import it:
 
 ```sh
-import SimpleParallax from 'simple-parallax-js';
+import simpleParallax from 'simple-parallax-js';
 ```
 
 ## 2. Initialize the plugin
@@ -60,7 +60,7 @@ Simply add the following JS code:
 
 ```javascript
 var images = document.getElementsByClassName('thumbnail');
-var instance = new SimpleParallax(images);
+var instance = new simpleParallax(images);
 ```
 
 ## 3. Settings
