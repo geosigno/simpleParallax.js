@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on images, 
- * @date: 15-05-2019 11:26:15, 
+ * @date: 19-05-2019 17:2:9, 
  * @version: 5.0.0alpha,
  * @link: https://simpleparallax.com/
  */
@@ -460,6 +460,10 @@ function simpleParallax_createClass(Constructor, protoProps, staticProps) { if (
 
 var simpleParallax_viewport = new viewport();
 
+var isInit = false,
+    instances = [],
+    instancesLength,
+    frameID;
 
 var simpleParallax_SimpleParallax =
 /*#__PURE__*/
@@ -482,9 +486,7 @@ function () {
       return;
     }
 
-    this.instances = [];
-    this.lastPosition = -1;
-    this.frameID; //this.init = this.init.bind(this);
+    this.lastPosition = -1; //this.init = this.init.bind(this);
 
     this.handleResize = this.handleResize.bind(this);
     this.proceedRequestAnimationFrame = this.proceedRequestAnimationFrame.bind(this);
@@ -498,13 +500,18 @@ function () {
 
       for (var i = this.elements.length - 1; i >= 0; i--) {
         var instance = new parallax(this.elements[i], this.settings);
-        this.instances.push(instance);
+        instances.push(instance);
+      } //update the instance length
+
+
+      instancesLength = instances.length; //only if this is the first simpleParallax init
+
+      if (!isInit) {
+        //init the frame
+        this.proceedRequestAnimationFrame();
+        window.addEventListener('resize', this.handleResize);
+        isInit = true;
       }
-
-      this.instancesLength = this.instances.length; //init the frame
-
-      this.proceedRequestAnimationFrame();
-      window.addEventListener('resize', this.handleResize);
     } //when resize, some coordonates need to be re-calculate
 
   }, {
@@ -517,11 +524,11 @@ function () {
         this.destroy();
       }
 
-      for (var i = this.instancesLength - 1; i >= 0; i--) {
+      for (var i = instancesLength - 1; i >= 0; i--) {
         //re-get the current element offset
-        this.instances[i].getElementOffset(); //re-get the range if the current element
+        instances[i].getElementOffset(); //re-get the range if the current element
 
-        this.instances[i].getRangeMax();
+        instances[i].getRangeMax();
       }
     } //animation frame
 
@@ -534,19 +541,19 @@ function () {
       if (this.lastPosition === simpleParallax_viewport.positions.top) {
         //if last position if the same than the curent one
         //callback the animationFrame and exit the current loop
-        this.frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
+        frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
         return;
       } //get the offset bottom of the viewport
 
 
       simpleParallax_viewport.setViewportBottom(); //proceed with the current element
 
-      for (var i = this.instancesLength - 1; i >= 0; i--) {
-        this.proceedElement(this.instances[i]);
+      for (var i = instancesLength - 1; i >= 0; i--) {
+        this.proceedElement(instances[i]);
       } //callback the animationFrame
 
 
-      this.frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame); //store the last position
+      frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame); //store the last position
 
       this.lastPosition = simpleParallax_viewport.positions.top;
     } //proceed the element
@@ -569,19 +576,19 @@ function () {
   }, {
     key: "destroy",
     value: function destroy() {
-      for (var i = this.instancesLength - 1; i >= 0; i--) {
+      for (var i = instancesLength - 1; i >= 0; i--) {
         //remove all style added from simpleParallax
-        this.instances[i].unSetStyle();
+        instances[i].unSetStyle();
 
         if (this.settings.overflow === false) {
           //if overflow option is set to false
           //unwrap the element from .simpleParallax wrapper container
-          this.instances[i].unWrapElement();
+          instances[i].unWrapElement();
         }
       } //cancel the animation frame
 
 
-      window.cancelAnimationFrame(this.frameID); //detach the resize event
+      window.cancelAnimationFrame(frameID); //detach the resize event
 
       window.removeEventListener('resize', this.handleResize);
     }
