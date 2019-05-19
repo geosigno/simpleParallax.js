@@ -1,15 +1,31 @@
 import SimpleParallax from '../src/simpleParallax';
 
-let images = document.querySelectorAll('img');
-const options = {
-    breakpoint: '480'
-    // orientation: 'down',
-    // scale: 1.5,
-    // overflow: true
-};
+let images = document.querySelectorAll('img'),
+    instance;
+images.forEach(image => {
+    let options = {
+        breakpoint: '480'
+        // orientation: 'down',
+        // scale: 1.5,
+        // overflow: true
+    };
+    if (image.classList.contains('up')) {
+        options.orientation = 'up';
+    }
+    if (image.classList.contains('down')) {
+        options.orientation = 'down';
+    }
+    if (image.classList.contains('right')) {
+        options.orientation = 'right';
+    }
+    if (image.classList.contains('left')) {
+        options.orientation = 'left';
+    }
 
-let instance = new SimpleParallax(images, options);
+    // console.log(options);
+    instance = new SimpleParallax(image, options);
+});
 
-// setTimeout(() => {
-//     instance.destroy();
-// }, 3000);
+setTimeout(() => {
+    instance.destroy();
+}, 3000);

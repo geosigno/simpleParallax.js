@@ -6,6 +6,11 @@ export const viewport = new Viewport();
 
 import ParallaxInstance from './instances/parallax';
 
+let isInit = false,
+    instances = [],
+    instancesLength,
+    frameID;
+
 export default class SimpleParallax {
     constructor(elements, options) {
         this.elements = typeof elements !== 'undefined' && NodeList.prototype.isPrototypeOf(elements) ? elements : [elements];
@@ -24,9 +29,7 @@ export default class SimpleParallax {
             return;
         }
 
-        this.instances = [];
         this.lastPosition = -1;
-        this.frameID;
 
         //this.init = this.init.bind(this);
         this.handleResize = this.handleResize.bind(this);
@@ -40,15 +43,21 @@ export default class SimpleParallax {
 
         for (let i = this.elements.length - 1; i >= 0; i--) {
             let instance = new ParallaxInstance(this.elements[i], this.settings);
-            this.instances.push(instance);
+            instances.push(instance);
         }
 
-        this.instancesLength = this.instances.length;
+        //update the instance length
+        instancesLength = instances.length;
 
-        //init the frame
-        this.proceedRequestAnimationFrame();
+        //only if this is the first simpleParallax init
+        if (!isInit) {
+            //init the frame
+            this.proceedRequestAnimationFrame();
 
-        window.addEventListener('resize', this.handleResize);
+            window.addEventListener('resize', this.handleResize);
+
+            isInit = true;
+        }
     }
 
     //when resize, some coordonates need to be re-calculate
@@ -60,12 +69,12 @@ export default class SimpleParallax {
             this.destroy();
         }
 
-        for (let i = this.instancesLength - 1; i >= 0; i--) {
+        for (let i = instancesLength - 1; i >= 0; i--) {
             //re-get the current element offset
-            this.instances[i].getElementOffset();
+            instances[i].getElementOffset();
 
             //re-get the range if the current element
-            this.instances[i].getRangeMax();
+            instances[i].getRangeMax();
         }
     }
 
@@ -77,7 +86,7 @@ export default class SimpleParallax {
         if (this.lastPosition === viewport.positions.top) {
             //if last position if the same than the curent one
             //callback the animationFrame and exit the current loop
-            this.frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
+            frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
 
             return;
         }
@@ -86,12 +95,12 @@ export default class SimpleParallax {
         viewport.setViewportBottom();
 
         //proceed with the current element
-        for (let i = this.instancesLength - 1; i >= 0; i--) {
-            this.proceedElement(this.instances[i]);
+        for (let i = instancesLength - 1; i >= 0; i--) {
+            this.proceedElement(instances[i]);
         }
 
         //callback the animationFrame
-        this.frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
+        frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
 
         //store the last position
         this.lastPosition = viewport.positions.top;
@@ -113,19 +122,19 @@ export default class SimpleParallax {
     }
 
     destroy() {
-        for (let i = this.instancesLength - 1; i >= 0; i--) {
+        for (let i = instancesLength - 1; i >= 0; i--) {
             //remove all style added from simpleParallax
-            this.instances[i].unSetStyle();
+            instances[i].unSetStyle();
 
             if (this.settings.overflow === false) {
                 //if overflow option is set to false
                 //unwrap the element from .simpleParallax wrapper container
-                this.instances[i].unWrapElement();
+                instances[i].unWrapElement();
             }
         }
 
         //cancel the animation frame
-        window.cancelAnimationFrame(this.frameID);
+        window.cancelAnimationFrame(frameID);
 
         //detach the resize event
         window.removeEventListener('resize', this.handleResize);
