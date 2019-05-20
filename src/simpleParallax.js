@@ -1,6 +1,3 @@
-import './polyfills/raf';
-import './polyfills/closest';
-
 import Viewport from './helpers/viewport';
 export const viewport = new Viewport();
 

@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on images, 
- * @date: 20-05-2019 10:52:29, 
+ * @date: 20-05-2019 11:43:7, 
  * @version: 5.0.0alpha,
  * @link: https://simpleparallax.com/
  */
@@ -106,12 +106,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: ./src/polyfills/raf.js
-var raf = __webpack_require__(1);
-
-// EXTERNAL MODULE: ./src/polyfills/closest.js
-var closest = __webpack_require__(2);
 
 // CONCATENATED MODULE: ./src/helpers/viewport.js
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -456,8 +450,6 @@ function simpleParallax_defineProperties(target, props) { for (var i = 0; i < pr
 function simpleParallax_createClass(Constructor, protoProps, staticProps) { if (protoProps) simpleParallax_defineProperties(Constructor.prototype, protoProps); if (staticProps) simpleParallax_defineProperties(Constructor, staticProps); return Constructor; }
 
 
-
-
 var simpleParallax_viewport = new viewport();
 
 var isInit = false,
@@ -618,59 +610,6 @@ function () {
 }();
 
 
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-//requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
-//via: https://gist.github.com/paulirish/1579671
-(function () {
-  var lastTime = 0;
-  var vendors = ['ms', 'moz', 'webkit', 'o'];
-
-  for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-    window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
-  }
-
-  if (!window.requestAnimationFrame) window.requestAnimationFrame = function (callback, element) {
-    var currTime = new Date().getTime();
-    var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-    var id = window.setTimeout(function () {
-      callback(currTime + timeToCall);
-    }, timeToCall);
-    lastTime = currTime + timeToCall;
-    return id;
-  };
-  if (!window.cancelAnimationFrame) window.cancelAnimationFrame = function (id) {
-    clearTimeout(id);
-  };
-})();
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-//closest polyfill for IE 11
-//https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
-if (!Element.prototype.matches) {
-  Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
-}
-
-if (!Element.prototype.closest) {
-  Element.prototype.closest = function (s) {
-    var el = this;
-    if (!document.documentElement.contains(el)) return null;
-
-    do {
-      if (el.matches(s)) return el;
-      el = el.parentElement || el.parentNode;
-    } while (el !== null && el.nodeType === 1);
-
-    return null;
-  };
-}
 
 /***/ })
 /******/ ]);
