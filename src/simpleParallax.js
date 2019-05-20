@@ -122,21 +122,44 @@ export default class SimpleParallax {
     }
 
     destroy() {
+        let instancesToDestroy = [];
+
+        //get all instance indexes that need to be destroyed
         for (let i = instancesLength - 1; i >= 0; i--) {
+            for (let j = this.elements.length - 1; j >= 0; j--) {
+                if (instances[i].element === this.elements[j]) {
+                    instancesToDestroy.push(i);
+                    break;
+                }
+            }
+        }
+
+        for (let i = 0; i < instancesToDestroy.length; i++) {
+            let instanceToDestroy = instancesToDestroy[i];
+
             //remove all style added from simpleParallax
-            instances[i].unSetStyle();
+            instances[instanceToDestroy].unSetStyle();
 
             if (this.settings.overflow === false) {
                 //if overflow option is set to false
                 //unwrap the element from .simpleParallax wrapper container
-                instances[i].unWrapElement();
+                instances[instanceToDestroy].unWrapElement();
             }
+
+            //remove the instance to destroy from the instance array
+            instances = instances.slice(0, instanceToDestroy).concat(instances.slice(instanceToDestroy + 1, instances.length));
         }
 
-        //cancel the animation frame
-        window.cancelAnimationFrame(frameID);
+        //update the instance length var
+        instancesLength = instances.length;
 
-        //detach the resize event
-        window.removeEventListener('resize', this.handleResize);
+        //if no instances left, remove the raf and resize event = simpleParallax fully destroyed
+        if (!instancesLength) {
+            //cancel the animation frame
+            window.cancelAnimationFrame(frameID);
+
+            //detach the resize event
+            window.removeEventListener('resize', this.handleResize);
+        }
     }
 }

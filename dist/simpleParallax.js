@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on images, 
- * @date: 19-05-2019 17:2:9, 
+ * @date: 20-05-2019 10:52:29, 
  * @version: 5.0.0alpha,
  * @link: https://simpleparallax.com/
  */
@@ -576,21 +576,41 @@ function () {
   }, {
     key: "destroy",
     value: function destroy() {
+      var instancesToDestroy = []; //get all instance indexes that need to be destroyed
+
       for (var i = instancesLength - 1; i >= 0; i--) {
-        //remove all style added from simpleParallax
-        instances[i].unSetStyle();
+        for (var j = this.elements.length - 1; j >= 0; j--) {
+          if (instances[i].element === this.elements[j]) {
+            instancesToDestroy.push(i);
+            break;
+          }
+        }
+      }
+
+      for (var _i = 0; _i < instancesToDestroy.length; _i++) {
+        var instanceToDestroy = instancesToDestroy[_i]; //remove all style added from simpleParallax
+
+        instances[instanceToDestroy].unSetStyle();
 
         if (this.settings.overflow === false) {
           //if overflow option is set to false
           //unwrap the element from .simpleParallax wrapper container
-          instances[i].unWrapElement();
-        }
-      } //cancel the animation frame
+          instances[instanceToDestroy].unWrapElement();
+        } //remove the instance to destroy from the instance array
 
 
-      window.cancelAnimationFrame(frameID); //detach the resize event
+        instances = instances.slice(0, instanceToDestroy).concat(instances.slice(instanceToDestroy + 1, instances.length));
+      } //update the instance length var
 
-      window.removeEventListener('resize', this.handleResize);
+
+      instancesLength = instances.length; //if no instances left, remove the raf and resize event = simpleParallax fully destroyed
+
+      if (!instancesLength) {
+        //cancel the animation frame
+        window.cancelAnimationFrame(frameID); //detach the resize event
+
+        window.removeEventListener('resize', this.handleResize);
+      }
     }
   }]);
 

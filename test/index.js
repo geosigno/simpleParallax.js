@@ -1,31 +1,57 @@
 import SimpleParallax from '../src/simpleParallax';
 
-let images = document.querySelectorAll('img'),
-    instance;
-images.forEach(image => {
-    let options = {
-        breakpoint: '480'
-        // orientation: 'down',
-        // scale: 1.5,
-        // overflow: true
-    };
-    if (image.classList.contains('up')) {
-        options.orientation = 'up';
-    }
-    if (image.classList.contains('down')) {
-        options.orientation = 'down';
-    }
-    if (image.classList.contains('right')) {
-        options.orientation = 'right';
-    }
-    if (image.classList.contains('left')) {
-        options.orientation = 'left';
-    }
+// let images = document.querySelectorAll('img'),
+//     instance;
 
-    // console.log(options);
-    instance = new SimpleParallax(image, options);
-});
+let instanceUp,
+    optionUp = {
+        orientation: 'up'
+    },
+    imageUp = document.querySelectorAll('img.up');
 
-setTimeout(() => {
-    instance.destroy();
-}, 3000);
+instanceUp = new SimpleParallax(imageUp, optionUp);
+
+let instanceDown,
+    optionDown = {
+        orientation: 'down'
+    },
+    imageDown = document.querySelectorAll('img.down');
+
+instanceDown = new SimpleParallax(imageDown, optionDown);
+
+// setTimeout(() => {
+//     instanceUp.destroy();
+// }, 3000);
+
+// setTimeout(() => {
+//     instanceDown.destroy();
+// }, 6000);
+
+// images.forEach(image => {
+//     let options = {
+//         breakpoint: '480'
+//         // orientation: 'down',
+//         // scale: 1.5,
+//         // overflow: true
+//     };
+//     if (image.classList.contains('up')) {
+//         options.orientation = 'up';
+//     }
+//     if (image.classList.contains('down')) {
+//         options.orientation = 'down';
+//     }
+//     if (image.classList.contains('right')) {
+//         options.orientation = 'right';
+//     }
+//     if (image.classList.contains('left')) {
+//         options.orientation = 'left';
+//     }
+
+//     // console.log(options);
+//     instance = new SimpleParallax(image, options);
+//     // console.log(instance);
+// });
+
+// setTimeout(() => {
+//     instance.destroy();
+// }, 3000);
