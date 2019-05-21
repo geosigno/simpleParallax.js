@@ -10,6 +10,7 @@ class ParallaxInstance {
         this.elementContainer = element;
         this.settings = options;
         this.isVisible = true;
+        this.isInit = false;
         this.oldTranslateValue = -1;
 
         this.init = this.init.bind(this);
@@ -23,6 +24,9 @@ class ParallaxInstance {
     }
 
     init() {
+        //for some reason, <picture> are init an infinite time on windows OS
+        if (this.isInit) return;
+
         if (this.settings.overflow === false) {
             //if overflow option is set to false
             //wrap the element into a div to apply overflow
@@ -43,6 +47,9 @@ class ParallaxInstance {
 
         //apply its translation even if not visible for the first init
         this.animate();
+
+        //for some reason, <picture> are init an infinite time on windows OS
+        this.isInit = true;
     }
 
     // if overflow option is set to false
@@ -103,6 +110,8 @@ class ParallaxInstance {
         this.elementHeight = positions.height;
         //get offset top
         this.elementTop = positions.top + viewport.positions.top;
+        //get offset bottom
+        this.elementBottom = this.elementHeight + this.elementTop;
     }
 
     //build the Threshold array to cater change for every pixel scrolled
@@ -134,6 +143,12 @@ class ParallaxInstance {
                 this.isVisible = false;
             }
         }
+    }
+
+    //check if the current element is visible in the Viewport
+    //for browser that not support Intersection Observer API
+    checkIfVisible() {
+        return this.elementBottom > viewport.positions.top && this.elementTop < viewport.positions.bottom;
     }
 
     //calculate the range between image will be translated

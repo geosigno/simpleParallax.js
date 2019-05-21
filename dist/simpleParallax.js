@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on images, 
- * @date: 21-05-2019 16:31:3, 
+ * @date: 21-05-2019 19:33:30, 
  * @version: 5.0.0alpha,
  * @link: https://simpleparallax.com/
  */
@@ -227,6 +227,7 @@ function () {
     this.elementContainer = element;
     this.settings = options;
     this.isVisible = true;
+    this.isInit = false;
     this.oldTranslateValue = -1;
     this.init = this.init.bind(this); //check if images has not been loaded yet
 
@@ -240,6 +241,9 @@ function () {
   parallax_createClass(ParallaxInstance, [{
     key: "init",
     value: function init() {
+      //for some reason, <picture> are init an infinite time on windows OS
+      if (this.isInit) return;
+
       if (this.settings.overflow === false) {
         //if overflow option is set to false
         //wrap the element into a div to apply overflow
@@ -255,7 +259,9 @@ function () {
 
       this.getTranslateValue(); //apply its translation even if not visible for the first init
 
-      this.animate();
+      this.animate(); //for some reason, <picture> are init an infinite time on windows OS
+
+      this.isInit = true;
     } // if overflow option is set to false
     // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
 
@@ -317,7 +323,9 @@ function () {
 
       this.elementHeight = positions.height; //get offset top
 
-      this.elementTop = positions.top + simpleParallax_viewport.positions.top;
+      this.elementTop = positions.top + simpleParallax_viewport.positions.top; //get offset bottom 
+
+      this.elementBottom = this.elementHeight + this.elementTop;
     } //build the Threshold array to cater change for every pixel scrolled
 
   }, {
@@ -354,6 +362,13 @@ function () {
           this.isVisible = false;
         }
       }
+    } //check if the current element is visible in the Viewport
+    //for browser that not support Intersection Observer API
+
+  }, {
+    key: "checkIfVisible",
+    value: function checkIfVisible() {
+      return this.elementBottom > simpleParallax_viewport.positions.top && this.elementTop < simpleParallax_viewport.positions.bottom;
     } //calculate the range between image will be translated
 
   }, {
@@ -448,7 +463,8 @@ function simpleParallax_createClass(Constructor, protoProps, staticProps) { if (
 
 var simpleParallax_viewport = new viewport();
 
-var isInit = false,
+var intersectionObserverAvailable = true,
+    isInit = false,
     instances = [],
     instancesLength,
     frameID;
@@ -461,7 +477,7 @@ function () {
 
     this.elements = typeof elements !== 'undefined' && NodeList.prototype.isPrototypeOf(elements) ? elements : [elements];
     this.defaults = {
-      delay: 0.6,
+      delay: 0.4,
       orientation: 'up',
       scale: 1.3,
       overflow: false,
@@ -472,8 +488,10 @@ function () {
 
     if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
       return;
-    }
+    } //check if the browser handle the Intersection Observer API
 
+
+    if (!'IntersectionObserver' in window) intersectionObserverAvailable = false;
     this.lastPosition = -1; //this.init = this.init.bind(this);
 
     this.handleResize = this.handleResize.bind(this);
@@ -549,10 +567,18 @@ function () {
   }, {
     key: "proceedElement",
     value: function proceedElement(instance) {
-      if (!instance.isVisible) {
-        return;
-      } //if percentage is equal to the last one, no need to continue
+      var isVisible = false; //is not support for Intersection Observer API
+      //use old function to check if element visible
 
+      if (!intersectionObserverAvailable) {
+        isVisible = instance.checkIfVisible(); //if support
+        //use response from Intersection Observer API Callback
+      } else {
+        isVisible = instance.isVisible;
+      } //if element not visible, stop it
+
+
+      if (!isVisible) return; //if percentage is equal to the last one, no need to continue
 
       if (!instance.getTranslateValue()) {
         return;

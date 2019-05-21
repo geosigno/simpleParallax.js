@@ -23,7 +23,7 @@
     "author": "Geoffrey Signorato <geoffrey.signorato@gmail.com>",
     "license": "MIT",
     "scripts": {
-        "start": "webpack-dev-server --mode development --open",
+        "start": "webpack-dev-server --mode development --open --port 3000 --hot --host 192.168.8.100",
         "build": "webpack --mode production",
         "format": "prettier --write '**/**.{js,json,html}'",
         "lint": "npx eslint ./src/**/*.js",

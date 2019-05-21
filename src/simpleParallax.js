@@ -3,7 +3,8 @@ export const viewport = new Viewport();
 
 import ParallaxInstance from './instances/parallax';
 
-let isInit = false,
+let intersectionObserverAvailable = true,
+    isInit = false,
     instances = [],
     instancesLength,
     frameID;
@@ -12,7 +13,7 @@ export default class SimpleParallax {
     constructor(elements, options) {
         this.elements = typeof elements !== 'undefined' && NodeList.prototype.isPrototypeOf(elements) ? elements : [elements];
         this.defaults = {
-            delay: 0.6,
+            delay: 0.4,
             orientation: 'up',
             scale: 1.3,
             overflow: false,
@@ -25,6 +26,9 @@ export default class SimpleParallax {
         if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
             return;
         }
+
+        //check if the browser handle the Intersection Observer API
+        if (!'IntersectionObserver' in window) intersectionObserverAvailable = false;
 
         this.lastPosition = -1;
 
@@ -105,9 +109,20 @@ export default class SimpleParallax {
 
     //proceed the element
     proceedElement(instance) {
-        if (!instance.isVisible) {
-            return;
+        let isVisible = false;
+
+        //is not support for Intersection Observer API
+        //use old function to check if element visible
+        if (!intersectionObserverAvailable) {
+            isVisible = instance.checkIfVisible();
+            //if support
+            //use response from Intersection Observer API Callback
+        } else {
+            isVisible = instance.isVisible;
         }
+
+        //if element not visible, stop it
+        if (!isVisible) return;
 
         //if percentage is equal to the last one, no need to continue
         if (!instance.getTranslateValue()) {
