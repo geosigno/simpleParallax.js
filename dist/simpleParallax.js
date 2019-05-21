@@ -1,7 +1,7 @@
 /*!
  * simpleParallax - simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on images, 
- * @date: 21-05-2019 19:33:30, 
- * @version: 5.0.0alpha,
+ * @date: 21-05-2019 19:50:28, 
+ * @version: 5.0.0beta,
  * @link: https://simpleparallax.com/
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -323,7 +323,7 @@ function () {
 
       this.elementHeight = positions.height; //get offset top
 
-      this.elementTop = positions.top + simpleParallax_viewport.positions.top; //get offset bottom 
+      this.elementTop = positions.top + simpleParallax_viewport.positions.top; //get offset bottom
 
       this.elementBottom = this.elementHeight + this.elementTop;
     } //build the Threshold array to cater change for every pixel scrolled
