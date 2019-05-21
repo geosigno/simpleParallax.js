@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on images, 
- * @date: 20-05-2019 11:58:33, 
+ * @date: 21-05-2019 16:31:3, 
  * @version: 5.0.0alpha,
  * @link: https://simpleparallax.com/
  */
@@ -362,13 +362,7 @@ function () {
       //get the real height of the image without scale
       var elementImageHeight = this.element.clientHeight; //range is calculate with the image height by the scale
 
-      this.rangeMax = elementImageHeight * this.settings.scale - elementImageHeight; // let test = this.elementHeight * this.settings.scale - this.elementHeight;
-      //if orientation option is down or right
-      //inverse the range max to translate in the other way
-
-      if (this.settings.orientation === 'down' || this.settings.orientation === 'right') {
-        this.rangeMax *= -1;
-      }
+      this.rangeMax = elementImageHeight * this.settings.scale - elementImageHeight;
     } //get the percentage and the translate value to apply on the element
 
   }, {
@@ -412,14 +406,16 @@ function () {
           translateValueX = 0,
           inlineCss;
 
-      if (this.settings.orientation === 'left' || this.settings.orientation === 'right') {
+      if (this.settings.orientation.includes('left') || this.settings.orientation.includes('right')) {
         //if orientation option is left or right
         //use horizontal axe - X axe
-        translateValueX = this.translateValue + 'px';
-      } else {
-        //if orientation option is left or right
+        translateValueX = (this.settings.orientation.includes('left') ? this.translateValue * -1 : this.translateValue) + 'px';
+      }
+
+      if (this.settings.orientation.includes('up') || this.settings.orientation.includes('down')) {
+        //if orientation option is up or down
         //use vertical axe - Y axe
-        translateValueY = this.translateValue + 'px';
+        translateValueY = (this.settings.orientation.includes('up') ? this.translateValue * -1 : this.translateValue) + 'px';
       } //set style to apply to the element
 
 

@@ -5,7 +5,7 @@ import SimpleParallax from '../src/simpleParallax';
 
 let instanceUp,
     optionUp = {
-        orientation: 'up'
+        orientation: 'down'
     },
     imageUp = document.querySelectorAll('img.up');
 
@@ -13,7 +13,7 @@ instanceUp = new SimpleParallax(imageUp, optionUp);
 
 let instanceDown,
     optionDown = {
-        orientation: 'down'
+        orientation: 'left'
     },
     imageDown = document.querySelectorAll('img.down');
 
