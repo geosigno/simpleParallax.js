@@ -1,7 +1,7 @@
 /*!
- * simpleParallax - simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on images, 
- * @date: 21-05-2019 19:50:28, 
- * @version: 5.0.0beta,
+ * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images, 
+ * @date: 22-05-2019 18:36:24, 
+ * @version: 5.0.0,
  * @link: https://simpleparallax.com/
  */
 (function webpackUniversalModuleDefinition(root, factory) {

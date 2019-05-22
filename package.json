@@ -1,7 +1,7 @@
 {
     "name": "simple-parallax-js",
-    "version": "5.0.0beta",
-    "description": "simpleParallax is a simple and lightweight JS plugin that gives your website parallax animations on images",
+    "version": "5.0.0",
+    "description": "simpleParallax is a simple JavaScript library that gives your website parallax animations on any images",
     "homepage": "https://simpleparallax.com/",
     "main": "dist/simpleParallax.min.js",
     "repository": {
@@ -10,6 +10,7 @@
     },
     "keywords": [
         "parallax",
+        "javascript",
         "scroll",
         "simple",
         "easy",
@@ -58,7 +59,6 @@
         "jest": "^24.8.0",
         "lint-staged": "^8.1.7",
         "moment": "^2.24.0",
-        "prettier": "1.16.4",
-        "uglifyjs-webpack-plugin": "^2.1.2"
+        "prettier": "1.16.4"
     }
 }
