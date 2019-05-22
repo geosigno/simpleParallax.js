@@ -1,1 +1,8 @@
 node_modules/
+dist/index\.html
+
+dist/test\.js
+
+package-lock\.json
+
+dist/index\.js
