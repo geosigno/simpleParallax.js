@@ -110,7 +110,9 @@ The minimum breakpoint from where simpleParallax should be initialized and to wh
 Destroy a simpleParallax instance:
 
 ```javascript
- instance.destroy();
+var images = document.querySelectorAll(img);
+var instance = new simpleParallax(images);
+instance.destroy();
 ```
 
 ## Compatibility
