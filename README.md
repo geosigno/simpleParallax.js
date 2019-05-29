@@ -62,7 +62,7 @@ new simpleParallax(image);
 This also work with several images:
 
 ```javascript
-var images = document.querySelectorAll(img);
+var images = document.querySelectorAll('img');
 new simpleParallax(images);
 ```
 ## Settings
@@ -110,7 +110,7 @@ The minimum breakpoint from where simpleParallax should be initialized and to wh
 Destroy a simpleParallax instance:
 
 ```javascript
-var images = document.querySelectorAll(img);
+var images = document.querySelectorAll('img');
 var instance = new simpleParallax(images);
 instance.destroy();
 ```
