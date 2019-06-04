@@ -7,7 +7,7 @@ let instanceUp,
     optionUp = {
         orientation: 'down'
     },
-    imageUp = document.querySelectorAll('img.up');
+    imageUp = document.querySelectorAll('.up');
 
 instanceUp = new SimpleParallax(imageUp, optionUp);
 
