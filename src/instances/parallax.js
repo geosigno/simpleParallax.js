@@ -27,6 +27,9 @@ class ParallaxInstance {
         //for some reason, <picture> are init an infinite time on windows OS
         if (this.isInit) return;
 
+        //check if element has not been already initialized with simpleParallax
+        if (this.element.closest('.simpleParallax')) return;
+
         if (this.settings.overflow === false) {
             //if overflow option is set to false
             //wrap the element into a div to apply overflow
