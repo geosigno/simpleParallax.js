@@ -1,7 +1,7 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images, 
- * @date: 03-06-2019 18:53:24, 
- * @version: 5.0.1,
+ * @date: 04-06-2019 9:30:3, 
+ * @version: 5.0.2,
  * @link: https://simpleparallax.com/
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -159,6 +159,15 @@ function () {
 }();
 
 /* harmony default export */ var viewport = (Viewport);
+// CONCATENATED MODULE: ./src/helpers/convertToArray.js
+// check wether the element is a Node List, a HTML Collection or an array
+// return an array of nodes
+var convertToArray = function convertToArray(elements) {
+  if (NodeList.prototype.isPrototypeOf(elements)) return elements;
+  if (HTMLCollection.prototype.isPrototypeOf(elements)) return Array.from(elements);else return [elements];
+};
+
+/* harmony default export */ var helpers_convertToArray = (convertToArray);
 // CONCATENATED MODULE: ./src/helpers/cssTransform.js
 // Detect css transform
 var cssTransform = function cssTransform() {
@@ -461,6 +470,7 @@ function simpleParallax_defineProperties(target, props) { for (var i = 0; i < pr
 function simpleParallax_createClass(Constructor, protoProps, staticProps) { if (protoProps) simpleParallax_defineProperties(Constructor.prototype, protoProps); if (staticProps) simpleParallax_defineProperties(Constructor, staticProps); return Constructor; }
 
 
+
 var simpleParallax_viewport = new viewport();
 
 var intersectionObserverAvailable = true,
@@ -475,7 +485,8 @@ function () {
   function SimpleParallax(elements, options) {
     simpleParallax_classCallCheck(this, SimpleParallax);
 
-    this.elements = typeof elements !== 'undefined' && NodeList.prototype.isPrototypeOf(elements) ? elements : [elements];
+    if (!elements) return;
+    this.elements = helpers_convertToArray(elements);
     this.defaults = {
       delay: 0.4,
       orientation: 'up',

@@ -1,4 +1,5 @@
 import Viewport from './helpers/viewport';
+import convertToArray from './helpers/convertToArray';
 export const viewport = new Viewport();
 
 import ParallaxInstance from './instances/parallax';
@@ -11,7 +12,8 @@ let intersectionObserverAvailable = true,
 
 export default class SimpleParallax {
     constructor(elements, options) {
-        this.elements = typeof elements !== 'undefined' && NodeList.prototype.isPrototypeOf(elements) ? elements : [elements];
+        if (!elements) return;
+        this.elements = convertToArray(elements);
         this.defaults = {
             delay: 0.4,
             orientation: 'up',
@@ -20,6 +22,7 @@ export default class SimpleParallax {
             transition: 'cubic-bezier(0,0,0,1)',
             breakpoint: false
         };
+
         this.settings = Object.assign(this.defaults, options);
 
         //check if breakpoint is set and superior to user browser width

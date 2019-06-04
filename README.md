@@ -6,7 +6,7 @@
 
 # What is simpleParallax?
 
-simpleParallax is a very simple and tiny Vanilla JS library to add parallax animations on any images.
+simpleParallax is a very simple and tiny Vanilla JS library which adds parallax animations on any images.
 
 Where it may be laborious to get results through other plugins, simpleParallax stands out for its ease and its visual rendering. The parallax effect is directly applied on image tags, there is no need to use background images. You can read one case study [here](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471).
 
@@ -24,7 +24,7 @@ Simply copy/paste the below snippet just before your closing `</body>` tag:
 or use the below CDN link provided by jsDelivr.com
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.0.1/dist/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.0.2/dist/simpleParallax.min.js"></script>
 ```
 
 or you can install it via npm/yarn

@@ -1,6 +1,6 @@
 {
     "name": "simple-parallax-js",
-    "version": "5.0.1",
+    "version": "5.0.2",
     "description": "simpleParallax is a simple JavaScript library that gives your website parallax animations on any images",
     "homepage": "https://simpleparallax.com/",
     "main": "dist/simpleParallax.min.js",
@@ -24,7 +24,7 @@
     "author": "Geoffrey Signorato <geoffrey.signorato@gmail.com>",
     "license": "MIT",
     "scripts": {
-        "start": "webpack-dev-server --mode development --open --port 3000 --hot --host 192.168.8.100",
+        "start": "webpack-dev-server --mode development --open --port 3000 --hot",
         "build": "webpack --mode production",
         "format": "prettier --write '**/**.{js,json,html}'",
         "lint": "npx eslint ./src/**/*.js",
