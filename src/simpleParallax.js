@@ -139,30 +139,25 @@ export default class SimpleParallax {
     destroy() {
         let instancesToDestroy = [];
 
-        //get all instance indexes that need to be destroyed
-        for (let i = instancesLength - 1; i >= 0; i--) {
-            for (let j = this.elements.length - 1; j >= 0; j--) {
-                if (instances[i].element === this.elements[j]) {
-                    instancesToDestroy.push(i);
-                    break;
-                }
+        //remove all instances that need to be destroyed from the instances array
+        instances = instances.filter(instance => {
+            if (this.elements.includes(instance.element)) {
+                //push instance that need to be destroyed into instancesToDestroy
+                instancesToDestroy.push(instance);
+            } else {
+                return instance;
             }
-        }
+        });
 
-        for (let i = 0; i < instancesToDestroy.length; i++) {
-            let instanceToDestroy = instancesToDestroy[i];
-
-            //remove all style added from simpleParallax
-            instances[instanceToDestroy].unSetStyle();
+        for (let instance of instancesToDestroy) {
+            //unset style
+            instance.unSetStyle();
 
             if (this.settings.overflow === false) {
                 //if overflow option is set to false
                 //unwrap the element from .simpleParallax wrapper container
-                instances[instanceToDestroy].unWrapElement();
+                instance.unWrapElement();
             }
-
-            //remove the instance to destroy from the instance array
-            instances = instances.slice(0, instanceToDestroy).concat(instances.slice(instanceToDestroy + 1, instances.length));
         }
 
         //update the instance length var
