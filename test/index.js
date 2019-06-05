@@ -5,22 +5,22 @@ import SimpleParallax from '../src/simpleParallax';
 
 let instanceUp,
     optionUp = {
-        orientation: 'down'
+        orientation: 'up'
     },
-    imageUp = document.querySelectorAll('img');
+    imageUp = document.getElementsByTagName('img');
 
-instanceUp = new SimpleParallax(imageUp, optionUp);
+instanceUp = new SimpleParallax('img', optionUp);
 
-let instanceDown,
-    optionDown = {
-        orientation: 'left'
-    },
-    imageDown = document.querySelectorAll('img.down');
+// let instanceDown,
+//     optionDown = {
+//         orientation: 'down'
+//     },
+//     imageDown = document.querySelectorAll('img.down');
 
-instanceDown = new SimpleParallax(imageDown, optionDown);
+// instanceDown = new SimpleParallax(imageDown, optionDown);
 
 // setTimeout(() => {
-//     instanceUp.destroy();
+//     instanceDown.destroy();
 // }, 3000);
 
 // setTimeout(() => {

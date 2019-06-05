@@ -3,7 +3,7 @@
 const convertToArray = elements => {
     if (NodeList.prototype.isPrototypeOf(elements) || HTMLCollection.prototype.isPrototypeOf(elements)) return Array.from(elements);
     if (typeof elements === 'string' || elements instanceof String) return document.querySelectorAll(elements);
-    else return [elements];
+    return [elements];
 };
 
 export default convertToArray;

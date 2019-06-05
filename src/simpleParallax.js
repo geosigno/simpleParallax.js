@@ -1,14 +1,15 @@
 import Viewport from './helpers/viewport';
 import convertToArray from './helpers/convertToArray';
-export const viewport = new Viewport();
 
 import ParallaxInstance from './instances/parallax';
 
-let intersectionObserverAvailable = true,
-    isInit = false,
-    instances = [],
-    instancesLength,
-    frameID;
+export const viewport = new Viewport();
+
+let intersectionObserverAvailable = true;
+let isInit = false;
+let instances = [];
+let instancesLength;
+let frameID;
 
 export default class SimpleParallax {
     constructor(elements, options) {
@@ -25,17 +26,17 @@ export default class SimpleParallax {
 
         this.settings = Object.assign(this.defaults, options);
 
-        //check if breakpoint is set and superior to user browser width
+        // check if breakpoint is set and superior to user browser width
         if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
             return;
         }
 
-        //check if the browser handle the Intersection Observer API
-        if (!'IntersectionObserver' in window) intersectionObserverAvailable = false;
+        // check if the browser handle the Intersection Observer API
+        if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
 
         this.lastPosition = -1;
 
-        //this.init = this.init.bind(this);
+        // this.init = this.init.bind(this);
         this.handleResize = this.handleResize.bind(this);
         this.proceedRequestAnimationFrame = this.proceedRequestAnimationFrame.bind(this);
 
@@ -46,16 +47,16 @@ export default class SimpleParallax {
         viewport.setViewportAll();
 
         for (let i = this.elements.length - 1; i >= 0; i--) {
-            let instance = new ParallaxInstance(this.elements[i], this.settings);
+            const instance = new ParallaxInstance(this.elements[i], this.settings);
             instances.push(instance);
         }
 
-        //update the instance length
+        // update the instance length
         instancesLength = instances.length;
 
-        //only if this is the first simpleParallax init
+        // only if this is the first simpleParallax init
         if (!isInit) {
-            //init the frame
+            // init the frame
             this.proceedRequestAnimationFrame();
 
             window.addEventListener('resize', this.handleResize);
@@ -64,9 +65,9 @@ export default class SimpleParallax {
         }
     }
 
-    //when resize, some coordonates need to be re-calculate
+    // when resize, some coordonates need to be re-calculate
     handleResize() {
-        //re-get all the viewport positions
+        // re-get all the viewport positions
         viewport.setViewportAll();
 
         if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
@@ -74,101 +75,101 @@ export default class SimpleParallax {
         }
 
         for (let i = instancesLength - 1; i >= 0; i--) {
-            //re-get the current element offset
+            // re-get the current element offset
             instances[i].getElementOffset();
 
-            //re-get the range if the current element
+            // re-get the range if the current element
             instances[i].getRangeMax();
         }
     }
 
-    //animation frame
+    // animation frame
     proceedRequestAnimationFrame() {
-        //get the offset top of the viewport
+        // get the offset top of the viewport
         viewport.setViewportTop();
 
         if (this.lastPosition === viewport.positions.top) {
-            //if last position if the same than the curent one
-            //callback the animationFrame and exit the current loop
+            // if last position if the same than the curent one
+            // callback the animationFrame and exit the current loop
             frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
 
             return;
         }
 
-        //get the offset bottom of the viewport
+        // get the offset bottom of the viewport
         viewport.setViewportBottom();
 
-        //proceed with the current element
+        // proceed with the current element
         for (let i = instancesLength - 1; i >= 0; i--) {
             this.proceedElement(instances[i]);
         }
 
-        //callback the animationFrame
+        // callback the animationFrame
         frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
 
-        //store the last position
+        // store the last position
         this.lastPosition = viewport.positions.top;
     }
 
-    //proceed the element
+    // proceed the element
     proceedElement(instance) {
         let isVisible = false;
 
-        //is not support for Intersection Observer API
-        //use old function to check if element visible
+        // is not support for Intersection Observer API
+        // use old function to check if element visible
         if (!intersectionObserverAvailable) {
             isVisible = instance.checkIfVisible();
-            //if support
-            //use response from Intersection Observer API Callback
+            // if support
+            // use response from Intersection Observer API Callback
         } else {
             isVisible = instance.isVisible;
         }
 
-        //if element not visible, stop it
+        // if element not visible, stop it
         if (!isVisible) return;
 
-        //if percentage is equal to the last one, no need to continue
+        // if percentage is equal to the last one, no need to continue
         if (!instance.getTranslateValue()) {
             return;
         }
 
-        //animate the image
+        // animate the image
         instance.animate();
     }
 
     destroy() {
-        let instancesToDestroy = [];
+        const instancesToDestroy = [];
 
-        //remove all instances that need to be destroyed from the instances array
+        // remove all instances that need to be destroyed from the instances array
         instances = instances.filter(instance => {
             if (this.elements.includes(instance.element)) {
-                //push instance that need to be destroyed into instancesToDestroy
+                // push instance that need to be destroyed into instancesToDestroy
                 instancesToDestroy.push(instance);
             } else {
                 return instance;
             }
         });
 
-        for (let instance of instancesToDestroy) {
-            //unset style
-            instance.unSetStyle();
+        for (let i = instancesToDestroy.length - 1; i >= 0; i--) {
+            // unset style
+            instancesToDestroy[i].unSetStyle();
 
             if (this.settings.overflow === false) {
-                //if overflow option is set to false
-                //unwrap the element from .simpleParallax wrapper container
-                instance.unWrapElement();
+                // if overflow option is set to false
+                // unwrap the element from .simpleParallax wrapper container
+                instancesToDestroy[i].unWrapElement();
             }
         }
 
-        //update the instance length var
+        // update the instance length var
         instancesLength = instances.length;
 
-        //if no instances left, remove the raf and resize event = simpleParallax fully destroyed
+        // if no instances left, remove the raf and resize event = simpleParallax fully destroyed
         if (!instancesLength) {
-            //cancel the animation frame
+            // cancel the animation frame
             window.cancelAnimationFrame(frameID);
 
-            //detach the resize event
+            // detach the resize event
             window.removeEventListener('resize', this.handleResize);
         }
     }
