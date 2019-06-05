@@ -3,13 +3,18 @@ import SimpleParallax from '../src/simpleParallax';
 // let images = document.querySelectorAll('img'),
 //     instance;
 
-let instanceUp,
-    optionUp = {
-        orientation: 'up'
-    },
-    imageUp = document.getElementsByTagName('img');
+let instanceUp;
+const optionUp = {
+    orientation: 'left'
+};
+const imageUp = document.getElementsByTagName('img');
 
-instanceUp = new SimpleParallax('img', optionUp);
+const images = document.querySelectorAll('img');
+images.forEach((image) => {
+    new SimpleParallax(image, optionUp);
+});
+
+// instanceUp = new SimpleParallax('img', optionUp);
 
 // let instanceDown,
 //     optionDown = {

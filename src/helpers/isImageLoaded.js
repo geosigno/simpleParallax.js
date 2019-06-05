@@ -1,5 +1,5 @@
 // check if image is fully loaded
-const isImageLoaded = image => {
+const isImageLoaded = (image) => {
     // check if image is set as the parameter
     if (!image) {
         return false;

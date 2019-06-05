@@ -10,6 +10,7 @@ let isInit = false;
 let instances = [];
 let instancesLength;
 let frameID;
+let resizeID;
 
 export default class SimpleParallax {
     constructor(elements, options) {
@@ -36,7 +37,7 @@ export default class SimpleParallax {
 
         this.lastPosition = -1;
 
-        // this.init = this.init.bind(this);
+        this.resizeIsDone = this.resizeIsDone.bind(this);
         this.handleResize = this.handleResize.bind(this);
         this.proceedRequestAnimationFrame = this.proceedRequestAnimationFrame.bind(this);
 
@@ -59,13 +60,19 @@ export default class SimpleParallax {
             // init the frame
             this.proceedRequestAnimationFrame();
 
-            window.addEventListener('resize', this.handleResize);
+            window.addEventListener('resize', this.resizeIsDone);
 
             isInit = true;
         }
     }
 
-    // when resize, some coordonates need to be re-calculate
+    // wait for resize to be completely done
+    resizeIsDone() {
+        clearTimeout(resizeID);
+        resizeID = setTimeout(this.handleResize, 500);
+    }
+
+    // handle the resize process, some coordonates need to be re-calculate
     handleResize() {
         // re-get all the viewport positions
         viewport.setViewportAll();
@@ -81,6 +88,9 @@ export default class SimpleParallax {
             // re-get the range if the current element
             instances[i].getRangeMax();
         }
+
+        // force the request animation frame to fired
+        this.lastPosition = -1;
     }
 
     // animation frame
@@ -141,7 +151,7 @@ export default class SimpleParallax {
         const instancesToDestroy = [];
 
         // remove all instances that need to be destroyed from the instances array
-        instances = instances.filter(instance => {
+        instances = instances.filter((instance) => {
             if (this.elements.includes(instance.element)) {
                 // push instance that need to be destroyed into instancesToDestroy
                 instancesToDestroy.push(instance);
