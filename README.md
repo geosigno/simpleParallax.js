@@ -21,14 +21,13 @@ Simply copy/paste the below snippet just before your closing `</body>` tag:
 <script src="simpleParallax.js"></script>
 ```
 
-or use the below CDN link provided by jsDelivr.com
+or use the below CDN link provided by [jsDelivr.com](https://www.jsdelivr.com/package/npm/simple-parallax-js):
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.0.2/dist/simpleParallax.min.js"></script>
 ```
 
-or you can install it via npm/yarn
-
+or you can install it via [npm/yarn](https://www.npmjs.com/package/simple-parallax-js):
 
 ```sh
 #npm
@@ -40,7 +39,7 @@ yarn add simple-parallax-js
 
 You can import it as follow:
 
-```sh
+```javascript
 import simpleParallax from 'simple-parallax-js';
 ```
 
@@ -114,6 +113,8 @@ var images = document.querySelectorAll('img');
 var instance = new simpleParallax(images);
 instance.destroy();
 ```
+## Examples
+You can find some examples [here](https://simpleparallax.com/#examples).
 
 ## Compatibility
 You can apply simpleParallax on picture tags/srcset images.
