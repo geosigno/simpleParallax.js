@@ -1,6 +1,6 @@
 {
     "name": "simple-parallax-js",
-    "version": "5.0.2",
+    "version": "5.1.0",
     "description": "simpleParallax is a simple JavaScript library that gives your website parallax animations on any images",
     "homepage": "https://simpleparallax.com/",
     "main": "dist/simpleParallax.min.js",
@@ -27,7 +27,7 @@
         "start": "webpack-dev-server --mode development --open --port 3000 --hot",
         "build": "webpack --mode production",
         "format": "prettier --write '**/**.{js,json,html}'",
-        "lint": "npx eslint ./src/**/*.js",
+        "lint": "eslint src --ext .js",
         "test": "jest"
     },
     "husky": {
@@ -36,7 +36,7 @@
         }
     },
     "lint-staged": {
-        "**/**.{js,json,html}": [
+        "**/**.{json,html}": [
             "prettier --write",
             "git add"
         ]
@@ -54,6 +54,9 @@
         "@babel/preset-env": "^7.4.4",
         "babel-loader": "^8.0.6",
         "eslint": "^5.16.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-plugin-import": "^2.17.3",
+        "eslint-plugin-node": "^9.1.0",
         "husky": "^2.3.0",
         "jest": "^24.8.0",
         "lint-staged": "^8.1.7",

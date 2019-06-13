@@ -3,24 +3,29 @@ import SimpleParallax from '../src/simpleParallax';
 // let images = document.querySelectorAll('img'),
 //     instance;
 
-let instanceUp,
-    optionUp = {
-        orientation: 'down'
-    },
-    imageUp = document.querySelectorAll('.up');
+let instanceUp;
+const optionUp = {
+    orientation: 'left'
+};
+const imageUp = document.getElementsByTagName('img');
 
-instanceUp = new SimpleParallax(imageUp, optionUp);
+const images = document.querySelectorAll('img');
+images.forEach((image) => {
+    new SimpleParallax(image, optionUp);
+});
 
-let instanceDown,
-    optionDown = {
-        orientation: 'left'
-    },
-    imageDown = document.querySelectorAll('img.down');
+// instanceUp = new SimpleParallax('img', optionUp);
 
-instanceDown = new SimpleParallax(imageDown, optionDown);
+// let instanceDown,
+//     optionDown = {
+//         orientation: 'down'
+//     },
+//     imageDown = document.querySelectorAll('img.down');
+
+// instanceDown = new SimpleParallax(imageDown, optionDown);
 
 // setTimeout(() => {
-//     instanceUp.destroy();
+//     instanceDown.destroy();
 // }, 3000);
 
 // setTimeout(() => {

@@ -1,13 +1,13 @@
 // Detect css transform
 const cssTransform = () => {
-    let prefixes = 'transform webkitTransform mozTransform oTransform msTransform'.split(' '),
-        cssTransform,
-        i = 0;
-    while (cssTransform === undefined) {
-        cssTransform = document.createElement('div').style[prefixes[i]] !== undefined ? prefixes[i] : undefined;
-        i++;
+    const prefixes = 'transform webkitTransform mozTransform oTransform msTransform'.split(' ');
+    let transform;
+    let i = 0;
+    while (transform === undefined) {
+        transform = document.createElement('div').style[prefixes[i]] !== undefined ? prefixes[i] : undefined;
+        i += 1;
     }
-    return cssTransform;
+    return transform;
 };
 
 export default cssTransform();
