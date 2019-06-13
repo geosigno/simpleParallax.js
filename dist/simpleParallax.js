@@ -1,7 +1,7 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images, 
- * @date: 05-06-2019 10:50:54, 
- * @version: 5.0.2,
+ * @date: 13-06-2019 16:24:29, 
+ * @version: 5.1.0,
  * @link: https://simpleparallax.com/
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -481,6 +481,7 @@ var isInit = false;
 var instances = [];
 var instancesLength;
 var frameID;
+var resizeID;
 
 var simpleParallax_SimpleParallax =
 /*#__PURE__*/
@@ -506,8 +507,8 @@ function () {
 
 
     if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
-    this.lastPosition = -1; // this.init = this.init.bind(this);
-
+    this.lastPosition = -1;
+    this.resizeIsDone = this.resizeIsDone.bind(this);
     this.handleResize = this.handleResize.bind(this);
     this.proceedRequestAnimationFrame = this.proceedRequestAnimationFrame.bind(this);
     this.init();
@@ -529,10 +530,17 @@ function () {
       if (!isInit) {
         // init the frame
         this.proceedRequestAnimationFrame();
-        window.addEventListener('resize', this.handleResize);
+        window.addEventListener('resize', this.resizeIsDone);
         isInit = true;
       }
-    } // when resize, some coordonates need to be re-calculate
+    } // wait for resize to be completely done
+
+  }, {
+    key: "resizeIsDone",
+    value: function resizeIsDone() {
+      clearTimeout(resizeID);
+      resizeID = setTimeout(this.handleResize, 500);
+    } // handle the resize process, some coordonates need to be re-calculate
 
   }, {
     key: "handleResize",
@@ -549,7 +557,10 @@ function () {
         instances[i].getElementOffset(); // re-get the range if the current element
 
         instances[i].getRangeMax();
-      }
+      } // force the request animation frame to fired
+
+
+      this.lastPosition = -1;
     } // animation frame
 
   }, {
