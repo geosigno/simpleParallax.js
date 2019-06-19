@@ -3,7 +3,8 @@
     "version": "5.1.0",
     "description": "simpleParallax is a simple JavaScript library that gives your website parallax animations on any images",
     "homepage": "https://simpleparallax.com/",
-    "main": "dist/simpleParallax.min.js",
+    "main": "./dist/simpleParallax.min.js",
+    "types": "./index.d.ts",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/geosigno/simpleParallax.git"
