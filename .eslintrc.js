@@ -18,6 +18,10 @@ module.exports = {
         'max-len': ['error', { code: 150 }],
         'no-prototype-builtins': 0,
         'import/no-cycle': 0,
-        'comma-dangle': ['error', 'never']
+        'comma-dangle': ['error', 'never'],
+        "class-methods-use-this": 0,
+        "array-callback-return": 0,
+        "consistent-return": 0
+
     }
 };
