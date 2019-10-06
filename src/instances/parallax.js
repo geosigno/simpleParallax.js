@@ -36,8 +36,8 @@ class ParallaxInstance {
             this.wrapElement(this.element);
         }
 
-        // apply the default style on the image
-        this.setStyle();
+        // apply the transform style on the image
+        this.setTransformCSS();
 
         // get the current element offset
         this.getElementOffset();
@@ -50,6 +50,15 @@ class ParallaxInstance {
 
         // apply its translation even if not visible for the first init
         this.animate();
+
+        // if a delay has been set
+        if (this.settings.delay > 0) {
+            // apply a timeout to avoid buggy effect
+            setTimeout(() => {
+                // apply the transition style on the image
+                this.setTransitionCSS();   
+            }, 10);
+        }
 
         // for some reason, <picture> are init an infinite time on windows OS
         this.isInit = true;
@@ -80,21 +89,21 @@ class ParallaxInstance {
     }
 
     // apply default style on element
-    setStyle() {
+    setTransformCSS() {
         if (this.settings.overflow === false) {
             // if overflow option is set to false
             // add scale style so the image can be translated without getting out of its container
             this.element.style[cssTransform] = `scale(${this.settings.scale})`;
         }
 
-        if (this.settings.delay > 0) {
-            // if delay option is set to true
-            // add transition option
-            this.element.style.transition = `transform ${this.settings.delay}s ${this.settings.transition}`;
-        }
-
         // add will-change CSS property to improve perfomance
         this.element.style.willChange = 'transform';
+    }
+
+    // apply the transition effet
+    setTransitionCSS() {
+        // add transition option
+        this.element.style.transition = `transform ${this.settings.delay}s ${this.settings.transition}`;
     }
 
     // remove style of the element
