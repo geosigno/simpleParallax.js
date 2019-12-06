@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images, 
- * @date: 06-12-2019 13:53:55, 
+ * @date: 06-12-2019 17:9:59, 
  * @version: 5.1.0,
  * @link: https://simpleparallax.com/
  */
@@ -129,8 +129,9 @@ function () {
 
   _createClass(Viewport, [{
     key: "setViewportTop",
-    value: function setViewportTop() {
-      this.positions.top = window.pageYOffset;
+    value: function setViewportTop(container) {
+      //if this is a custom container, user the scrollTop
+      this.positions.top = container ? container.scrollTop : window.pageYOffset;
       return this.positions;
     }
   }, {
@@ -140,17 +141,13 @@ function () {
       return this.positions;
     }
   }, {
-    key: "setViewportHeight",
-    value: function setViewportHeight() {
-      this.positions.height = document.documentElement.clientHeight;
-      return this.positions;
-    }
-  }, {
     key: "setViewportAll",
-    value: function setViewportAll() {
-      this.positions.top = window.pageYOffset;
+    value: function setViewportAll(container) {
+      //if this is a custom container, user the scrollTop
+      this.positions.top = container ? container.scrollTop : window.pageYOffset; //if this is a custom container, get the height from the custom container itself
+
+      this.positions.height = container ? document.querySelector('.container').clientHeight : document.documentElement.clientHeight;
       this.positions.bottom = this.positions.top + this.positions.height;
-      this.positions.height = document.documentElement.clientHeight;
       return this.positions;
     }
   }]);
@@ -347,7 +344,14 @@ function () {
 
       this.elementHeight = positions.height; // get offset top
 
-      this.elementTop = positions.top + simpleParallax_viewport.positions.top; // get offset bottom
+      this.elementTop = positions.top + simpleParallax_viewport.positions.top; //if there is a custom container
+
+      if (this.settings.customContainer) {
+        //we need to do some calculation to get the position from the parent rather than the viewport
+        var parentPositions = document.querySelector(this.settings.customContainer).getBoundingClientRect();
+        this.elementTop = positions.top - parentPositions.top + simpleParallax_viewport.positions.top;
+      } // get offset bottom
+
 
       this.elementBottom = this.elementHeight + this.elementTop;
     } // build the Threshold array to cater change for every pixel scrolled
@@ -508,11 +512,17 @@ function () {
       orientation: 'up',
       scale: 1.3,
       overflow: false,
-      transition: 'cubic-bezier(0,0,0,1)'
+      transition: 'cubic-bezier(0,0,0,1)',
+      customContainer: false
     };
     this.settings = Object.assign(this.defaults, options); // check if the browser handle the Intersection Observer API
 
     if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
+
+    if (this.settings.customContainer) {
+      this.customContainer = document.querySelector(this.settings.customContainer);
+    }
+
     this.lastPosition = -1;
     this.resizeIsDone = this.resizeIsDone.bind(this);
     this.handleResize = this.handleResize.bind(this);
@@ -523,7 +533,7 @@ function () {
   simpleParallax_createClass(SimpleParallax, [{
     key: "init",
     value: function init() {
-      simpleParallax_viewport.setViewportAll();
+      simpleParallax_viewport.setViewportAll(this.customContainer);
 
       for (var i = this.elements.length - 1; i >= 0; i--) {
         var instance = new parallax(this.elements[i], this.settings);
@@ -552,7 +562,7 @@ function () {
     key: "handleResize",
     value: function handleResize() {
       // re-get all the viewport positions
-      simpleParallax_viewport.setViewportAll();
+      simpleParallax_viewport.setViewportAll(this.customContainer);
 
       for (var i = instancesLength - 1; i >= 0; i--) {
         // re-get the current element offset
@@ -569,7 +579,7 @@ function () {
     key: "proceedRequestAnimationFrame",
     value: function proceedRequestAnimationFrame() {
       // get the offset top of the viewport
-      simpleParallax_viewport.setViewportTop();
+      simpleParallax_viewport.setViewportTop(this.customContainer);
 
       if (this.lastPosition === simpleParallax_viewport.positions.top) {
         // if last position if the same than the curent one
@@ -595,9 +605,10 @@ function () {
     key: "proceedElement",
     value: function proceedElement(instance) {
       var isVisible = false; // is not support for Intersection Observer API
+      // or if this is a custom container
       // use old function to check if element visible
 
-      if (!intersectionObserverAvailable) {
+      if (!intersectionObserverAvailable || this.customContainer) {
         isVisible = instance.checkIfVisible(); // if support
         // use response from Intersection Observer API Callback
       } else {

@@ -21,13 +21,18 @@ export default class SimpleParallax {
             orientation: 'up',
             scale: 1.3,
             overflow: false,
-            transition: 'cubic-bezier(0,0,0,1)'        
+            transition: 'cubic-bezier(0,0,0,1)',
+            customContainer: false   
         };
 
         this.settings = Object.assign(this.defaults, options);
 
         // check if the browser handle the Intersection Observer API
         if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
+
+        if (this.settings.customContainer) {
+            this.customContainer = document.querySelector(this.settings.customContainer);
+        }
 
         this.lastPosition = -1;
 
@@ -39,7 +44,7 @@ export default class SimpleParallax {
     }
 
     init() {
-        viewport.setViewportAll();
+        viewport.setViewportAll(this.customContainer);
 
         for (let i = this.elements.length - 1; i >= 0; i--) {
             const instance = new ParallaxInstance(this.elements[i], this.settings);
@@ -69,7 +74,7 @@ export default class SimpleParallax {
     // handle the resize process, some coordonates need to be re-calculate
     handleResize() {
         // re-get all the viewport positions
-        viewport.setViewportAll();
+        viewport.setViewportAll(this.customContainer);
 
         for (let i = instancesLength - 1; i >= 0; i--) {
             // re-get the current element offset
@@ -86,7 +91,7 @@ export default class SimpleParallax {
     // animation frame
     proceedRequestAnimationFrame() {
         // get the offset top of the viewport
-        viewport.setViewportTop();
+        viewport.setViewportTop(this.customContainer);
 
         if (this.lastPosition === viewport.positions.top) {
             // if last position if the same than the curent one
@@ -116,8 +121,9 @@ export default class SimpleParallax {
         let isVisible = false;
 
         // is not support for Intersection Observer API
+        // or if this is a custom container
         // use old function to check if element visible
-        if (!intersectionObserverAvailable) {
+        if (!intersectionObserverAvailable || this.customContainer) {
             isVisible = instance.checkIfVisible();
             // if support
             // use response from Intersection Observer API Callback

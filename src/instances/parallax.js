@@ -122,6 +122,12 @@ class ParallaxInstance {
         this.elementHeight = positions.height;
         // get offset top
         this.elementTop = positions.top + viewport.positions.top;
+        //if there is a custom container
+        if (this.settings.customContainer) {
+            //we need to do some calculation to get the position from the parent rather than the viewport
+            const parentPositions = document.querySelector(this.settings.customContainer).getBoundingClientRect();
+            this.elementTop = (positions.top - parentPositions.top) + viewport.positions.top;
+        }
         // get offset bottom
         this.elementBottom = this.elementHeight + this.elementTop;
     }
