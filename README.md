@@ -73,7 +73,6 @@ scale | int | 1.3 | need to be above 1.0
 overflow | boolean | false | 
 delay | int | 0.4 | the delay is in second
 transition | string | false | any CSS transition
-breakpoint | int | false | the breakpoint is in pixel
 
 You can apply these settings with the following JS code:
 
@@ -101,9 +100,6 @@ When a delay is set, the translation of the image will slightly continue when th
 
 ### transition - *string*
 The transition works closely with the delay setting. The transition will add any CSS effect to the delay setting.
-
-### breakpoint - *int*
-The minimum breakpoint from where simpleParallax should be initialized and to where simpleParallax should be destroyed.
 
 ## Methods
 Destroy a simpleParallax instance:

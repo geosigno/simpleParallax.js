@@ -21,16 +21,10 @@ export default class SimpleParallax {
             orientation: 'up',
             scale: 1.3,
             overflow: false,
-            transition: 'cubic-bezier(0,0,0,1)',
-            breakpoint: false
+            transition: 'cubic-bezier(0,0,0,1)'        
         };
 
         this.settings = Object.assign(this.defaults, options);
-
-        // check if breakpoint is set and superior to user browser width
-        if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
-            return;
-        }
 
         // check if the browser handle the Intersection Observer API
         if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
@@ -76,10 +70,6 @@ export default class SimpleParallax {
     handleResize() {
         // re-get all the viewport positions
         viewport.setViewportAll();
-
-        if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
-            this.destroy();
-        }
 
         for (let i = instancesLength - 1; i >= 0; i--) {
             // re-get the current element offset

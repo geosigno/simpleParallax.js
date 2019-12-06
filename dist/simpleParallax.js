@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images, 
- * @date: 02-09-2019 19:12:2, 
+ * @date: 06-12-2019 13:53:55, 
  * @version: 5.1.0,
  * @link: https://simpleparallax.com/
  */
@@ -251,6 +251,8 @@ function () {
   parallax_createClass(ParallaxInstance, [{
     key: "init",
     value: function init() {
+      var _this = this;
+
       // for some reason, <picture> are init an infinite time on windows OS
       if (this.isInit) return; // check if element has not been already initialized with simpleParallax
 
@@ -260,10 +262,10 @@ function () {
         // if overflow option is set to false
         // wrap the element into a div to apply overflow
         this.wrapElement(this.element);
-      } // apply the default style on the image
+      } // apply the transform style on the image
 
 
-      this.setStyle(); // get the current element offset
+      this.setTransformCSS(); // get the current element offset
 
       this.getElementOffset(); // init the Intesection Observer
 
@@ -271,7 +273,16 @@ function () {
 
       this.getTranslateValue(); // apply its translation even if not visible for the first init
 
-      this.animate(); // for some reason, <picture> are init an infinite time on windows OS
+      this.animate(); // if a delay has been set
+
+      if (this.settings.delay > 0) {
+        // apply a timeout to avoid buggy effect
+        setTimeout(function () {
+          // apply the transition style on the image
+          _this.setTransitionCSS();
+        }, 10);
+      } // for some reason, <picture> are init an infinite time on windows OS
+
 
       this.isInit = true;
     } // if overflow option is set to false
@@ -300,22 +311,23 @@ function () {
     } // apply default style on element
 
   }, {
-    key: "setStyle",
-    value: function setStyle() {
+    key: "setTransformCSS",
+    value: function setTransformCSS() {
       if (this.settings.overflow === false) {
         // if overflow option is set to false
         // add scale style so the image can be translated without getting out of its container
         this.element.style[helpers_cssTransform] = "scale(".concat(this.settings.scale, ")");
-      }
-
-      if (this.settings.delay > 0) {
-        // if delay option is set to true
-        // add transition option
-        this.element.style.transition = "transform ".concat(this.settings.delay, "s ").concat(this.settings.transition);
       } // add will-change CSS property to improve perfomance
 
 
       this.element.style.willChange = 'transform';
+    } // apply the transition effet
+
+  }, {
+    key: "setTransitionCSS",
+    value: function setTransitionCSS() {
+      // add transition option
+      this.element.style.transition = "transform ".concat(this.settings.delay, "s ").concat(this.settings.transition);
     } // remove style of the element
 
   }, {
@@ -496,15 +508,9 @@ function () {
       orientation: 'up',
       scale: 1.3,
       overflow: false,
-      transition: 'cubic-bezier(0,0,0,1)',
-      breakpoint: false
+      transition: 'cubic-bezier(0,0,0,1)'
     };
-    this.settings = Object.assign(this.defaults, options); // check if breakpoint is set and superior to user browser width
-
-    if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
-      return;
-    } // check if the browser handle the Intersection Observer API
-
+    this.settings = Object.assign(this.defaults, options); // check if the browser handle the Intersection Observer API
 
     if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
     this.lastPosition = -1;
@@ -547,10 +553,6 @@ function () {
     value: function handleResize() {
       // re-get all the viewport positions
       simpleParallax_viewport.setViewportAll();
-
-      if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
-        this.destroy();
-      }
 
       for (var i = instancesLength - 1; i >= 0; i--) {
         // re-get the current element offset
