@@ -1,7 +1,7 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images, 
- * @date: 06-12-2019 17:9:59, 
- * @version: 5.1.0,
+ * @date: 07-12-2019 18:53:52, 
+ * @version: 5.2.0,
  * @link: https://simpleparallax.com/
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -130,7 +130,7 @@ function () {
   _createClass(Viewport, [{
     key: "setViewportTop",
     value: function setViewportTop(container) {
-      //if this is a custom container, user the scrollTop
+      // if this is a custom container, user the scrollTop
       this.positions.top = container ? container.scrollTop : window.pageYOffset;
       return this.positions;
     }
@@ -143,10 +143,10 @@ function () {
   }, {
     key: "setViewportAll",
     value: function setViewportAll(container) {
-      //if this is a custom container, user the scrollTop
-      this.positions.top = container ? container.scrollTop : window.pageYOffset; //if this is a custom container, get the height from the custom container itself
+      // if this is a custom container, user the scrollTop
+      this.positions.top = container ? container.scrollTop : window.pageYOffset; // if this is a custom container, get the height from the custom container itself
 
-      this.positions.height = container ? document.querySelector('.container').clientHeight : document.documentElement.clientHeight;
+      this.positions.height = container ? container.clientHeight : document.documentElement.clientHeight;
       this.positions.bottom = this.positions.top + this.positions.height;
       return this.positions;
     }
@@ -155,7 +155,8 @@ function () {
   return Viewport;
 }();
 
-/* harmony default export */ var viewport = (Viewport);
+var viewport = new Viewport();
+
 // CONCATENATED MODULE: ./src/helpers/convertToArray.js
 // check wether the element is a Node List, a HTML Collection or an array
 // return an array of nodes
@@ -344,12 +345,12 @@ function () {
 
       this.elementHeight = positions.height; // get offset top
 
-      this.elementTop = positions.top + simpleParallax_viewport.positions.top; //if there is a custom container
+      this.elementTop = positions.top + viewport.positions.top; // if there is a custom container
 
       if (this.settings.customContainer) {
-        //we need to do some calculation to get the position from the parent rather than the viewport
-        var parentPositions = document.querySelector(this.settings.customContainer).getBoundingClientRect();
-        this.elementTop = positions.top - parentPositions.top + simpleParallax_viewport.positions.top;
+        // we need to do some calculation to get the position from the parent rather than the viewport
+        var parentPositions = this.settings.customContainer.getBoundingClientRect();
+        this.elementTop = positions.top - parentPositions.top + viewport.positions.top;
       } // get offset bottom
 
 
@@ -396,7 +397,7 @@ function () {
   }, {
     key: "checkIfVisible",
     value: function checkIfVisible() {
-      return this.elementBottom > simpleParallax_viewport.positions.top && this.elementTop < simpleParallax_viewport.positions.bottom;
+      return this.elementBottom > viewport.positions.top && this.elementTop < viewport.positions.bottom;
     } // calculate the range between image will be translated
 
   }, {
@@ -413,7 +414,7 @@ function () {
     value: function getTranslateValue() {
       // calculate the % position of the element comparing to the viewport
       // rounding percentage to a 1 number float to avoid unn unnecessary calculation
-      var percentage = ((simpleParallax_viewport.positions.bottom - this.elementTop) / ((simpleParallax_viewport.positions.height + this.elementHeight) / 100)).toFixed(1); // sometime the percentage exceeds 100 or goes below 0
+      var percentage = ((viewport.positions.bottom - this.elementTop) / ((viewport.positions.height + this.elementHeight) / 100)).toFixed(1); // sometime the percentage exceeds 100 or goes below 0
 
       percentage = Math.min(100, Math.max(0, percentage)); // sometime the same percentage is returned
       // if so we don't do aything
@@ -480,7 +481,6 @@ function () {
 
 /* harmony default export */ var parallax = (parallax_ParallaxInstance);
 // CONCATENATED MODULE: ./src/simpleParallax.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "viewport", function() { return simpleParallax_viewport; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return simpleParallax_SimpleParallax; });
 function simpleParallax_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -491,7 +491,6 @@ function simpleParallax_createClass(Constructor, protoProps, staticProps) { if (
 
 
 
-var simpleParallax_viewport = new viewport();
 var intersectionObserverAvailable = true;
 var isInit = false;
 var instances = [];
@@ -520,7 +519,8 @@ function () {
     if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
 
     if (this.settings.customContainer) {
-      this.customContainer = document.querySelector(this.settings.customContainer);
+      console.log(helpers_convertToArray(this.settings.customContainer)[0]);
+      this.customContainer = helpers_convertToArray(this.settings.customContainer)[0];
     }
 
     this.lastPosition = -1;
@@ -533,7 +533,7 @@ function () {
   simpleParallax_createClass(SimpleParallax, [{
     key: "init",
     value: function init() {
-      simpleParallax_viewport.setViewportAll(this.customContainer);
+      viewport.setViewportAll(this.customContainer);
 
       for (var i = this.elements.length - 1; i >= 0; i--) {
         var instance = new parallax(this.elements[i], this.settings);
@@ -562,7 +562,7 @@ function () {
     key: "handleResize",
     value: function handleResize() {
       // re-get all the viewport positions
-      simpleParallax_viewport.setViewportAll(this.customContainer);
+      viewport.setViewportAll(this.customContainer);
 
       for (var i = instancesLength - 1; i >= 0; i--) {
         // re-get the current element offset
@@ -579,9 +579,9 @@ function () {
     key: "proceedRequestAnimationFrame",
     value: function proceedRequestAnimationFrame() {
       // get the offset top of the viewport
-      simpleParallax_viewport.setViewportTop(this.customContainer);
+      viewport.setViewportTop(this.customContainer);
 
-      if (this.lastPosition === simpleParallax_viewport.positions.top) {
+      if (this.lastPosition === viewport.positions.top) {
         // if last position if the same than the curent one
         // callback the animationFrame and exit the current loop
         frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
@@ -589,7 +589,7 @@ function () {
       } // get the offset bottom of the viewport
 
 
-      simpleParallax_viewport.setViewportBottom(); // proceed with the current element
+      viewport.setViewportBottom(); // proceed with the current element
 
       for (var i = instancesLength - 1; i >= 0; i--) {
         this.proceedElement(instances[i]);
@@ -598,7 +598,7 @@ function () {
 
       frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame); // store the last position
 
-      this.lastPosition = simpleParallax_viewport.positions.top;
+      this.lastPosition = viewport.positions.top;
     } // proceed the element
 
   }, {
@@ -636,9 +636,10 @@ function () {
         if (_this.elements.includes(instance.element)) {
           // push instance that need to be destroyed into instancesToDestroy
           instancesToDestroy.push(instance);
-        } else {
-          return instance;
+          return false;
         }
+
+        return instance;
       });
 
       for (var i = instancesToDestroy.length - 1; i >= 0; i--) {
