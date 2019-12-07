@@ -5,7 +5,8 @@ import SimpleParallax from '../src/simpleParallax';
 
 let instanceUp;
 const optionUp = {
-    orientation: 'left'
+    orientation: 'left',
+    // customContainer: document.querySelector('.container')
 };
 const imageUp = document.getElementsByTagName('img');
 

@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images, 
- * @date: 13-06-2019 16:24:29, 
+ * @date: 06-12-2019 17:9:59, 
  * @version: 5.1.0,
  * @link: https://simpleparallax.com/
  */
@@ -129,8 +129,9 @@ function () {
 
   _createClass(Viewport, [{
     key: "setViewportTop",
-    value: function setViewportTop() {
-      this.positions.top = window.pageYOffset;
+    value: function setViewportTop(container) {
+      //if this is a custom container, user the scrollTop
+      this.positions.top = container ? container.scrollTop : window.pageYOffset;
       return this.positions;
     }
   }, {
@@ -140,17 +141,13 @@ function () {
       return this.positions;
     }
   }, {
-    key: "setViewportHeight",
-    value: function setViewportHeight() {
-      this.positions.height = document.documentElement.clientHeight;
-      return this.positions;
-    }
-  }, {
     key: "setViewportAll",
-    value: function setViewportAll() {
-      this.positions.top = window.pageYOffset;
+    value: function setViewportAll(container) {
+      //if this is a custom container, user the scrollTop
+      this.positions.top = container ? container.scrollTop : window.pageYOffset; //if this is a custom container, get the height from the custom container itself
+
+      this.positions.height = container ? document.querySelector('.container').clientHeight : document.documentElement.clientHeight;
       this.positions.bottom = this.positions.top + this.positions.height;
-      this.positions.height = document.documentElement.clientHeight;
       return this.positions;
     }
   }]);
@@ -251,6 +248,8 @@ function () {
   parallax_createClass(ParallaxInstance, [{
     key: "init",
     value: function init() {
+      var _this = this;
+
       // for some reason, <picture> are init an infinite time on windows OS
       if (this.isInit) return; // check if element has not been already initialized with simpleParallax
 
@@ -260,10 +259,10 @@ function () {
         // if overflow option is set to false
         // wrap the element into a div to apply overflow
         this.wrapElement(this.element);
-      } // apply the default style on the image
+      } // apply the transform style on the image
 
 
-      this.setStyle(); // get the current element offset
+      this.setTransformCSS(); // get the current element offset
 
       this.getElementOffset(); // init the Intesection Observer
 
@@ -271,7 +270,16 @@ function () {
 
       this.getTranslateValue(); // apply its translation even if not visible for the first init
 
-      this.animate(); // for some reason, <picture> are init an infinite time on windows OS
+      this.animate(); // if a delay has been set
+
+      if (this.settings.delay > 0) {
+        // apply a timeout to avoid buggy effect
+        setTimeout(function () {
+          // apply the transition style on the image
+          _this.setTransitionCSS();
+        }, 10);
+      } // for some reason, <picture> are init an infinite time on windows OS
+
 
       this.isInit = true;
     } // if overflow option is set to false
@@ -300,22 +308,23 @@ function () {
     } // apply default style on element
 
   }, {
-    key: "setStyle",
-    value: function setStyle() {
+    key: "setTransformCSS",
+    value: function setTransformCSS() {
       if (this.settings.overflow === false) {
         // if overflow option is set to false
         // add scale style so the image can be translated without getting out of its container
         this.element.style[helpers_cssTransform] = "scale(".concat(this.settings.scale, ")");
-      }
-
-      if (this.settings.delay > 0) {
-        // if delay option is set to true
-        // add transition option
-        this.element.style.transition = "transform ".concat(this.settings.delay, "s ").concat(this.settings.transition);
       } // add will-change CSS property to improve perfomance
 
 
       this.element.style.willChange = 'transform';
+    } // apply the transition effet
+
+  }, {
+    key: "setTransitionCSS",
+    value: function setTransitionCSS() {
+      // add transition option
+      this.element.style.transition = "transform ".concat(this.settings.delay, "s ").concat(this.settings.transition);
     } // remove style of the element
 
   }, {
@@ -335,7 +344,14 @@ function () {
 
       this.elementHeight = positions.height; // get offset top
 
-      this.elementTop = positions.top + simpleParallax_viewport.positions.top; // get offset bottom
+      this.elementTop = positions.top + simpleParallax_viewport.positions.top; //if there is a custom container
+
+      if (this.settings.customContainer) {
+        //we need to do some calculation to get the position from the parent rather than the viewport
+        var parentPositions = document.querySelector(this.settings.customContainer).getBoundingClientRect();
+        this.elementTop = positions.top - parentPositions.top + simpleParallax_viewport.positions.top;
+      } // get offset bottom
+
 
       this.elementBottom = this.elementHeight + this.elementTop;
     } // build the Threshold array to cater change for every pixel scrolled
@@ -497,16 +513,16 @@ function () {
       scale: 1.3,
       overflow: false,
       transition: 'cubic-bezier(0,0,0,1)',
-      breakpoint: false
+      customContainer: false
     };
-    this.settings = Object.assign(this.defaults, options); // check if breakpoint is set and superior to user browser width
-
-    if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
-      return;
-    } // check if the browser handle the Intersection Observer API
-
+    this.settings = Object.assign(this.defaults, options); // check if the browser handle the Intersection Observer API
 
     if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
+
+    if (this.settings.customContainer) {
+      this.customContainer = document.querySelector(this.settings.customContainer);
+    }
+
     this.lastPosition = -1;
     this.resizeIsDone = this.resizeIsDone.bind(this);
     this.handleResize = this.handleResize.bind(this);
@@ -517,7 +533,7 @@ function () {
   simpleParallax_createClass(SimpleParallax, [{
     key: "init",
     value: function init() {
-      simpleParallax_viewport.setViewportAll();
+      simpleParallax_viewport.setViewportAll(this.customContainer);
 
       for (var i = this.elements.length - 1; i >= 0; i--) {
         var instance = new parallax(this.elements[i], this.settings);
@@ -546,11 +562,7 @@ function () {
     key: "handleResize",
     value: function handleResize() {
       // re-get all the viewport positions
-      simpleParallax_viewport.setViewportAll();
-
-      if (this.settings.breakpoint && document.documentElement.clientWidth <= this.settings.breakpoint) {
-        this.destroy();
-      }
+      simpleParallax_viewport.setViewportAll(this.customContainer);
 
       for (var i = instancesLength - 1; i >= 0; i--) {
         // re-get the current element offset
@@ -567,7 +579,7 @@ function () {
     key: "proceedRequestAnimationFrame",
     value: function proceedRequestAnimationFrame() {
       // get the offset top of the viewport
-      simpleParallax_viewport.setViewportTop();
+      simpleParallax_viewport.setViewportTop(this.customContainer);
 
       if (this.lastPosition === simpleParallax_viewport.positions.top) {
         // if last position if the same than the curent one
@@ -593,9 +605,10 @@ function () {
     key: "proceedElement",
     value: function proceedElement(instance) {
       var isVisible = false; // is not support for Intersection Observer API
+      // or if this is a custom container
       // use old function to check if element visible
 
-      if (!intersectionObserverAvailable) {
+      if (!intersectionObserverAvailable || this.customContainer) {
         isVisible = instance.checkIfVisible(); // if support
         // use response from Intersection Observer API Callback
       } else {

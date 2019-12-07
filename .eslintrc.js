@@ -16,8 +16,6 @@ module.exports = {
         indent: ['error', 4],
         'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
         'max-len': ['error', { code: 150 }],
-        'no-prototype-builtins': 0,
-        'import/no-cycle': 0,
-        'comma-dangle': ['error', 'never']
+        'no-prototype-builtins': 0    
     }
 };

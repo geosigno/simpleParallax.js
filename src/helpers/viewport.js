@@ -3,12 +3,13 @@ class Viewport {
         this.positions = {
             top: 0,
             bottom: 0,
-            height: 0
+            height: 0,
         };
     }
 
-    setViewportTop() {
-        this.positions.top = window.pageYOffset;
+    setViewportTop(container) {
+        // if this is a custom container, user the scrollTop
+        this.positions.top = (container ? container.scrollTop : window.pageYOffset);
         return this.positions;
     }
 
@@ -17,17 +18,16 @@ class Viewport {
         return this.positions;
     }
 
-    setViewportHeight() {
-        this.positions.height = document.documentElement.clientHeight;
-        return this.positions;
-    }
-
-    setViewportAll() {
-        this.positions.top = window.pageYOffset;
+    setViewportAll(container) {
+        // if this is a custom container, user the scrollTop
+        this.positions.top = (container ? container.scrollTop : window.pageYOffset);
+        // if this is a custom container, get the height from the custom container itself
+        this.positions.height = (container ? container.clientHeight : document.documentElement.clientHeight);
         this.positions.bottom = this.positions.top + this.positions.height;
-        this.positions.height = document.documentElement.clientHeight;
+
         return this.positions;
     }
 }
 
-export default Viewport;
+export const viewport = new Viewport();
+export { viewport as default };
