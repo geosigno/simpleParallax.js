@@ -24,7 +24,7 @@ Simply copy/paste the below snippet just before your closing `</body>` tag:
 or use the below CDN link provided by [jsDelivr.com](https://www.jsdelivr.com/package/npm/simple-parallax-js):
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.1.0/dist/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.2.0/dist/simpleParallax.min.js"></script>
 ```
 
 or you can install it via [npm/yarn](https://www.npmjs.com/package/simple-parallax-js):
