@@ -73,6 +73,7 @@ scale | int | 1.3 | need to be above 1.0
 overflow | boolean | false | 
 delay | int | 0.4 | the delay is in second
 transition | string | false | any CSS transition
+customContainer | string or node | false | this can be a string of directly a node
 
 You can apply these settings with the following JS code:
 
@@ -100,6 +101,9 @@ When a delay is set, the translation of the image will slightly continue when th
 
 ### transition - *string*
 The transition works closely with the delay setting. The transition will add any CSS effect to the delay setting.
+
+###customContainer - *string or node*
+In some cases, you want the parallax effects to be apply on a container that have its own scroll, and not apply the parallax effects via the document scroll.
 
 ## Methods
 Destroy a simpleParallax instance:
