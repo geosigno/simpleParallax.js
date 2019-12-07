@@ -1,9 +1,7 @@
-import Viewport from './helpers/viewport';
+import { viewport } from './helpers/viewport';
 import convertToArray from './helpers/convertToArray';
 
 import ParallaxInstance from './instances/parallax';
-
-export const viewport = new Viewport();
 
 let intersectionObserverAvailable = true;
 let isInit = false;
@@ -22,7 +20,7 @@ export default class SimpleParallax {
             scale: 1.3,
             overflow: false,
             transition: 'cubic-bezier(0,0,0,1)',
-            customContainer: false   
+            customContainer: false,
         };
 
         this.settings = Object.assign(this.defaults, options);
@@ -151,9 +149,9 @@ export default class SimpleParallax {
             if (this.elements.includes(instance.element)) {
                 // push instance that need to be destroyed into instancesToDestroy
                 instancesToDestroy.push(instance);
-            } else {
-                return instance;
+                return false;
             }
+            return instance;
         });
 
         for (let i = instancesToDestroy.length - 1; i >= 0; i--) {

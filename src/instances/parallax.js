@@ -1,7 +1,6 @@
 import cssTransform from '../helpers/cssTransform';
 import isImageLoaded from '../helpers/isImageLoaded';
-
-import { viewport } from '../simpleParallax';
+import { viewport } from '../helpers/viewport';
 
 class ParallaxInstance {
     constructor(element, options) {
@@ -56,7 +55,7 @@ class ParallaxInstance {
             // apply a timeout to avoid buggy effect
             setTimeout(() => {
                 // apply the transition style on the image
-                this.setTransitionCSS();   
+                this.setTransitionCSS();
             }, 10);
         }
 
@@ -122,9 +121,9 @@ class ParallaxInstance {
         this.elementHeight = positions.height;
         // get offset top
         this.elementTop = positions.top + viewport.positions.top;
-        //if there is a custom container
+        // if there is a custom container
         if (this.settings.customContainer) {
-            //we need to do some calculation to get the position from the parent rather than the viewport
+            // we need to do some calculation to get the position from the parent rather than the viewport
             const parentPositions = document.querySelector(this.settings.customContainer).getBoundingClientRect();
             this.elementTop = (positions.top - parentPositions.top) + viewport.positions.top;
         }
@@ -146,7 +145,7 @@ class ParallaxInstance {
     intersectionObserver() {
         const options = {
             root: null,
-            threshold: this.buildThresholdList()
+            threshold: this.buildThresholdList(),
         };
         this.observer = new IntersectionObserver(this.intersectionObserverCallback.bind(this), options);
         this.observer.observe(this.element);
