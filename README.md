@@ -83,7 +83,7 @@ new simpleParallax(images, {
     delay: 0,
     orientation: 'down',
     scale: 1.3,
-    overfow: true,
+    overflow: true,
     customContainer: '.container'
 });
 ```
