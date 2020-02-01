@@ -84,7 +84,8 @@ new simpleParallax(images, {
     delay: 0,
     orientation: 'down',
     scale: 1.3,
-    overfow: true
+    overflow: true,
+    customContainer: '.container'
 });
 ```
 
@@ -103,7 +104,7 @@ When a delay is set, the translation of the image will slightly continue when th
 ### transition - *string*
 The transition works closely with the delay setting. The transition will add any CSS effect to the delay setting.
 
-###customContainer - *string or node*
+### customContainer - *string or node*
 In some cases, you want the parallax effects to be apply on a container that have its own scroll, and not apply the parallax effects via the document scroll.
 
 ###maxTransition - *int*
