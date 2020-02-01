@@ -107,7 +107,7 @@ The transition works closely with the delay setting. The transition will add any
 ### customContainer - *string or node*
 In some cases, you want the parallax effects to be apply on a container that have its own scroll, and not apply the parallax effects via the document scroll.
 
-###maxTransition - *int*
+### maxTransition - *int*
 The maxTransition setting can be used to stop the parallax transition after a given percentage. By default, it translate from 0% to 100% of the user viewport. You can change it here to any percentage you want.
 
 ## Methods
