@@ -24,7 +24,7 @@ Simply copy/paste the below snippet just before your closing `</body>` tag:
 or use the below CDN link provided by [jsDelivr.com](https://www.jsdelivr.com/package/npm/simple-parallax-js):
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.1.0/dist/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.3.0/dist/simpleParallax.min.js"></script>
 ```
 
 or you can install it via [npm/yarn](https://www.npmjs.com/package/simple-parallax-js):
@@ -74,6 +74,7 @@ overflow | boolean | false |
 delay | int | 0.4 | the delay is in second
 transition | string | false | any CSS transition
 customContainer | string or node | false | this can be a string of directly a node
+maxTransition | int | 0 | the percentage where the parallax should stop (between 1 and 99)
 
 You can apply these settings with the following JS code:
 
@@ -104,6 +105,9 @@ The transition works closely with the delay setting. The transition will add any
 
 ###customContainer - *string or node*
 In some cases, you want the parallax effects to be apply on a container that have its own scroll, and not apply the parallax effects via the document scroll.
+
+###maxTransition - *int*
+The maxTransition setting can be used to stop the parallax transition after a given percentage. By default, it translate from 0% to 100% of the user viewport. You can change it here to any percentage you want.
 
 ## Methods
 Destroy a simpleParallax instance:

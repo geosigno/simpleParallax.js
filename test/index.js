@@ -5,15 +5,18 @@ import SimpleParallax from '../src/simpleParallax';
 
 let instanceUp;
 const optionUp = {
-    orientation: 'left',
+    orientation: 'up',
+    maxTransition: 50,
+    scale: 1.5,
+    overflow: true
     // customContainer: document.querySelector('.container')
 };
 const imageUp = document.getElementsByTagName('img');
 
 const images = document.querySelectorAll('img');
-images.forEach((image) => {
-    new SimpleParallax(image, optionUp);
-});
+// images.forEach((image) => {
+new SimpleParallax(images, optionUp);
+// });
 
 // instanceUp = new SimpleParallax('img', optionUp);
 

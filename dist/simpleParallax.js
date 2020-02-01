@@ -1,7 +1,7 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images, 
- * @date: 07-12-2019 18:53:52, 
- * @version: 5.2.0,
+ * @date: 01-02-2020 23:1:26, 
+ * @version: 5.3.0,
  * @link: https://simpleparallax.com/
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -416,8 +416,13 @@ function () {
       // rounding percentage to a 1 number float to avoid unn unnecessary calculation
       var percentage = ((viewport.positions.bottom - this.elementTop) / ((viewport.positions.height + this.elementHeight) / 100)).toFixed(1); // sometime the percentage exceeds 100 or goes below 0
 
-      percentage = Math.min(100, Math.max(0, percentage)); // sometime the same percentage is returned
+      percentage = Math.min(100, Math.max(0, percentage)); // if a maxTransition has been set, we round the percentage to that number
+
+      if (this.settings.maxTransition !== 0 && percentage > this.settings.maxTransition) {
+        percentage = this.settings.maxTransition;
+      } // sometime the same percentage is returned
       // if so we don't do aything
+
 
       if (this.oldPercentage === percentage) {
         return false;
@@ -482,6 +487,14 @@ function () {
 /* harmony default export */ var parallax = (parallax_ParallaxInstance);
 // CONCATENATED MODULE: ./src/simpleParallax.js
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return simpleParallax_SimpleParallax; });
+function simpleParallax_toConsumableArray(arr) { return simpleParallax_arrayWithoutHoles(arr) || simpleParallax_iterableToArray(arr) || simpleParallax_nonIterableSpread(); }
+
+function simpleParallax_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function simpleParallax_iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function simpleParallax_arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function simpleParallax_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function simpleParallax_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -512,7 +525,8 @@ function () {
       scale: 1.3,
       overflow: false,
       transition: 'cubic-bezier(0,0,0,1)',
-      customContainer: false
+      customContainer: false,
+      maxTransition: 0
     };
     this.settings = Object.assign(this.defaults, options); // check if the browser handle the Intersection Observer API
 
@@ -533,13 +547,12 @@ function () {
   simpleParallax_createClass(SimpleParallax, [{
     key: "init",
     value: function init() {
+      var _this = this;
+
       viewport.setViewportAll(this.customContainer);
-
-      for (var i = this.elements.length - 1; i >= 0; i--) {
-        var instance = new parallax(this.elements[i], this.settings);
-        instances.push(instance);
-      } // update the instance length
-
+      instances = [].concat(simpleParallax_toConsumableArray(this.elements.map(function (element) {
+        return new parallax(element, _this.settings);
+      })), simpleParallax_toConsumableArray(instances)); // update the instance length
 
       instancesLength = instances.length; // only if this is the first simpleParallax init
 
@@ -628,12 +641,12 @@ function () {
   }, {
     key: "destroy",
     value: function destroy() {
-      var _this = this;
+      var _this2 = this;
 
       var instancesToDestroy = []; // remove all instances that need to be destroyed from the instances array
 
       instances = instances.filter(function (instance) {
-        if (_this.elements.includes(instance.element)) {
+        if (_this2.elements.includes(instance.element)) {
           // push instance that need to be destroyed into instancesToDestroy
           instancesToDestroy.push(instance);
           return false;

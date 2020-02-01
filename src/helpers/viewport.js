@@ -9,7 +9,7 @@ class Viewport {
 
     setViewportTop(container) {
         // if this is a custom container, user the scrollTop
-        this.positions.top = (container ? container.scrollTop : window.pageYOffset);
+        this.positions.top = container ? container.scrollTop : window.pageYOffset;
         return this.positions;
     }
 
@@ -20,9 +20,9 @@ class Viewport {
 
     setViewportAll(container) {
         // if this is a custom container, user the scrollTop
-        this.positions.top = (container ? container.scrollTop : window.pageYOffset);
+        this.positions.top = container ? container.scrollTop : window.pageYOffset;
         // if this is a custom container, get the height from the custom container itself
-        this.positions.height = (container ? container.clientHeight : document.documentElement.clientHeight);
+        this.positions.height = container ? container.clientHeight : document.documentElement.clientHeight;
         this.positions.bottom = this.positions.top + this.positions.height;
 
         return this.positions;

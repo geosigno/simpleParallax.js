@@ -21,6 +21,7 @@ export default class SimpleParallax {
             overflow: false,
             transition: 'cubic-bezier(0,0,0,1)',
             customContainer: false,
+            maxTransition: 0,
         };
 
         this.settings = Object.assign(this.defaults, options);
@@ -29,7 +30,7 @@ export default class SimpleParallax {
         if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
 
         if (this.settings.customContainer) {
-            console.log(convertToArray(this.settings.customContainer)[0])
+            console.log(convertToArray(this.settings.customContainer)[0]);
             this.customContainer = convertToArray(this.settings.customContainer)[0];
         }
 
@@ -45,10 +46,7 @@ export default class SimpleParallax {
     init() {
         viewport.setViewportAll(this.customContainer);
 
-        for (let i = this.elements.length - 1; i >= 0; i--) {
-            const instance = new ParallaxInstance(this.elements[i], this.settings);
-            instances.push(instance);
-        }
+        instances = [...this.elements.map((element) => new ParallaxInstance(element, this.settings)), ...instances];
 
         // update the instance length
         instancesLength = instances.length;

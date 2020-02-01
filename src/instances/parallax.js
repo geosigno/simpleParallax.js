@@ -125,7 +125,7 @@ class ParallaxInstance {
         if (this.settings.customContainer) {
             // we need to do some calculation to get the position from the parent rather than the viewport
             const parentPositions = this.settings.customContainer.getBoundingClientRect();
-            this.elementTop = (positions.top - parentPositions.top) + viewport.positions.top;
+            this.elementTop = positions.top - parentPositions.top + viewport.positions.top;
         }
         // get offset bottom
         this.elementBottom = this.elementHeight + this.elementTop;
@@ -185,6 +185,11 @@ class ParallaxInstance {
 
         // sometime the percentage exceeds 100 or goes below 0
         percentage = Math.min(100, Math.max(0, percentage));
+
+        // if a maxTransition has been set, we round the percentage to that number
+        if (this.settings.maxTransition !== 0 && percentage > this.settings.maxTransition) {
+            percentage = this.settings.maxTransition;
+        }
 
         // sometime the same percentage is returned
         // if so we don't do aything
