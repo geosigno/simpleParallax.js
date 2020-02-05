@@ -4,11 +4,11 @@
 [![](https://data.jsdelivr.com/v1/package/npm/simple-parallax-js/badge?style=rounded)](https://www.jsdelivr.com/package/npm/simple-parallax-js)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-# What is simpleParallax?
+# What is simpleParallax.js?
 
-simpleParallax is a very simple and tiny Vanilla JS library which adds parallax animations on any images.
+simpleParallax.js is a very simple and tiny Vanilla JS library which adds parallax animations on any images.
 
-Where it may be laborious to get results through other plugins, simpleParallax stands out for its ease and its visual rendering. The parallax effect is directly applied on image tags, there is no need to use background images. You can read one case study [here](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471).
+Where it may be laborious to get results through other plugins, simpleParallax.js stands out for its ease and its visual rendering. The parallax effect is directly applied on image tags, there is no need to use background images. You can read one case study [here](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471).
 
 Any image will fit. Try it out!
 
@@ -122,7 +122,7 @@ instance.destroy();
 You can find some examples [here](https://simpleparallax.com/#examples).
 
 ## Compatibility
-You can apply simpleParallax on picture tags/srcset images.
+You can apply simpleParallax.js on picture tags/srcset images.
 
 ## Author
 
