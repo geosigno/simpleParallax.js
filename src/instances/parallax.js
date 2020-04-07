@@ -66,17 +66,29 @@ class ParallaxInstance {
     // if overflow option is set to false
     // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
     wrapElement() {
+        // get the customWrapper if any
+        let customWrapper = (this.settings.customWrapper && this.element.closest(this.settings.customWrapper));
+
         // check is current image is in a <picture> tag
         const elementToWrap = this.element.closest('picture') || this.element;
 
         // create a .simpleParallax wrapper container
-        const wrapper = document.createElement('div');
+        let wrapper = document.createElement('div');
+
+        //if there is a custom wrapper
+        //override the wrapper with it
+        if (customWrapper) {
+            wrapper = this.element.closest(this.settings.customWrapper);
+        }
+
         wrapper.classList.add('simpleParallax');
         wrapper.style.overflow = 'hidden';
 
         // append the image inside the new wrapper
-        elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
-        wrapper.appendChild(elementToWrap);
+        if (!customWrapper) {
+            elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
+            wrapper.appendChild(elementToWrap);
+        }
 
         this.elementContainer = wrapper;
     }
@@ -84,7 +96,17 @@ class ParallaxInstance {
     // unwrap the element from .simpleParallax wrapper container
     unWrapElement() {
         const wrapper = this.elementContainer;
-        wrapper.replaceWith(...wrapper.childNodes);
+
+        // get the customWrapper if any
+        let customWrapper = (this.settings.customWrapper && this.element.closest(this.settings.customWrapper));
+
+        //if there is a custom wrapper, we jusy need to remove the class and style
+        if (customWrapper) {
+            wrapper.classList.remove('simpleParallax');
+            wrapper.style.overflow = '';
+        } else {
+            wrapper.replaceWith(...wrapper.childNodes);
+        }
     }
 
     // apply default style on element

@@ -1,4 +1,6 @@
-import SimpleParallax from '../src/simpleParallax';
+import simpleParallax from '../src/simpleParallax';
+// var simpleParallax = require('../dist/simpleParallax');
+
 
 // let images = document.querySelectorAll('img'),
 //     instance;
@@ -6,17 +8,21 @@ import SimpleParallax from '../src/simpleParallax';
 let instanceUp;
 const optionUp = {
     orientation: 'up',
-    maxTransition: 50,
     scale: 1.5,
-    overflow: true
+    customWrapper: '.customWrapper'
     // customContainer: document.querySelector('.container')
 };
 const imageUp = document.getElementsByTagName('img');
 
 const images = document.querySelectorAll('img');
 // images.forEach((image) => {
-new SimpleParallax(images, optionUp);
+const instance = new simpleParallax(images, optionUp);
 // });
+
+// setTimeout(() => {
+//     instance.destroy();
+// }, 3000);
+
 
 // instanceUp = new SimpleParallax('img', optionUp);
 

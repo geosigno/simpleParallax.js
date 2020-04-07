@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images, 
- * @date: 01-02-2020 23:1:26, 
+ * @date: 07-04-2020 18:47:4, 
  * @version: 5.3.0,
  * @link: https://simpleparallax.com/
  */
@@ -289,23 +289,42 @@ function () {
   }, {
     key: "wrapElement",
     value: function wrapElement() {
-      // check is current image is in a <picture> tag
+      // get the customWrapper if any
+      var customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper); // check is current image is in a <picture> tag
+
       var elementToWrap = this.element.closest('picture') || this.element; // create a .simpleParallax wrapper container
 
-      var wrapper = document.createElement('div');
+      var wrapper = document.createElement('div'); //if there is a custom wrapper
+      //override the wrapper with it
+
+      if (customWrapper) {
+        wrapper = this.element.closest(this.settings.customWrapper);
+      }
+
       wrapper.classList.add('simpleParallax');
       wrapper.style.overflow = 'hidden'; // append the image inside the new wrapper
 
-      elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
-      wrapper.appendChild(elementToWrap);
+      if (!customWrapper) {
+        elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
+        wrapper.appendChild(elementToWrap);
+      }
+
       this.elementContainer = wrapper;
     } // unwrap the element from .simpleParallax wrapper container
 
   }, {
     key: "unWrapElement",
     value: function unWrapElement() {
-      var wrapper = this.elementContainer;
-      wrapper.replaceWith.apply(wrapper, _toConsumableArray(wrapper.childNodes));
+      var wrapper = this.elementContainer; // get the customWrapper if any
+
+      var customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper); //if there is a custom wrapper, we jusy need to remove the class and style
+
+      if (customWrapper) {
+        wrapper.classList.remove('simpleParallax');
+        wrapper.style.overflow = '';
+      } else {
+        wrapper.replaceWith.apply(wrapper, _toConsumableArray(wrapper.childNodes));
+      }
     } // apply default style on element
 
   }, {
