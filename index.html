@@ -20,8 +20,9 @@
             /* div{
                 overflow: hidden;
             } */
-            img {
-                max-width: 850px;
+            img,
+            video {
+                width: 850px;
                 height: auto;
             }
 
@@ -29,6 +30,7 @@
                 /* margin: 0 0 48px; */
             }
         </style>
+
     </head>
     <body>
         <section class="container">
@@ -37,6 +39,13 @@
                     <source media="(min-width: 650px)" srcset="https://simpleparallax.com/images/image03.jpg" />
                     <img class="up" src="https://simpleparallax.com/images/image03.jpg" alt="simpleParallax image" />
                 </picture>
+            </div>
+            <div>
+                <video width="400" autoplay>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    <source src="https://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">
+                    Your browser does not support HTML5 video.
+                </video>
             </div>
             <div>
                 <img class="up" src="https://simpleparallax.com/images/image03.jpg" alt="simpleParallax image" />
@@ -280,5 +289,11 @@
                 <img class="up" src="https://simpleparallax.com/images/image03.jpg" alt="simpleParallax image" />
             </div> -->
         </section>
+        <!-- <script>
+            console.log(document.querySelector('video'));
+            document.querySelector('video').addEventListener('loadstart', function() {
+            console.log('loaded');
+        });
+        </script> -->
     </body>
 </html>

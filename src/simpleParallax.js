@@ -21,6 +21,7 @@ export default class SimpleParallax {
             overflow: false,
             transition: 'cubic-bezier(0,0,0,1)',
             customContainer: false,
+            customWrapper: false,
             maxTransition: 0,
         };
 

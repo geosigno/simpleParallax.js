@@ -1,7 +1,7 @@
 /*!
- * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images, 
- * @date: 07-04-2020 18:47:4, 
- * @version: 5.3.0,
+ * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos, 
+ * @date: 08-04-2020 8:7:34, 
+ * @version: 5.4.0,
  * @link: https://simpleparallax.com/
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -184,20 +184,25 @@ var cssTransform = function cssTransform() {
 
 /* harmony default export */ var helpers_cssTransform = (cssTransform());
 // CONCATENATED MODULE: ./src/helpers/isImageLoaded.js
-// check if image is fully loaded
-var isImageLoaded = function isImageLoaded(image) {
-  // check if image is set as the parameter
-  if (!image) {
+// check if media is fully loaded
+var isImageLoaded = function isImageLoaded(media) {
+  //if the media is a video, return true
+  if (media.tagName.toLowerCase() == 'video') {
+    return true;
+  } // check if media is set as the parameter
+
+
+  if (!media) {
     return false;
-  } // check if image has been 100% loaded
+  } // check if media has been 100% loaded
 
 
-  if (!image.complete) {
+  if (!media.complete) {
     return false;
-  } // check if the image is displayed
+  } // check if the media is displayed
 
 
-  if (typeof image.naturalWidth !== 'undefined' && image.naturalWidth === 0) {
+  if (typeof media.naturalWidth !== 'undefined' && media.naturalWidth === 0) {
     return false;
   }
 
@@ -545,6 +550,7 @@ function () {
       overflow: false,
       transition: 'cubic-bezier(0,0,0,1)',
       customContainer: false,
+      customWrapper: false,
       maxTransition: 0
     };
     this.settings = Object.assign(this.defaults, options); // check if the browser handle the Intersection Observer API

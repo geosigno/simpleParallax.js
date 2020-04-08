@@ -8,13 +8,13 @@ import simpleParallax from '../src/simpleParallax';
 let instanceUp;
 const optionUp = {
     orientation: 'up',
-    scale: 1.5,
-    customWrapper: '.customWrapper'
+    scale: 1.3,
+    // customWrapper: '.customWrapper'
     // customContainer: document.querySelector('.container')
 };
 const imageUp = document.getElementsByTagName('img');
 
-const images = document.querySelectorAll('img');
+const images = document.querySelectorAll('video, img');
 // images.forEach((image) => {
 const instance = new simpleParallax(images, optionUp);
 // });

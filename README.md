@@ -24,7 +24,7 @@ Simply copy/paste the below snippet just before your closing `</body>` tag:
 or use the below CDN link provided by [jsDelivr.com](https://www.jsdelivr.com/package/npm/simple-parallax-js):
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.3.0/dist/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.4.0/dist/simpleParallax.min.js"></script>
 ```
 
 ### Via [npm/yarn](https://www.npmjs.com/package/simple-parallax-js)
@@ -74,6 +74,20 @@ You can also choose to apply the parallax on multiple images:
 const images = document.querySelectorAll('img');
 new simpleParallax(images);
 ```
+
+simpleParallax now works with video:
+
+```html
+<video>
+  <source src="video.mp4" type="video/mp4">
+</video>
+```
+
+```javascript
+var video = document.getElementsByTagName('video');
+new simpleParallax(video);
+```
+
 ## Settings
 
 Setting | Type | Default | Hint
