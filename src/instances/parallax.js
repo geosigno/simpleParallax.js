@@ -18,13 +18,24 @@ class ParallaxInstance {
         if (isImageLoaded(element)) {
             this.init();
         } else {
-            this.element.addEventListener('load', this.init);
+            this.element.addEventListener('load', () => {
+                //timeout to ensure the image is fully loaded into the DOM
+                setTimeout(() => {
+                    this.init(true)
+                }, 50);
+            });
         }
     }
 
-    init() {
+    init(asyncInit) {
         // for some reason, <picture> are init an infinite time on windows OS
         if (this.isInit) return;
+
+        if (asyncInit) {
+            //in case the image is lazy loaded, the rangemax should be cleared
+            //so it will be updated in the next getTranslateValue()
+            this.rangeMax = null;
+        }
 
         // check if element has not been already initialized with simpleParallax
         if (this.element.closest('.simpleParallax')) return;

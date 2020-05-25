@@ -1,7 +1,7 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos, 
- * @date: 08-04-2020 8:7:34, 
- * @version: 5.4.0,
+ * @date: 25-05-2020 17:53:21, 
+ * @version: 5.4.1,
  * @link: https://simpleparallax.com/
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -233,6 +233,8 @@ var parallax_ParallaxInstance =
 /*#__PURE__*/
 function () {
   function ParallaxInstance(element, options) {
+    var _this = this;
+
     parallax_classCallCheck(this, ParallaxInstance);
 
     // set the element & settings
@@ -247,17 +249,29 @@ function () {
     if (helpers_isImageLoaded(element)) {
       this.init();
     } else {
-      this.element.addEventListener('load', this.init);
+      this.element.addEventListener('load', function () {
+        //timeout to ensure the image is fully loaded into the DOM
+        setTimeout(function () {
+          _this.init(true);
+        }, 50);
+      });
     }
   }
 
   parallax_createClass(ParallaxInstance, [{
     key: "init",
-    value: function init() {
-      var _this = this;
+    value: function init(asyncInit) {
+      var _this2 = this;
 
       // for some reason, <picture> are init an infinite time on windows OS
-      if (this.isInit) return; // check if element has not been already initialized with simpleParallax
+      if (this.isInit) return;
+
+      if (asyncInit) {
+        //in case the image is lazy loaded, the rangemax should be cleared
+        //so it will be updated in the next getTranslateValue()
+        this.rangeMax = null;
+      } // check if element has not been already initialized with simpleParallax
+
 
       if (this.element.closest('.simpleParallax')) return;
 
@@ -282,7 +296,7 @@ function () {
         // apply a timeout to avoid buggy effect
         setTimeout(function () {
           // apply the transition style on the image
-          _this.setTransitionCSS();
+          _this2.setTransitionCSS();
         }, 10);
       } // for some reason, <picture> are init an infinite time on windows OS
 
@@ -558,7 +572,6 @@ function () {
     if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
 
     if (this.settings.customContainer) {
-      console.log(helpers_convertToArray(this.settings.customContainer)[0]);
       this.customContainer = helpers_convertToArray(this.settings.customContainer)[0];
     }
 
