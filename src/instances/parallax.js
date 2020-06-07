@@ -18,13 +18,24 @@ class ParallaxInstance {
         if (isImageLoaded(element)) {
             this.init();
         } else {
-            this.element.addEventListener('load', this.init);
+            this.element.addEventListener('load', () => {
+                //timeout to ensure the image is fully loaded into the DOM
+                setTimeout(() => {
+                    this.init(true)
+                }, 50);
+            });
         }
     }
 
-    init() {
+    init(asyncInit) {
         // for some reason, <picture> are init an infinite time on windows OS
         if (this.isInit) return;
+
+        if (asyncInit) {
+            //in case the image is lazy loaded, the rangemax should be cleared
+            //so it will be updated in the next getTranslateValue()
+            this.rangeMax = null;
+        }
 
         // check if element has not been already initialized with simpleParallax
         if (this.element.closest('.simpleParallax')) return;
@@ -66,17 +77,29 @@ class ParallaxInstance {
     // if overflow option is set to false
     // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
     wrapElement() {
+        // get the customWrapper if any
+        let customWrapper = (this.settings.customWrapper && this.element.closest(this.settings.customWrapper));
+
         // check is current image is in a <picture> tag
         const elementToWrap = this.element.closest('picture') || this.element;
 
         // create a .simpleParallax wrapper container
-        const wrapper = document.createElement('div');
+        let wrapper = document.createElement('div');
+
+        //if there is a custom wrapper
+        //override the wrapper with it
+        if (customWrapper) {
+            wrapper = this.element.closest(this.settings.customWrapper);
+        }
+
         wrapper.classList.add('simpleParallax');
         wrapper.style.overflow = 'hidden';
 
         // append the image inside the new wrapper
-        elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
-        wrapper.appendChild(elementToWrap);
+        if (!customWrapper) {
+            elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
+            wrapper.appendChild(elementToWrap);
+        }
 
         this.elementContainer = wrapper;
     }
@@ -84,7 +107,17 @@ class ParallaxInstance {
     // unwrap the element from .simpleParallax wrapper container
     unWrapElement() {
         const wrapper = this.elementContainer;
-        wrapper.replaceWith(...wrapper.childNodes);
+
+        // get the customWrapper if any
+        let customWrapper = (this.settings.customWrapper && this.element.closest(this.settings.customWrapper));
+
+        //if there is a custom wrapper, we jusy need to remove the class and style
+        if (customWrapper) {
+            wrapper.classList.remove('simpleParallax');
+            wrapper.style.overflow = '';
+        } else {
+            wrapper.replaceWith(...wrapper.childNodes);
+        }
     }
 
     // apply default style on element
@@ -125,7 +158,7 @@ class ParallaxInstance {
         if (this.settings.customContainer) {
             // we need to do some calculation to get the position from the parent rather than the viewport
             const parentPositions = this.settings.customContainer.getBoundingClientRect();
-            this.elementTop = (positions.top - parentPositions.top) + viewport.positions.top;
+            this.elementTop = positions.top - parentPositions.top + viewport.positions.top;
         }
         // get offset bottom
         this.elementBottom = this.elementHeight + this.elementTop;
@@ -185,6 +218,11 @@ class ParallaxInstance {
 
         // sometime the percentage exceeds 100 or goes below 0
         percentage = Math.min(100, Math.max(0, percentage));
+
+        // if a maxTransition has been set, we round the percentage to that number
+        if (this.settings.maxTransition !== 0 && percentage > this.settings.maxTransition) {
+            percentage = this.settings.maxTransition;
+        }
 
         // sometime the same percentage is returned
         // if so we don't do aything

@@ -4,7 +4,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const moment = require('moment');
 const now = moment().format('DD-MM-YYYY H:m:s');
 
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const PACKAGE = require('./package.json'),
     version = PACKAGE.version,
@@ -40,8 +40,12 @@ module.exports = {
     optimization: {
         minimize: true,
         minimizer: [
-            new UglifyJsPlugin({
-                include: /\.min\.js$/
+            new TerserPlugin({
+                include: /\.min\.js$/,
+                extractComments: false,
+                terserOptions: {
+                    ecma: 5
+                }
             })
         ]
     },
@@ -50,7 +54,12 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: ['babel-loader']
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: ['@babel/preset-env']
+                    }
+                  }
             }
         ]
     },

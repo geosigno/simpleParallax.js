@@ -1,17 +1,22 @@
-// check if image is fully loaded
-const isImageLoaded = (image) => {
-    // check if image is set as the parameter
-    if (!image) {
+// check if media is fully loaded
+const isImageLoaded = (media) => {
+    //if the media is a video, return true
+    if (media.tagName.toLowerCase() == 'video') {
+        return true;
+    }
+
+    // check if media is set as the parameter
+    if (!media) {
         return false;
     }
 
-    // check if image has been 100% loaded
-    if (!image.complete) {
+    // check if media has been 100% loaded
+    if (!media.complete) {
         return false;
     }
 
-    // check if the image is displayed
-    if (typeof image.naturalWidth !== 'undefined' && image.naturalWidth === 0) {
+    // check if the media is displayed
+    if (typeof media.naturalWidth !== 'undefined' && media.naturalWidth === 0) {
         return false;
     }
 

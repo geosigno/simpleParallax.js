@@ -1,19 +1,28 @@
-import SimpleParallax from '../src/simpleParallax';
+import simpleParallax from '../src/simpleParallax';
+// var simpleParallax = require('../dist/simpleParallax');
+
 
 // let images = document.querySelectorAll('img'),
 //     instance;
 
 let instanceUp;
 const optionUp = {
-    orientation: 'left',
+    orientation: 'up',
+    scale: 1.3,
+    // customWrapper: '.customWrapper'
     // customContainer: document.querySelector('.container')
 };
 const imageUp = document.getElementsByTagName('img');
 
-const images = document.querySelectorAll('img');
-images.forEach((image) => {
-    new SimpleParallax(image, optionUp);
-});
+const images = document.querySelectorAll('video, img');
+// images.forEach((image) => {
+const instance = new simpleParallax(images, optionUp);
+// });
+
+// setTimeout(() => {
+//     instance.destroy();
+// }, 3000);
+
 
 // instanceUp = new SimpleParallax('img', optionUp);
 
