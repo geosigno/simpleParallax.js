@@ -152,7 +152,13 @@ instance.destroy();
 You can find all the examples [here](https://simpleparallax.com/#examples).
 
 ## Compatibility
-You can apply simpleParallax.js on picture tags along with srcset images.
+| IE | Edge | Firefox | Chrome | Safari | Opera | iOS Safari |
+|---|---|---|---|---|---|---|
+| no support | 16+ | 55+ | 58+ | 12.1+ | 45+ | 12.2+ |
+
+Even though old browsers are not supported, the page won't crash. Simply, there will be no parallax.
+
+If you want to support older browsers such as IE, you will need a polyfill for [cloest()](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill) and [Intersection Observer](https://github.com/w3c/IntersectionObserver/tree/master/polyfill). Please note that even with polyfills, the parallax effect will not seem fluid.
 
 ## Author
 

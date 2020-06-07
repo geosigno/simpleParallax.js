@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos, 
- * @date: 25-05-2020 17:53:21, 
+ * @date: 07-06-2020 15:10:5, 
  * @version: 5.4.1,
  * @link: https://simpleparallax.com/
  */
@@ -105,8 +105,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ simpleParallax_SimpleParallax; });
+
+// CONCATENATED MODULE: ./src/helpers/isSupportedBrowser.js
+//need closest support
+//https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+//need Intersection Observer support
+//https://github.com/w3c/IntersectionObserver/tree/master/polyfill
+var isSupportedBrowser = function isSupportedBrowser() {
+  return Element.prototype.closest && 'IntersectionObserver' in window;
+};
+
+/* harmony default export */ var helpers_isSupportedBrowser = (isSupportedBrowser);
 // CONCATENATED MODULE: ./src/helpers/viewport.js
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -114,9 +128,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Viewport =
-/*#__PURE__*/
-function () {
+var Viewport = /*#__PURE__*/function () {
   function Viewport() {
     _classCallCheck(this, Viewport);
 
@@ -211,13 +223,17 @@ var isImageLoaded = function isImageLoaded(media) {
 
 /* harmony default export */ var helpers_isImageLoaded = (isImageLoaded);
 // CONCATENATED MODULE: ./src/instances/parallax.js
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function parallax_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -229,9 +245,7 @@ function parallax_createClass(Constructor, protoProps, staticProps) { if (protoP
 
 
 
-var parallax_ParallaxInstance =
-/*#__PURE__*/
-function () {
+var parallax_ParallaxInstance = /*#__PURE__*/function () {
   function ParallaxInstance(element, options) {
     var _this = this;
 
@@ -524,14 +538,17 @@ function () {
 
 /* harmony default export */ var parallax = (parallax_ParallaxInstance);
 // CONCATENATED MODULE: ./src/simpleParallax.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return simpleParallax_SimpleParallax; });
-function simpleParallax_toConsumableArray(arr) { return simpleParallax_arrayWithoutHoles(arr) || simpleParallax_iterableToArray(arr) || simpleParallax_nonIterableSpread(); }
+function simpleParallax_toConsumableArray(arr) { return simpleParallax_arrayWithoutHoles(arr) || simpleParallax_iterableToArray(arr) || simpleParallax_unsupportedIterableToArray(arr) || simpleParallax_nonIterableSpread(); }
 
-function simpleParallax_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+function simpleParallax_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function simpleParallax_iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+function simpleParallax_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return simpleParallax_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return simpleParallax_arrayLikeToArray(o, minLen); }
 
-function simpleParallax_arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+function simpleParallax_iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function simpleParallax_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return simpleParallax_arrayLikeToArray(arr); }
+
+function simpleParallax_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function simpleParallax_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -542,20 +559,20 @@ function simpleParallax_createClass(Constructor, protoProps, staticProps) { if (
 
 
 
-var intersectionObserverAvailable = true;
+
 var isInit = false;
 var instances = [];
 var instancesLength;
 var frameID;
 var resizeID;
 
-var simpleParallax_SimpleParallax =
-/*#__PURE__*/
-function () {
+var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
   function SimpleParallax(elements, options) {
     simpleParallax_classCallCheck(this, SimpleParallax);
 
-    if (!elements) return;
+    if (!elements) return; //check if the browser support simpleParallax
+
+    if (!helpers_isSupportedBrowser()) return;
     this.elements = helpers_convertToArray(elements);
     this.defaults = {
       delay: 0.4,
@@ -567,9 +584,7 @@ function () {
       customWrapper: false,
       maxTransition: 0
     };
-    this.settings = Object.assign(this.defaults, options); // check if the browser handle the Intersection Observer API
-
-    if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
+    this.settings = Object.assign(this.defaults, options);
 
     if (this.settings.customContainer) {
       this.customContainer = helpers_convertToArray(this.settings.customContainer)[0];
@@ -655,13 +670,11 @@ function () {
   }, {
     key: "proceedElement",
     value: function proceedElement(instance) {
-      var isVisible = false; // is not support for Intersection Observer API
-      // or if this is a custom container
+      var isVisible = false; // if this is a custom container
       // use old function to check if element visible
 
-      if (!intersectionObserverAvailable || this.customContainer) {
-        isVisible = instance.checkIfVisible(); // if support
-        // use response from Intersection Observer API Callback
+      if (this.customContainer) {
+        isVisible = instance.checkIfVisible(); // else, use response from Intersection Observer API Callback
       } else {
         isVisible = instance.isVisible;
       } // if element not visible, stop it

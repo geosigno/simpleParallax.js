@@ -1,9 +1,9 @@
+import isSupportedBrowser from './helpers/isSupportedBrowser';
 import { viewport } from './helpers/viewport';
 import convertToArray from './helpers/convertToArray';
 
 import ParallaxInstance from './instances/parallax';
 
-let intersectionObserverAvailable = true;
 let isInit = false;
 let instances = [];
 let instancesLength;
@@ -13,6 +13,10 @@ let resizeID;
 export default class SimpleParallax {
     constructor(elements, options) {
         if (!elements) return;
+
+        //check if the browser support simpleParallax
+        if (!isSupportedBrowser()) return;
+
         this.elements = convertToArray(elements);
         this.defaults = {
             delay: 0.4,
@@ -26,9 +30,6 @@ export default class SimpleParallax {
         };
 
         this.settings = Object.assign(this.defaults, options);
-
-        // check if the browser handle the Intersection Observer API
-        if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
 
         if (this.settings.customContainer) {
             this.customContainer = convertToArray(this.settings.customContainer)[0];
@@ -117,13 +118,11 @@ export default class SimpleParallax {
     proceedElement(instance) {
         let isVisible = false;
 
-        // is not support for Intersection Observer API
-        // or if this is a custom container
+        // if this is a custom container
         // use old function to check if element visible
-        if (!intersectionObserverAvailable || this.customContainer) {
+        if (this.customContainer) {
             isVisible = instance.checkIfVisible();
-            // if support
-            // use response from Intersection Observer API Callback
+            // else, use response from Intersection Observer API Callback
         } else {
             isVisible = instance.isVisible;
         }
