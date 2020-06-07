@@ -19,9 +19,9 @@ class ParallaxInstance {
             this.init();
         } else {
             this.element.addEventListener('load', () => {
-                //timeout to ensure the image is fully loaded into the DOM
+                // timeout to ensure the image is fully loaded into the DOM
                 setTimeout(() => {
-                    this.init(true)
+                    this.init(true);
                 }, 50);
             });
         }
@@ -32,8 +32,8 @@ class ParallaxInstance {
         if (this.isInit) return;
 
         if (asyncInit) {
-            //in case the image is lazy loaded, the rangemax should be cleared
-            //so it will be updated in the next getTranslateValue()
+            // in case the image is lazy loaded, the rangemax should be cleared
+            // so it will be updated in the next getTranslateValue()
             this.rangeMax = null;
         }
 
@@ -78,7 +78,7 @@ class ParallaxInstance {
     // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
     wrapElement() {
         // get the customWrapper if any
-        let customWrapper = (this.settings.customWrapper && this.element.closest(this.settings.customWrapper));
+        const customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper);
 
         // check is current image is in a <picture> tag
         const elementToWrap = this.element.closest('picture') || this.element;
@@ -86,8 +86,8 @@ class ParallaxInstance {
         // create a .simpleParallax wrapper container
         let wrapper = document.createElement('div');
 
-        //if there is a custom wrapper
-        //override the wrapper with it
+        // if there is a custom wrapper
+        // override the wrapper with it
         if (customWrapper) {
             wrapper = this.element.closest(this.settings.customWrapper);
         }
@@ -109,9 +109,9 @@ class ParallaxInstance {
         const wrapper = this.elementContainer;
 
         // get the customWrapper if any
-        let customWrapper = (this.settings.customWrapper && this.element.closest(this.settings.customWrapper));
+        const customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper);
 
-        //if there is a custom wrapper, we jusy need to remove the class and style
+        // if there is a custom wrapper, we jusy need to remove the class and style
         if (customWrapper) {
             wrapper.classList.remove('simpleParallax');
             wrapper.style.overflow = '';
@@ -178,7 +178,7 @@ class ParallaxInstance {
     intersectionObserver() {
         const options = {
             root: null,
-            threshold: this.buildThresholdList(),
+            threshold: this.buildThresholdList()
         };
         this.observer = new IntersectionObserver(this.intersectionObserverCallback.bind(this), options);
         this.observer.observe(this.element);
@@ -186,13 +186,13 @@ class ParallaxInstance {
 
     // Intersection Observer Callback to set the element at visible state or not
     intersectionObserverCallback(entries) {
-        for (let i = entries.length - 1; i >= 0; i--) {
-            if (entries[i].isIntersecting) {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
                 this.isVisible = true;
             } else {
                 this.isVisible = false;
             }
-        }
+        });
     }
 
     // check if the current element is visible in the Viewport

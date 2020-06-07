@@ -3,7 +3,7 @@ class Viewport {
         this.positions = {
             top: 0,
             bottom: 0,
-            height: 0,
+            height: 0
         };
     }
 

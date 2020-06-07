@@ -1,18 +1,21 @@
+import isSupportedBrowser from './helpers/isSupportedBrowser';
 import { viewport } from './helpers/viewport';
 import convertToArray from './helpers/convertToArray';
 
 import ParallaxInstance from './instances/parallax';
 
-let intersectionObserverAvailable = true;
 let isInit = false;
 let instances = [];
-let instancesLength;
 let frameID;
 let resizeID;
 
 export default class SimpleParallax {
     constructor(elements, options) {
         if (!elements) return;
+
+        // check if the browser support simpleParallax
+        if (!isSupportedBrowser()) return;
+
         this.elements = convertToArray(elements);
         this.defaults = {
             delay: 0.4,
@@ -22,22 +25,19 @@ export default class SimpleParallax {
             transition: 'cubic-bezier(0,0,0,1)',
             customContainer: false,
             customWrapper: false,
-            maxTransition: 0,
+            maxTransition: 0
         };
 
         this.settings = Object.assign(this.defaults, options);
 
-        // check if the browser handle the Intersection Observer API
-        if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
-
         if (this.settings.customContainer) {
-            this.customContainer = convertToArray(this.settings.customContainer)[0];
+            [this.customContainer] = convertToArray(this.settings.customContainer);
         }
 
         this.lastPosition = -1;
 
         this.resizeIsDone = this.resizeIsDone.bind(this);
-        this.handleResize = this.handleResize.bind(this);
+        this.refresh = this.refresh.bind(this);
         this.proceedRequestAnimationFrame = this.proceedRequestAnimationFrame.bind(this);
 
         this.init();
@@ -49,7 +49,7 @@ export default class SimpleParallax {
         instances = [...this.elements.map((element) => new ParallaxInstance(element, this.settings)), ...instances];
 
         // update the instance length
-        instancesLength = instances.length;
+        // instancesLength = instances.length;
 
         // only if this is the first simpleParallax init
         if (!isInit) {
@@ -65,24 +65,7 @@ export default class SimpleParallax {
     // wait for resize to be completely done
     resizeIsDone() {
         clearTimeout(resizeID);
-        resizeID = setTimeout(this.handleResize, 500);
-    }
-
-    // handle the resize process, some coordonates need to be re-calculate
-    handleResize() {
-        // re-get all the viewport positions
-        viewport.setViewportAll(this.customContainer);
-
-        for (let i = instancesLength - 1; i >= 0; i--) {
-            // re-get the current element offset
-            instances[i].getElementOffset();
-
-            // re-get the range if the current element
-            instances[i].getRangeMax();
-        }
-
-        // force the request animation frame to fired
-        this.lastPosition = -1;
+        resizeID = setTimeout(this.refresh, 200);
     }
 
     // animation frame
@@ -102,9 +85,9 @@ export default class SimpleParallax {
         viewport.setViewportBottom();
 
         // proceed with the current element
-        for (let i = instancesLength - 1; i >= 0; i--) {
-            this.proceedElement(instances[i]);
-        }
+        instances.forEach((instance) => {
+            this.proceedElement(instance);
+        });
 
         // callback the animationFrame
         frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
@@ -117,13 +100,11 @@ export default class SimpleParallax {
     proceedElement(instance) {
         let isVisible = false;
 
-        // is not support for Intersection Observer API
-        // or if this is a custom container
+        // if this is a custom container
         // use old function to check if element visible
-        if (!intersectionObserverAvailable || this.customContainer) {
+        if (this.customContainer) {
             isVisible = instance.checkIfVisible();
-            // if support
-            // use response from Intersection Observer API Callback
+            // else, use response from Intersection Observer API Callback
         } else {
             isVisible = instance.isVisible;
         }
@@ -140,6 +121,22 @@ export default class SimpleParallax {
         instance.animate();
     }
 
+    refresh() {
+        // re-get all the viewport positions
+        viewport.setViewportAll(this.customContainer);
+
+        instances.forEach((instance) => {
+            // re-get the current element offset
+            instance.getElementOffset();
+
+            // re-get the range if the current element
+            instance.getRangeMax();
+        });
+
+        // force the request animation frame to fired
+        this.lastPosition = -1;
+    }
+
     destroy() {
         const instancesToDestroy = [];
 
@@ -153,27 +150,24 @@ export default class SimpleParallax {
             return instance;
         });
 
-        for (let i = instancesToDestroy.length - 1; i >= 0; i--) {
+        instancesToDestroy.forEach((instance) => {
             // unset style
-            instancesToDestroy[i].unSetStyle();
+            instance.unSetStyle();
 
             if (this.settings.overflow === false) {
                 // if overflow option is set to false
                 // unwrap the element from .simpleParallax wrapper container
-                instancesToDestroy[i].unWrapElement();
+                instance.unWrapElement();
             }
-        }
-
-        // update the instance length var
-        instancesLength = instances.length;
+        });
 
         // if no instances left, remove the raf and resize event = simpleParallax fully destroyed
-        if (!instancesLength) {
+        if (!instances.length) {
             // cancel the animation frame
             window.cancelAnimationFrame(frameID);
 
             // detach the resize event
-            window.removeEventListener('resize', this.handleResize);
+            window.removeEventListener('resize', this.refresh);
         }
     }
 }

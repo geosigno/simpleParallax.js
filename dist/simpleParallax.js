@@ -1,7 +1,7 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos, 
- * @date: 25-05-2020 17:53:21, 
- * @version: 5.4.1,
+ * @date: 07-06-2020 16:8:40, 
+ * @version: 5.5.0,
  * @link: https://simpleparallax.com/
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -105,8 +105,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ simpleParallax_SimpleParallax; });
+
+// CONCATENATED MODULE: ./src/helpers/isSupportedBrowser.js
+// need closest support
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+// need Intersection Observer support
+// https://github.com/w3c/IntersectionObserver/tree/master/polyfill
+var isSupportedBrowser = function isSupportedBrowser() {
+  return Element.prototype.closest && 'IntersectionObserver' in window;
+};
+
+/* harmony default export */ var helpers_isSupportedBrowser = (isSupportedBrowser);
 // CONCATENATED MODULE: ./src/helpers/viewport.js
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -114,9 +128,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Viewport =
-/*#__PURE__*/
-function () {
+var Viewport = /*#__PURE__*/function () {
   function Viewport() {
     _classCallCheck(this, Viewport);
 
@@ -158,7 +170,7 @@ function () {
 var viewport = new Viewport();
 
 // CONCATENATED MODULE: ./src/helpers/convertToArray.js
-// check wether the element is a Node List, a HTML Collection or an array
+// check whether the element is a Node List, a HTML Collection or an array
 // return an array of nodes
 var convertToArray = function convertToArray(elements) {
   if (NodeList.prototype.isPrototypeOf(elements) || HTMLCollection.prototype.isPrototypeOf(elements)) return Array.from(elements);
@@ -186,8 +198,8 @@ var cssTransform = function cssTransform() {
 // CONCATENATED MODULE: ./src/helpers/isImageLoaded.js
 // check if media is fully loaded
 var isImageLoaded = function isImageLoaded(media) {
-  //if the media is a video, return true
-  if (media.tagName.toLowerCase() == 'video') {
+  // if the media is a video, return true
+  if (media.tagName.toLowerCase() === 'video') {
     return true;
   } // check if media is set as the parameter
 
@@ -211,13 +223,17 @@ var isImageLoaded = function isImageLoaded(media) {
 
 /* harmony default export */ var helpers_isImageLoaded = (isImageLoaded);
 // CONCATENATED MODULE: ./src/instances/parallax.js
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function parallax_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -229,9 +245,7 @@ function parallax_createClass(Constructor, protoProps, staticProps) { if (protoP
 
 
 
-var parallax_ParallaxInstance =
-/*#__PURE__*/
-function () {
+var parallax_ParallaxInstance = /*#__PURE__*/function () {
   function ParallaxInstance(element, options) {
     var _this = this;
 
@@ -250,7 +264,7 @@ function () {
       this.init();
     } else {
       this.element.addEventListener('load', function () {
-        //timeout to ensure the image is fully loaded into the DOM
+        // timeout to ensure the image is fully loaded into the DOM
         setTimeout(function () {
           _this.init(true);
         }, 50);
@@ -267,8 +281,8 @@ function () {
       if (this.isInit) return;
 
       if (asyncInit) {
-        //in case the image is lazy loaded, the rangemax should be cleared
-        //so it will be updated in the next getTranslateValue()
+        // in case the image is lazy loaded, the rangemax should be cleared
+        // so it will be updated in the next getTranslateValue()
         this.rangeMax = null;
       } // check if element has not been already initialized with simpleParallax
 
@@ -313,8 +327,8 @@ function () {
 
       var elementToWrap = this.element.closest('picture') || this.element; // create a .simpleParallax wrapper container
 
-      var wrapper = document.createElement('div'); //if there is a custom wrapper
-      //override the wrapper with it
+      var wrapper = document.createElement('div'); // if there is a custom wrapper
+      // override the wrapper with it
 
       if (customWrapper) {
         wrapper = this.element.closest(this.settings.customWrapper);
@@ -336,7 +350,7 @@ function () {
     value: function unWrapElement() {
       var wrapper = this.elementContainer; // get the customWrapper if any
 
-      var customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper); //if there is a custom wrapper, we jusy need to remove the class and style
+      var customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper); // if there is a custom wrapper, we jusy need to remove the class and style
 
       if (customWrapper) {
         wrapper.classList.remove('simpleParallax');
@@ -422,13 +436,15 @@ function () {
   }, {
     key: "intersectionObserverCallback",
     value: function intersectionObserverCallback(entries) {
-      for (var i = entries.length - 1; i >= 0; i--) {
-        if (entries[i].isIntersecting) {
-          this.isVisible = true;
+      var _this3 = this;
+
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          _this3.isVisible = true;
         } else {
-          this.isVisible = false;
+          _this3.isVisible = false;
         }
-      }
+      });
     } // check if the current element is visible in the Viewport
     // for browser that not support Intersection Observer API
 
@@ -524,14 +540,25 @@ function () {
 
 /* harmony default export */ var parallax = (parallax_ParallaxInstance);
 // CONCATENATED MODULE: ./src/simpleParallax.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return simpleParallax_SimpleParallax; });
-function simpleParallax_toConsumableArray(arr) { return simpleParallax_arrayWithoutHoles(arr) || simpleParallax_iterableToArray(arr) || simpleParallax_nonIterableSpread(); }
+function simpleParallax_toConsumableArray(arr) { return simpleParallax_arrayWithoutHoles(arr) || simpleParallax_iterableToArray(arr) || simpleParallax_unsupportedIterableToArray(arr) || simpleParallax_nonIterableSpread(); }
 
-function simpleParallax_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+function simpleParallax_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function simpleParallax_iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+function simpleParallax_iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
 
-function simpleParallax_arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+function simpleParallax_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return simpleParallax_arrayLikeToArray(arr); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || simpleParallax_unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function simpleParallax_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return simpleParallax_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return simpleParallax_arrayLikeToArray(o, minLen); }
+
+function simpleParallax_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function simpleParallax_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -542,20 +569,19 @@ function simpleParallax_createClass(Constructor, protoProps, staticProps) { if (
 
 
 
-var intersectionObserverAvailable = true;
+
 var isInit = false;
 var instances = [];
-var instancesLength;
 var frameID;
 var resizeID;
 
-var simpleParallax_SimpleParallax =
-/*#__PURE__*/
-function () {
+var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
   function SimpleParallax(elements, options) {
     simpleParallax_classCallCheck(this, SimpleParallax);
 
-    if (!elements) return;
+    if (!elements) return; // check if the browser support simpleParallax
+
+    if (!helpers_isSupportedBrowser()) return;
     this.elements = helpers_convertToArray(elements);
     this.defaults = {
       delay: 0.4,
@@ -567,17 +593,19 @@ function () {
       customWrapper: false,
       maxTransition: 0
     };
-    this.settings = Object.assign(this.defaults, options); // check if the browser handle the Intersection Observer API
-
-    if (!('IntersectionObserver' in window)) intersectionObserverAvailable = false;
+    this.settings = Object.assign(this.defaults, options);
 
     if (this.settings.customContainer) {
-      this.customContainer = helpers_convertToArray(this.settings.customContainer)[0];
+      var _convertToArray = helpers_convertToArray(this.settings.customContainer);
+
+      var _convertToArray2 = _slicedToArray(_convertToArray, 1);
+
+      this.customContainer = _convertToArray2[0];
     }
 
     this.lastPosition = -1;
     this.resizeIsDone = this.resizeIsDone.bind(this);
-    this.handleResize = this.handleResize.bind(this);
+    this.refresh = this.refresh.bind(this);
     this.proceedRequestAnimationFrame = this.proceedRequestAnimationFrame.bind(this);
     this.init();
   }
@@ -591,8 +619,8 @@ function () {
       instances = [].concat(simpleParallax_toConsumableArray(this.elements.map(function (element) {
         return new parallax(element, _this.settings);
       })), simpleParallax_toConsumableArray(instances)); // update the instance length
-
-      instancesLength = instances.length; // only if this is the first simpleParallax init
+      // instancesLength = instances.length;
+      // only if this is the first simpleParallax init
 
       if (!isInit) {
         // init the frame
@@ -606,29 +634,14 @@ function () {
     key: "resizeIsDone",
     value: function resizeIsDone() {
       clearTimeout(resizeID);
-      resizeID = setTimeout(this.handleResize, 500);
-    } // handle the resize process, some coordonates need to be re-calculate
-
-  }, {
-    key: "handleResize",
-    value: function handleResize() {
-      // re-get all the viewport positions
-      viewport.setViewportAll(this.customContainer);
-
-      for (var i = instancesLength - 1; i >= 0; i--) {
-        // re-get the current element offset
-        instances[i].getElementOffset(); // re-get the range if the current element
-
-        instances[i].getRangeMax();
-      } // force the request animation frame to fired
-
-
-      this.lastPosition = -1;
+      resizeID = setTimeout(this.refresh, 200);
     } // animation frame
 
   }, {
     key: "proceedRequestAnimationFrame",
     value: function proceedRequestAnimationFrame() {
+      var _this2 = this;
+
       // get the offset top of the viewport
       viewport.setViewportTop(this.customContainer);
 
@@ -642,10 +655,9 @@ function () {
 
       viewport.setViewportBottom(); // proceed with the current element
 
-      for (var i = instancesLength - 1; i >= 0; i--) {
-        this.proceedElement(instances[i]);
-      } // callback the animationFrame
-
+      instances.forEach(function (instance) {
+        _this2.proceedElement(instance);
+      }); // callback the animationFrame
 
       frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame); // store the last position
 
@@ -655,13 +667,11 @@ function () {
   }, {
     key: "proceedElement",
     value: function proceedElement(instance) {
-      var isVisible = false; // is not support for Intersection Observer API
-      // or if this is a custom container
+      var isVisible = false; // if this is a custom container
       // use old function to check if element visible
 
-      if (!intersectionObserverAvailable || this.customContainer) {
-        isVisible = instance.checkIfVisible(); // if support
-        // use response from Intersection Observer API Callback
+      if (this.customContainer) {
+        isVisible = instance.checkIfVisible(); // else, use response from Intersection Observer API Callback
       } else {
         isVisible = instance.isVisible;
       } // if element not visible, stop it
@@ -677,14 +687,28 @@ function () {
       instance.animate();
     }
   }, {
+    key: "refresh",
+    value: function refresh() {
+      // re-get all the viewport positions
+      viewport.setViewportAll(this.customContainer);
+      instances.forEach(function (instance) {
+        // re-get the current element offset
+        instance.getElementOffset(); // re-get the range if the current element
+
+        instance.getRangeMax();
+      }); // force the request animation frame to fired
+
+      this.lastPosition = -1;
+    }
+  }, {
     key: "destroy",
     value: function destroy() {
-      var _this2 = this;
+      var _this3 = this;
 
       var instancesToDestroy = []; // remove all instances that need to be destroyed from the instances array
 
       instances = instances.filter(function (instance) {
-        if (_this2.elements.includes(instance.element)) {
+        if (_this3.elements.includes(instance.element)) {
           // push instance that need to be destroyed into instancesToDestroy
           instancesToDestroy.push(instance);
           return false;
@@ -692,26 +716,22 @@ function () {
 
         return instance;
       });
-
-      for (var i = instancesToDestroy.length - 1; i >= 0; i--) {
+      instancesToDestroy.forEach(function (instance) {
         // unset style
-        instancesToDestroy[i].unSetStyle();
+        instance.unSetStyle();
 
-        if (this.settings.overflow === false) {
+        if (_this3.settings.overflow === false) {
           // if overflow option is set to false
           // unwrap the element from .simpleParallax wrapper container
-          instancesToDestroy[i].unWrapElement();
+          instance.unWrapElement();
         }
-      } // update the instance length var
+      }); // if no instances left, remove the raf and resize event = simpleParallax fully destroyed
 
-
-      instancesLength = instances.length; // if no instances left, remove the raf and resize event = simpleParallax fully destroyed
-
-      if (!instancesLength) {
+      if (!instances.length) {
         // cancel the animation frame
         window.cancelAnimationFrame(frameID); // detach the resize event
 
-        window.removeEventListener('resize', this.handleResize);
+        window.removeEventListener('resize', this.refresh);
       }
     }
   }]);

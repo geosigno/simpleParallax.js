@@ -24,7 +24,7 @@ Simply copy/paste the below snippet just before your closing `</body>` tag:
 or use the below CDN link provided by [jsDelivr.com](https://www.jsdelivr.com/package/npm/simple-parallax-js):
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.4.1/dist/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.5.0/dist/simpleParallax.min.js"></script>
 ```
 
 ### Via [npm/yarn](https://www.npmjs.com/package/simple-parallax-js)
@@ -140,6 +140,19 @@ In some cases, you want to use your own wrapper instead of the one created by th
 The maxTransition setting should be used to stop the parallax animation after a given percentage. By default, it translates from 0% to 100% of the user viewport. You can change it here to any percentage you want.
 
 ## Methods
+
+### refresh
+Refresh a simpleParallax instance (to recalculate all the positions): 
+
+```javascript
+var images = document.querySelectorAll('img');
+var instance = new simpleParallax(images);
+instance.refresh();
+```
+
+By default, the refresh method is fired at every window resize.
+
+### destroy
 Destroy a simpleParallax instance:
 
 ```javascript
@@ -152,7 +165,13 @@ instance.destroy();
 You can find all the examples [here](https://simpleparallax.com/#examples).
 
 ## Compatibility
-You can apply simpleParallax.js on picture tags along with srcset images.
+| IE | Edge | Firefox | Chrome | Safari | Opera | iOS Safari |
+|---|---|---|---|---|---|---|
+| no support | 16+ | 55+ | 58+ | 12.1+ | 45+ | 12.2+ |
+
+Even though old browsers are not supported, the page won't crash. Simply, there will be no parallax.
+
+If you want to support older browsers such as IE, you will need a polyfill for [cloest()](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill) and [Intersection Observer](https://github.com/w3c/IntersectionObserver/tree/master/polyfill). Please note that even with polyfills, the parallax effect will not seem fluid.
 
 ## Author
 

@@ -6,10 +6,15 @@ declare module 'simple-parallax-js' {
         delay?: number;
         transition?: string;
         breakpoint?: number;
+        customContainer?: boolean;
+        customWrapper?: boolean;
+        maxTransition?: number;
+
     }
 
     export default class SimpleParallax {
         constructor(images: Element | Element[], settings?: IParallaxSettings);
+        public refresh: () => void;
         public destroy: () => void;
     }
 }
