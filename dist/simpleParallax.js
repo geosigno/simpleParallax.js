@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos, 
- * @date: 07-06-2020 15:10:5, 
+ * @date: 07-06-2020 15:53:39, 
  * @version: 5.4.1,
  * @link: https://simpleparallax.com/
  */
@@ -112,10 +112,10 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ simpleParallax_SimpleParallax; });
 
 // CONCATENATED MODULE: ./src/helpers/isSupportedBrowser.js
-//need closest support
-//https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
-//need Intersection Observer support
-//https://github.com/w3c/IntersectionObserver/tree/master/polyfill
+// need closest support
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+// need Intersection Observer support
+// https://github.com/w3c/IntersectionObserver/tree/master/polyfill
 var isSupportedBrowser = function isSupportedBrowser() {
   return Element.prototype.closest && 'IntersectionObserver' in window;
 };
@@ -170,7 +170,7 @@ var Viewport = /*#__PURE__*/function () {
 var viewport = new Viewport();
 
 // CONCATENATED MODULE: ./src/helpers/convertToArray.js
-// check wether the element is a Node List, a HTML Collection or an array
+// check whether the element is a Node List, a HTML Collection or an array
 // return an array of nodes
 var convertToArray = function convertToArray(elements) {
   if (NodeList.prototype.isPrototypeOf(elements) || HTMLCollection.prototype.isPrototypeOf(elements)) return Array.from(elements);
@@ -198,8 +198,8 @@ var cssTransform = function cssTransform() {
 // CONCATENATED MODULE: ./src/helpers/isImageLoaded.js
 // check if media is fully loaded
 var isImageLoaded = function isImageLoaded(media) {
-  //if the media is a video, return true
-  if (media.tagName.toLowerCase() == 'video') {
+  // if the media is a video, return true
+  if (media.tagName.toLowerCase() === 'video') {
     return true;
   } // check if media is set as the parameter
 
@@ -264,7 +264,7 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
       this.init();
     } else {
       this.element.addEventListener('load', function () {
-        //timeout to ensure the image is fully loaded into the DOM
+        // timeout to ensure the image is fully loaded into the DOM
         setTimeout(function () {
           _this.init(true);
         }, 50);
@@ -281,8 +281,8 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
       if (this.isInit) return;
 
       if (asyncInit) {
-        //in case the image is lazy loaded, the rangemax should be cleared
-        //so it will be updated in the next getTranslateValue()
+        // in case the image is lazy loaded, the rangemax should be cleared
+        // so it will be updated in the next getTranslateValue()
         this.rangeMax = null;
       } // check if element has not been already initialized with simpleParallax
 
@@ -327,8 +327,8 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
 
       var elementToWrap = this.element.closest('picture') || this.element; // create a .simpleParallax wrapper container
 
-      var wrapper = document.createElement('div'); //if there is a custom wrapper
-      //override the wrapper with it
+      var wrapper = document.createElement('div'); // if there is a custom wrapper
+      // override the wrapper with it
 
       if (customWrapper) {
         wrapper = this.element.closest(this.settings.customWrapper);
@@ -350,7 +350,7 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
     value: function unWrapElement() {
       var wrapper = this.elementContainer; // get the customWrapper if any
 
-      var customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper); //if there is a custom wrapper, we jusy need to remove the class and style
+      var customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper); // if there is a custom wrapper, we jusy need to remove the class and style
 
       if (customWrapper) {
         wrapper.classList.remove('simpleParallax');
@@ -436,13 +436,15 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
   }, {
     key: "intersectionObserverCallback",
     value: function intersectionObserverCallback(entries) {
-      for (var i = entries.length - 1; i >= 0; i--) {
-        if (entries[i].isIntersecting) {
-          this.isVisible = true;
+      var _this3 = this;
+
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          _this3.isVisible = true;
         } else {
-          this.isVisible = false;
+          _this3.isVisible = false;
         }
-      }
+      });
     } // check if the current element is visible in the Viewport
     // for browser that not support Intersection Observer API
 
@@ -542,13 +544,21 @@ function simpleParallax_toConsumableArray(arr) { return simpleParallax_arrayWith
 
 function simpleParallax_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function simpleParallax_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return simpleParallax_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return simpleParallax_arrayLikeToArray(o, minLen); }
-
 function simpleParallax_iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
 
 function simpleParallax_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return simpleParallax_arrayLikeToArray(arr); }
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || simpleParallax_unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function simpleParallax_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return simpleParallax_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return simpleParallax_arrayLikeToArray(o, minLen); }
+
 function simpleParallax_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function simpleParallax_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -562,7 +572,6 @@ function simpleParallax_createClass(Constructor, protoProps, staticProps) { if (
 
 var isInit = false;
 var instances = [];
-var instancesLength;
 var frameID;
 var resizeID;
 
@@ -570,7 +579,7 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
   function SimpleParallax(elements, options) {
     simpleParallax_classCallCheck(this, SimpleParallax);
 
-    if (!elements) return; //check if the browser support simpleParallax
+    if (!elements) return; // check if the browser support simpleParallax
 
     if (!helpers_isSupportedBrowser()) return;
     this.elements = helpers_convertToArray(elements);
@@ -587,7 +596,11 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
     this.settings = Object.assign(this.defaults, options);
 
     if (this.settings.customContainer) {
-      this.customContainer = helpers_convertToArray(this.settings.customContainer)[0];
+      var _convertToArray = helpers_convertToArray(this.settings.customContainer);
+
+      var _convertToArray2 = _slicedToArray(_convertToArray, 1);
+
+      this.customContainer = _convertToArray2[0];
     }
 
     this.lastPosition = -1;
@@ -606,8 +619,8 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
       instances = [].concat(simpleParallax_toConsumableArray(this.elements.map(function (element) {
         return new parallax(element, _this.settings);
       })), simpleParallax_toConsumableArray(instances)); // update the instance length
-
-      instancesLength = instances.length; // only if this is the first simpleParallax init
+      // instancesLength = instances.length;
+      // only if this is the first simpleParallax init
 
       if (!isInit) {
         // init the frame
@@ -629,14 +642,12 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
     value: function handleResize() {
       // re-get all the viewport positions
       viewport.setViewportAll(this.customContainer);
-
-      for (var i = instancesLength - 1; i >= 0; i--) {
+      instances.forEach(function (instance) {
         // re-get the current element offset
-        instances[i].getElementOffset(); // re-get the range if the current element
+        instance.getElementOffset(); // re-get the range if the current element
 
-        instances[i].getRangeMax();
-      } // force the request animation frame to fired
-
+        instance.getRangeMax();
+      }); // force the request animation frame to fired
 
       this.lastPosition = -1;
     } // animation frame
@@ -644,6 +655,8 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
   }, {
     key: "proceedRequestAnimationFrame",
     value: function proceedRequestAnimationFrame() {
+      var _this2 = this;
+
       // get the offset top of the viewport
       viewport.setViewportTop(this.customContainer);
 
@@ -657,10 +670,9 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
 
       viewport.setViewportBottom(); // proceed with the current element
 
-      for (var i = instancesLength - 1; i >= 0; i--) {
-        this.proceedElement(instances[i]);
-      } // callback the animationFrame
-
+      instances.forEach(function (instance) {
+        _this2.proceedElement(instance);
+      }); // callback the animationFrame
 
       frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame); // store the last position
 
@@ -692,12 +704,12 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
   }, {
     key: "destroy",
     value: function destroy() {
-      var _this2 = this;
+      var _this3 = this;
 
       var instancesToDestroy = []; // remove all instances that need to be destroyed from the instances array
 
       instances = instances.filter(function (instance) {
-        if (_this2.elements.includes(instance.element)) {
+        if (_this3.elements.includes(instance.element)) {
           // push instance that need to be destroyed into instancesToDestroy
           instancesToDestroy.push(instance);
           return false;
@@ -705,22 +717,18 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
 
         return instance;
       });
-
-      for (var i = instancesToDestroy.length - 1; i >= 0; i--) {
+      instancesToDestroy.forEach(function (instance) {
         // unset style
-        instancesToDestroy[i].unSetStyle();
+        instance.unSetStyle();
 
-        if (this.settings.overflow === false) {
+        if (_this3.settings.overflow === false) {
           // if overflow option is set to false
           // unwrap the element from .simpleParallax wrapper container
-          instancesToDestroy[i].unWrapElement();
+          instance.unWrapElement();
         }
-      } // update the instance length var
+      }); // if no instances left, remove the raf and resize event = simpleParallax fully destroyed
 
-
-      instancesLength = instances.length; // if no instances left, remove the raf and resize event = simpleParallax fully destroyed
-
-      if (!instancesLength) {
+      if (!instances.length) {
         // cancel the animation frame
         window.cancelAnimationFrame(frameID); // detach the resize event
 

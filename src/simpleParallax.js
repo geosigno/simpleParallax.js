@@ -6,7 +6,6 @@ import ParallaxInstance from './instances/parallax';
 
 let isInit = false;
 let instances = [];
-let instancesLength;
 let frameID;
 let resizeID;
 
@@ -14,7 +13,7 @@ export default class SimpleParallax {
     constructor(elements, options) {
         if (!elements) return;
 
-        //check if the browser support simpleParallax
+        // check if the browser support simpleParallax
         if (!isSupportedBrowser()) return;
 
         this.elements = convertToArray(elements);
@@ -26,13 +25,13 @@ export default class SimpleParallax {
             transition: 'cubic-bezier(0,0,0,1)',
             customContainer: false,
             customWrapper: false,
-            maxTransition: 0,
+            maxTransition: 0
         };
 
         this.settings = Object.assign(this.defaults, options);
 
         if (this.settings.customContainer) {
-            this.customContainer = convertToArray(this.settings.customContainer)[0];
+            [this.customContainer] = convertToArray(this.settings.customContainer);
         }
 
         this.lastPosition = -1;
@@ -50,7 +49,7 @@ export default class SimpleParallax {
         instances = [...this.elements.map((element) => new ParallaxInstance(element, this.settings)), ...instances];
 
         // update the instance length
-        instancesLength = instances.length;
+        // instancesLength = instances.length;
 
         // only if this is the first simpleParallax init
         if (!isInit) {
@@ -74,13 +73,13 @@ export default class SimpleParallax {
         // re-get all the viewport positions
         viewport.setViewportAll(this.customContainer);
 
-        for (let i = instancesLength - 1; i >= 0; i--) {
+        instances.forEach((instance) => {
             // re-get the current element offset
-            instances[i].getElementOffset();
+            instance.getElementOffset();
 
             // re-get the range if the current element
-            instances[i].getRangeMax();
-        }
+            instance.getRangeMax();
+        });
 
         // force the request animation frame to fired
         this.lastPosition = -1;
@@ -103,9 +102,9 @@ export default class SimpleParallax {
         viewport.setViewportBottom();
 
         // proceed with the current element
-        for (let i = instancesLength - 1; i >= 0; i--) {
-            this.proceedElement(instances[i]);
-        }
+        instances.forEach((instance) => {
+            this.proceedElement(instance);
+        });
 
         // callback the animationFrame
         frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
@@ -152,22 +151,19 @@ export default class SimpleParallax {
             return instance;
         });
 
-        for (let i = instancesToDestroy.length - 1; i >= 0; i--) {
+        instancesToDestroy.forEach((instance) => {
             // unset style
-            instancesToDestroy[i].unSetStyle();
+            instance.unSetStyle();
 
             if (this.settings.overflow === false) {
                 // if overflow option is set to false
                 // unwrap the element from .simpleParallax wrapper container
-                instancesToDestroy[i].unWrapElement();
+                instance.unWrapElement();
             }
-        }
-
-        // update the instance length var
-        instancesLength = instances.length;
+        });
 
         // if no instances left, remove the raf and resize event = simpleParallax fully destroyed
-        if (!instancesLength) {
+        if (!instances.length) {
             // cancel the animation frame
             window.cancelAnimationFrame(frameID);
 
