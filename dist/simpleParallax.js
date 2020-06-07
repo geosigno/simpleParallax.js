@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos, 
- * @date: 07-06-2020 15:53:39, 
+ * @date: 07-06-2020 16:3:28, 
  * @version: 5.4.1,
  * @link: https://simpleparallax.com/
  */
@@ -605,7 +605,7 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
 
     this.lastPosition = -1;
     this.resizeIsDone = this.resizeIsDone.bind(this);
-    this.handleResize = this.handleResize.bind(this);
+    this.refresh = this.refresh.bind(this);
     this.proceedRequestAnimationFrame = this.proceedRequestAnimationFrame.bind(this);
     this.init();
   }
@@ -634,22 +634,7 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
     key: "resizeIsDone",
     value: function resizeIsDone() {
       clearTimeout(resizeID);
-      resizeID = setTimeout(this.handleResize, 500);
-    } // handle the resize process, some coordonates need to be re-calculate
-
-  }, {
-    key: "handleResize",
-    value: function handleResize() {
-      // re-get all the viewport positions
-      viewport.setViewportAll(this.customContainer);
-      instances.forEach(function (instance) {
-        // re-get the current element offset
-        instance.getElementOffset(); // re-get the range if the current element
-
-        instance.getRangeMax();
-      }); // force the request animation frame to fired
-
-      this.lastPosition = -1;
+      resizeID = setTimeout(this.refresh, 200);
     } // animation frame
 
   }, {
@@ -702,6 +687,20 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
       instance.animate();
     }
   }, {
+    key: "refresh",
+    value: function refresh() {
+      // re-get all the viewport positions
+      viewport.setViewportAll(this.customContainer);
+      instances.forEach(function (instance) {
+        // re-get the current element offset
+        instance.getElementOffset(); // re-get the range if the current element
+
+        instance.getRangeMax();
+      }); // force the request animation frame to fired
+
+      this.lastPosition = -1;
+    }
+  }, {
     key: "destroy",
     value: function destroy() {
       var _this3 = this;
@@ -732,7 +731,7 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
         // cancel the animation frame
         window.cancelAnimationFrame(frameID); // detach the resize event
 
-        window.removeEventListener('resize', this.handleResize);
+        window.removeEventListener('resize', this.refresh);
       }
     }
   }]);

@@ -37,7 +37,7 @@ export default class SimpleParallax {
         this.lastPosition = -1;
 
         this.resizeIsDone = this.resizeIsDone.bind(this);
-        this.handleResize = this.handleResize.bind(this);
+        this.refresh = this.refresh.bind(this);
         this.proceedRequestAnimationFrame = this.proceedRequestAnimationFrame.bind(this);
 
         this.init();
@@ -65,24 +65,7 @@ export default class SimpleParallax {
     // wait for resize to be completely done
     resizeIsDone() {
         clearTimeout(resizeID);
-        resizeID = setTimeout(this.handleResize, 500);
-    }
-
-    // handle the resize process, some coordonates need to be re-calculate
-    handleResize() {
-        // re-get all the viewport positions
-        viewport.setViewportAll(this.customContainer);
-
-        instances.forEach((instance) => {
-            // re-get the current element offset
-            instance.getElementOffset();
-
-            // re-get the range if the current element
-            instance.getRangeMax();
-        });
-
-        // force the request animation frame to fired
-        this.lastPosition = -1;
+        resizeID = setTimeout(this.refresh, 200);
     }
 
     // animation frame
@@ -138,6 +121,22 @@ export default class SimpleParallax {
         instance.animate();
     }
 
+    refresh() {
+        // re-get all the viewport positions
+        viewport.setViewportAll(this.customContainer);
+
+        instances.forEach((instance) => {
+            // re-get the current element offset
+            instance.getElementOffset();
+
+            // re-get the range if the current element
+            instance.getRangeMax();
+        });
+
+        // force the request animation frame to fired
+        this.lastPosition = -1;
+    }
+
     destroy() {
         const instancesToDestroy = [];
 
@@ -168,7 +167,7 @@ export default class SimpleParallax {
             window.cancelAnimationFrame(frameID);
 
             // detach the resize event
-            window.removeEventListener('resize', this.handleResize);
+            window.removeEventListener('resize', this.refresh);
         }
     }
 }

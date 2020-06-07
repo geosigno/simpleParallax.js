@@ -140,6 +140,19 @@ In some cases, you want to use your own wrapper instead of the one created by th
 The maxTransition setting should be used to stop the parallax animation after a given percentage. By default, it translates from 0% to 100% of the user viewport. You can change it here to any percentage you want.
 
 ## Methods
+
+### refresh
+Refresh a simpleParallax instance (to recalculate all the positions): 
+
+```javascript
+var images = document.querySelectorAll('img');
+var instance = new simpleParallax(images);
+instance.refresh();
+```
+
+By default, the refresh method is fired at every window resize.
+
+### destroy
 Destroy a simpleParallax instance:
 
 ```javascript
