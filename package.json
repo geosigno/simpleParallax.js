@@ -1,6 +1,6 @@
 {
     "name": "simple-parallax-js",
-    "version": "5.4.1",
+    "version": "5.5.0",
     "description": "simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos",
     "homepage": "https://simpleparallax.com/",
     "main": "./dist/simpleParallax.min.js",
