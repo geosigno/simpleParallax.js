@@ -24,7 +24,7 @@ Simply copy/paste the below snippet just before your closing `</body>` tag:
 or use the below CDN link provided by [jsDelivr.com](https://www.jsdelivr.com/package/npm/simple-parallax-js):
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.5.0/dist/simpleParallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.5.1/dist/simpleParallax.min.js"></script>
 ```
 
 ### Via [npm/yarn](https://www.npmjs.com/package/simple-parallax-js)
@@ -95,7 +95,7 @@ Setting | Type | Default | Hint
 orientation | String | up | up - right - down - left - up left - up right - down left - down right
 scale | Number | 1.3 | need to be above 1
 overflow | Boolean | false | 
-delay | Number | 0.4 | the delay is in second
+delay | Number | 0 | the delay is in second **Watch out, sometimes this delay is causing issue on iOS devices [#47](https://github.com/geosigno/simpleParallax.js/issues/47)**
 transition | String | '' | any CSS transition
 customContainer | String or Node | false | 
 customWrapper | string | '' | the selector of the custom wrapper
@@ -125,7 +125,7 @@ The higher the scale is set, the more visible the parallax effect will be. In re
 By default, the image is scaled to apply a parallax effect without any overflow on the layout - you can check the [case study](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471) to have a better understanding. When *overflow* is set to true, the image will translate out of its natural flow (so it may overlap with your content).
 
 ### delay - *Number* - see [example](https://simpleparallax.com#example-delay-transition)
-When a *delay* is set, the translation of the image will continue during that delay when the user stops scrolling. That gives a very nice effect. The delay is in second.
+When a *delay* is set, the translation of the image will continue during that delay when the user stops scrolling. That gives a very nice effect. The delay is in second. **Watch out, sometimes this delay is causing issue on iOS devices [#47](https://github.com/geosigno/simpleParallax.js/issues/47)**
 
 ### transition - *String* - see [example](https://simpleparallax.com#example-delay-transition)
 The *transition* setting works closely with the *delay* setting. This setting will add any CSS transition to the delay setting. For example, you can use *ease* or *ease-in-out*.

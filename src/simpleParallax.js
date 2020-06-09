@@ -18,7 +18,7 @@ export default class SimpleParallax {
 
         this.elements = convertToArray(elements);
         this.defaults = {
-            delay: 0.4,
+            delay: 0,
             orientation: 'up',
             scale: 1.3,
             overflow: false,
