@@ -168,6 +168,9 @@ export default class SimpleParallax {
 
             // detach the resize event
             window.removeEventListener('resize', this.refresh);
+
+            // Reset isInit
+            isInit = false;
         }
     }
 }
