@@ -6,8 +6,8 @@ declare module 'simple-parallax-js' {
         delay?: number;
         transition?: string;
         breakpoint?: number;
-        customContainer?: boolean;
-        customWrapper?: boolean;
+        customContainer?: boolean | string | HTMLElement;
+        customWrapper?: boolean | string | HTMLElement;
         maxTransition?: number;
 
     }
