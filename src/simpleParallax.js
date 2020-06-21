@@ -23,8 +23,8 @@ export default class SimpleParallax {
             scale: 1.3,
             overflow: false,
             transition: 'cubic-bezier(0,0,0,1)',
-            customContainer: false,
-            customWrapper: false,
+            customContainer: '',
+            customWrapper: '',
             maxTransition: 0
         };
 

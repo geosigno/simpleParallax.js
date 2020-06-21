@@ -97,8 +97,8 @@ scale | Number | 1.3 | need to be above 1
 overflow | Boolean | false | 
 delay | Number | 0 | the delay is in second **Watch out, sometimes this delay is causing issue on iOS devices [#47](https://github.com/geosigno/simpleParallax.js/issues/47)**
 transition | String | '' | any CSS transition
-customContainer | String or Node | false | 
-customWrapper | string | '' | the selector of the custom wrapper
+customContainer | String or Node | '' | 
+customWrapper | String | '' | the selector of the custom wrapper
 maxTransition | Number | 0 | it should be a percentage between 1 and 99
 
 You can apply these settings with the following JS code:
@@ -133,7 +133,7 @@ The *transition* setting works closely with the *delay* setting. This setting wi
 ### customContainer - *String or Node*
 By default, the parallax calculation is done with the body scroll percentage. In some cases, the images may be in a container that has its own scroll area, so to have an accurate calculation, the custom container should be set.
 
-### customWrapper - *string*
+### customWrapper - *String*
 In some cases, you want to use your own wrapper instead of the one created by the plugin. If you specify your custom wrapper, the plugin will add the "simpleParallax" class along with an "overflow: hidden" style.
 
 ### maxTransition - *Number* - see [example](https://simpleparallax.com#example-max-transition)

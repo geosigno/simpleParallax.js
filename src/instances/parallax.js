@@ -14,6 +14,11 @@ class ParallaxInstance {
 
         this.init = this.init.bind(this);
 
+        this.customWrapper =
+            this.settings.customWrapper && this.element.closest(this.settings.customWrapper)
+                ? this.element.closest(this.settings.customWrapper)
+                : null;
+
         // check if images has not been loaded yet
         if (isImageLoaded(element)) {
             this.init();
@@ -77,26 +82,19 @@ class ParallaxInstance {
     // if overflow option is set to false
     // wrap the element into a .simpleParallax div and apply overflow hidden to hide the image excedant (result of the scale)
     wrapElement() {
-        // get the customWrapper if any
-        const customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper);
-
         // check is current image is in a <picture> tag
         const elementToWrap = this.element.closest('picture') || this.element;
 
         // create a .simpleParallax wrapper container
-        let wrapper = document.createElement('div');
-
         // if there is a custom wrapper
         // override the wrapper with it
-        if (customWrapper) {
-            wrapper = this.element.closest(this.settings.customWrapper);
-        }
+        let wrapper = this.customWrapper || document.createElement('div');
 
         wrapper.classList.add('simpleParallax');
         wrapper.style.overflow = 'hidden';
 
         // append the image inside the new wrapper
-        if (!customWrapper) {
+        if (!this.customWrapper) {
             elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
             wrapper.appendChild(elementToWrap);
         }
@@ -108,11 +106,8 @@ class ParallaxInstance {
     unWrapElement() {
         const wrapper = this.elementContainer;
 
-        // get the customWrapper if any
-        const customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper);
-
         // if there is a custom wrapper, we jusy need to remove the class and style
-        if (customWrapper) {
+        if (this.customWrapper) {
             wrapper.classList.remove('simpleParallax');
             wrapper.style.overflow = '';
         } else {

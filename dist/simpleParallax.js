@@ -1,6 +1,6 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos, 
- * @date: 09-06-2020 12:9:37, 
+ * @date: 21-06-2020 13:22:47, 
  * @version: 5.5.1,
  * @link: https://simpleparallax.com/
  */
@@ -258,7 +258,8 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
     this.isVisible = true;
     this.isInit = false;
     this.oldTranslateValue = -1;
-    this.init = this.init.bind(this); // check if images has not been loaded yet
+    this.init = this.init.bind(this);
+    this.customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper) ? this.element.closest(this.settings.customWrapper) : null; // check if images has not been loaded yet
 
     if (helpers_isImageLoaded(element)) {
       this.init();
@@ -322,22 +323,16 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
   }, {
     key: "wrapElement",
     value: function wrapElement() {
-      // get the customWrapper if any
-      var customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper); // check is current image is in a <picture> tag
-
+      // check is current image is in a <picture> tag
       var elementToWrap = this.element.closest('picture') || this.element; // create a .simpleParallax wrapper container
-
-      var wrapper = document.createElement('div'); // if there is a custom wrapper
+      // if there is a custom wrapper
       // override the wrapper with it
 
-      if (customWrapper) {
-        wrapper = this.element.closest(this.settings.customWrapper);
-      }
-
+      var wrapper = this.customWrapper || document.createElement('div');
       wrapper.classList.add('simpleParallax');
       wrapper.style.overflow = 'hidden'; // append the image inside the new wrapper
 
-      if (!customWrapper) {
+      if (!this.customWrapper) {
         elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
         wrapper.appendChild(elementToWrap);
       }
@@ -348,11 +343,9 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
   }, {
     key: "unWrapElement",
     value: function unWrapElement() {
-      var wrapper = this.elementContainer; // get the customWrapper if any
+      var wrapper = this.elementContainer; // if there is a custom wrapper, we jusy need to remove the class and style
 
-      var customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper); // if there is a custom wrapper, we jusy need to remove the class and style
-
-      if (customWrapper) {
+      if (this.customWrapper) {
         wrapper.classList.remove('simpleParallax');
         wrapper.style.overflow = '';
       } else {
@@ -589,8 +582,8 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
       scale: 1.3,
       overflow: false,
       transition: 'cubic-bezier(0,0,0,1)',
-      customContainer: false,
-      customWrapper: false,
+      customContainer: '',
+      customWrapper: '',
       maxTransition: 0
     };
     this.settings = Object.assign(this.defaults, options);
