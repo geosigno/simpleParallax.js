@@ -1,7 +1,7 @@
 /*!
  * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos, 
- * @date: 26-07-2020 15:48:32, 
- * @version: 5.5.1,
+ * @date: 26-07-2020 15:56:23, 
+ * @version: 5.6.1,
  * @link: https://simpleparallax.com/
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -311,8 +311,14 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
         // apply a timeout to avoid buggy effect
         setTimeout(function () {
           // apply the transition style on the image
-          _this2.setTransitionCSS();
+          _this2.setTransitionCSS(); //add isInit class
+
+
+          _this2.elementContainer.classList.add('simple-parallax-initialized');
         }, 10);
+      } else {
+        //add isInit class
+        this.elementContainer.classList.add('simple-parallax-initialized');
       } // for some reason, <picture> are init an infinite time on windows OS
 
 

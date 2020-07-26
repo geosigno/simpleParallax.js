@@ -72,7 +72,13 @@ class ParallaxInstance {
             setTimeout(() => {
                 // apply the transition style on the image
                 this.setTransitionCSS();
+
+                //add isInit class
+                this.elementContainer.classList.add('simple-parallax-initialized');
             }, 10);
+        } else {
+            //add isInit class
+            this.elementContainer.classList.add('simple-parallax-initialized');
         }
 
         // for some reason, <picture> are init an infinite time on windows OS
