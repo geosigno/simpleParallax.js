@@ -1,7 +1,7 @@
 // check if media is fully loaded
 const isImageLoaded = (media) => {
     // if the media is a video, return true
-    if (media.tagName.toLowerCase() === 'video') {
+    if (media.tagName.toLowerCase() !== 'img' && media.tagName.toLowerCase() !== 'picture') {
         return true;
     }
 
