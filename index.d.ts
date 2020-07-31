@@ -12,7 +12,7 @@ declare module 'simple-parallax-js' {
     }
 
     export default class SimpleParallax {
-        constructor(images: Element | Element[], settings?: IParallaxSettings);
+        constructor(images: Element | Element[] | HTMLCollectionOf<Element>, settings?: IParallaxSettings);
         public refresh: () => void;
         public destroy: () => void;
     }
