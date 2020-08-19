@@ -45,12 +45,10 @@
     "bugs": {
         "url": "https://github.com/geosigno/simpleParallax/issues"
     },
-    "dependencies": {
+    "devDependencies": {
         "html-webpack-plugin": "^4.3.0",
         "webpack": "^4.43.0",
-        "webpack-dev-server": "^3.11.0"
-    },
-    "devDependencies": {
+        "webpack-dev-server": "^3.11.0",
         "@babel/core": "^7.10.3",
         "@babel/preset-env": "^7.10.3",
         "babel-loader": "^8.1.0",
