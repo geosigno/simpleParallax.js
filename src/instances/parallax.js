@@ -226,7 +226,7 @@ class ParallaxInstance {
         }
 
         // sometime the same percentage is returned
-        // if so we don't do aything
+        // if so we don't do anything
         if (this.oldPercentage === percentage) {
             return false;
         }
@@ -241,7 +241,7 @@ class ParallaxInstance {
         this.translateValue = ((percentage / 100) * this.rangeMax - this.rangeMax / 2).toFixed(0);
 
         // sometime the same translate value is returned
-        // if so we don't do aything
+        // if so we don't do anything
         if (this.oldTranslateValue === this.translateValue) {
             return false;
         }
