@@ -45,7 +45,10 @@ export default class SimpleParallax {
 
     init() {
         viewport.setViewportAll(this.customContainer);
-        instances = [...this.elements.map((element) => new ParallaxInstance(element, this.settings)), ...instances];
+        instances = [
+            ...this.elements.map((element) => new ParallaxInstance(element, this.settings)),
+            ...instances
+        ];
 
         // only if this is the first simpleParallax init
         if (!isInit) {

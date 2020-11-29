@@ -7,7 +7,10 @@ const isImageLoaded = (media, callback) => {
 
     // check if media has been 100% loaded
     // check if the media is displayed
-    if (!media.complete || (typeof media.naturalWidth !== 'undefined' && media.naturalWidth === 0)) {
+    if (
+        !media.complete ||
+        (typeof media.naturalWidth !== 'undefined' && media.naturalWidth === 0)
+    ) {
         return media.addEventListener('load', () => {
             // timeout to ensure the image is fully painted into the DOM
             setTimeout(() => callback(), 10);

@@ -167,7 +167,10 @@ class ParallaxInstance {
             root: null,
             threshold: this.buildThresholdList()
         };
-        this.observer = new IntersectionObserver(this.intersectionObserverCallback.bind(this), options);
+        this.observer = new IntersectionObserver(
+            this.intersectionObserverCallback.bind(this),
+            options
+        );
         this.observer.observe(this.element);
     }
 
@@ -185,7 +188,10 @@ class ParallaxInstance {
     // check if the current element is visible in the Viewport
     // for browser that not support Intersection Observer API
     checkIfVisible() {
-        return this.elementBottom > viewport.positions.top && this.elementTop < viewport.positions.bottom;
+        return (
+            this.elementBottom > viewport.positions.top &&
+            this.elementTop < viewport.positions.bottom
+        );
     }
 
     // calculate the range between image will be translated
@@ -201,7 +207,10 @@ class ParallaxInstance {
     getTranslateValue() {
         // calculate the % position of the element comparing to the viewport
         // rounding percentage to a 1 number float to avoid unn unnecessary calculation
-        let percentage = ((viewport.positions.bottom - this.elementTop) / ((viewport.positions.height + this.elementHeight) / 100)).toFixed(1);
+        let percentage = (
+            (viewport.positions.bottom - this.elementTop) /
+            ((viewport.positions.height + this.elementHeight) / 100)
+        ).toFixed(1);
         // sometime the percentage exceeds 100 or goes below 0
         percentage = Math.min(100, Math.max(0, percentage));
 
@@ -243,16 +252,30 @@ class ParallaxInstance {
         let translateValueY = 0;
         let translateValueX = 0;
 
-        if (this.settings.orientation.includes('left') || this.settings.orientation.includes('right')) {
+        if (
+            this.settings.orientation.includes('left') ||
+            this.settings.orientation.includes('right')
+        ) {
             // if orientation option is left or right
             // use horizontal axe - X axe
-            translateValueX = `${this.settings.orientation.includes('left') ? this.translateValue * -1 : this.translateValue}px`;
+            translateValueX = `${
+                this.settings.orientation.includes('left')
+                    ? this.translateValue * -1
+                    : this.translateValue
+            }px`;
         }
 
-        if (this.settings.orientation.includes('up') || this.settings.orientation.includes('down')) {
+        if (
+            this.settings.orientation.includes('up') ||
+            this.settings.orientation.includes('down')
+        ) {
             // if orientation option is up or down
             // use vertical axe - Y axe
-            translateValueY = `${this.settings.orientation.includes('up') ? this.translateValue * -1 : this.translateValue}px`;
+            translateValueY = `${
+                this.settings.orientation.includes('up')
+                    ? this.translateValue * -1
+                    : this.translateValue
+            }px`;
         }
 
         const transform = {

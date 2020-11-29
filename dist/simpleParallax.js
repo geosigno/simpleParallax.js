@@ -1,115 +1,24 @@
 /*!
- * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos, 
- * @date: 20-08-2020 14:0:14, 
+ * simpleParallax - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos,
+ * @date: 16-11-2020 22:37:35,
  * @version: 5.6.2,
  * @link: https://simpleparallax.com/
  */
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define("simpleParallax", [], factory);
-	else if(typeof exports === 'object')
-		exports["simpleParallax"] = factory();
-	else
-		root["simpleParallax"] = factory();
-})(window, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+var simpleParallax;simpleParallax =
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
 
-"use strict";
+/***/ 524:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
-__webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ simpleParallax_SimpleParallax; });
+__webpack_require__.d(__webpack_exports__, {
+  "default": function() { return /* binding */ SimpleParallax; }
+});
 
 // CONCATENATED MODULE: ./src/helpers/isSupportedBrowser.js
 // need closest support
@@ -197,31 +106,33 @@ var cssTransform = function cssTransform() {
 /* harmony default export */ var helpers_cssTransform = (cssTransform());
 // CONCATENATED MODULE: ./src/helpers/isImageLoaded.js
 // check if media is fully loaded
-var isImageLoaded = function isImageLoaded(media) {
+var isImageLoaded = function isImageLoaded(media, callback) {
   // if the media is a video, return true
-  if (media.tagName.toLowerCase() !== 'img' && media.tagName.toLowerCase() !== 'picture') {
-    return true;
-  } // check if media is set as the parameter
-
-
-  if (!media) {
-    return false;
+  if (media.tagName.toLowerCase() !== 'img') {
+    return callback();
   } // check if media has been 100% loaded
+  // check if the media is displayed
 
 
-  if (!media.complete) {
-    return false;
-  } // check if the media is displayed
-
-
-  if (typeof media.naturalWidth !== 'undefined' && media.naturalWidth === 0) {
-    return false;
+  if (!media.complete || typeof media.naturalWidth !== 'undefined' && media.naturalWidth === 0) {
+    return media.addEventListener('load', function () {
+      // timeout to ensure the image is fully painted into the DOM
+      setTimeout(function () {
+        return callback();
+      }, 10);
+    });
   }
 
-  return true;
+  return callback();
 };
 
 /* harmony default export */ var helpers_isImageLoaded = (isImageLoaded);
+// CONCATENATED MODULE: ./src/helpers/getImage.js
+var getImage = function getImage(element) {
+  if (element.tagName.toLowerCase() === 'picture') return element.querySelector('img');else return element;
+};
+
+/* harmony default export */ var helpers_getImage = (getImage);
 // CONCATENATED MODULE: ./src/instances/parallax.js
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -245,48 +156,31 @@ function parallax_createClass(Constructor, protoProps, staticProps) { if (protoP
 
 
 
-var parallax_ParallaxInstance = /*#__PURE__*/function () {
-  function ParallaxInstance(element, options) {
-    var _this = this;
 
+var ParallaxInstance = /*#__PURE__*/function () {
+  function ParallaxInstance(element, options) {
     parallax_classCallCheck(this, ParallaxInstance);
 
     // set the element & settings
-    this.element = element;
+    this.element = helpers_getImage(element);
+    if (!this.element) return;
     this.elementContainer = element;
     this.settings = options;
     this.isVisible = true;
     this.isInit = false;
     this.oldTranslateValue = -1;
     this.init = this.init.bind(this);
-    this.customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper) ? this.element.closest(this.settings.customWrapper) : null; // check if images has not been loaded yet
-
-    if (helpers_isImageLoaded(element)) {
-      this.init();
-    } else {
-      this.element.addEventListener('load', function () {
-        // timeout to ensure the image is fully loaded into the DOM
-        setTimeout(function () {
-          _this.init(true);
-        }, 50);
-      });
-    }
+    this.customWrapper = this.settings.customWrapper && this.element.closest(this.settings.customWrapper) ? this.element.closest(this.settings.customWrapper) : null;
+    helpers_isImageLoaded(element, this.init);
   }
 
   parallax_createClass(ParallaxInstance, [{
     key: "init",
-    value: function init(asyncInit) {
-      var _this2 = this;
+    value: function init() {
+      var _this = this;
 
       // for some reason, <picture> are init an infinite time on windows OS
-      if (this.isInit) return;
-
-      if (asyncInit) {
-        // in case the image is lazy loaded, the rangemax should be cleared
-        // so it will be updated in the next getTranslateValue()
-        this.rangeMax = null;
-      } // check if element has not been already initialized with simpleParallax
-
+      if (this.isInit) return; // check if element has not been already initialized with simpleParallax
 
       if (this.element.closest('.simpleParallax')) return;
 
@@ -311,10 +205,10 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
         // apply a timeout to avoid buggy effect
         setTimeout(function () {
           // apply the transition style on the image
-          _this2.setTransitionCSS(); //add isInit class
+          _this.setTransitionCSS(); //add isInit class
 
 
-          _this2.elementContainer.classList.add('simple-parallax-initialized');
+          _this.elementContainer.classList.add('simple-parallax-initialized');
         }, 10);
       } else {
         //add isInit class
@@ -435,13 +329,13 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
   }, {
     key: "intersectionObserverCallback",
     value: function intersectionObserverCallback(entries) {
-      var _this3 = this;
+      var _this2 = this;
 
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          _this3.isVisible = true;
+          _this2.isVisible = true;
         } else {
-          _this3.isVisible = false;
+          _this2.isVisible = false;
         }
       });
     } // check if the current element is visible in the Viewport
@@ -474,7 +368,7 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
       if (this.settings.maxTransition !== 0 && percentage > this.settings.maxTransition) {
         percentage = this.settings.maxTransition;
       } // sometime the same percentage is returned
-      // if so we don't do aything
+      // if so we don't do anything
 
 
       if (this.oldPercentage === percentage) {
@@ -489,7 +383,7 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
 
 
       this.translateValue = (percentage / 100 * this.rangeMax - this.rangeMax / 2).toFixed(0); // sometime the same translate value is returned
-      // if so we don't do aything
+      // if so we don't do anything
 
       if (this.oldTranslateValue === this.translateValue) {
         return false;
@@ -506,7 +400,6 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
     value: function animate() {
       var translateValueY = 0;
       var translateValueX = 0;
-      var inlineCss;
 
       if (this.settings.orientation.includes('left') || this.settings.orientation.includes('right')) {
         // if orientation option is left or right
@@ -518,26 +411,26 @@ var parallax_ParallaxInstance = /*#__PURE__*/function () {
         // if orientation option is up or down
         // use vertical axe - Y axe
         translateValueY = "".concat(this.settings.orientation.includes('up') ? this.translateValue * -1 : this.translateValue, "px");
-      } // set style to apply to the element
+      }
 
-
-      if (this.settings.overflow === false) {
-        // if overflow option is set to false
-        // add the scale style
-        inlineCss = "translate3d(".concat(translateValueX, ", ").concat(translateValueY, ", 0) scale(").concat(this.settings.scale, ")");
-      } else {
-        inlineCss = "translate3d(".concat(translateValueX, ", ").concat(translateValueY, ", 0)");
-      } // add style on the element using the adequate CSS transform
-
-
-      this.element.style[helpers_cssTransform] = inlineCss;
+      var transform = {
+        transform: ["translate3d(".concat(this.oldTranslateValueX, ", ").concat(this.oldTranslateValueY, ", 0) scale(").concat(this.settings.scale, ")"), "translate3d(".concat(translateValueX, ", ").concat(translateValueY, ", 0) scale(").concat(this.settings.scale, ")")]
+      };
+      var options = {
+        duration: this.settings.delay,
+        easing: this.settings.transition,
+        fill: 'forwards'
+      };
+      this.element.animate(transform, options);
+      this.oldTranslateValueY = translateValueY;
+      this.oldTranslateValueX = translateValueX;
     }
   }]);
 
   return ParallaxInstance;
 }();
 
-/* harmony default export */ var parallax = (parallax_ParallaxInstance);
+/* harmony default export */ var parallax = (ParallaxInstance);
 // CONCATENATED MODULE: ./src/simpleParallax.js
 function simpleParallax_toConsumableArray(arr) { return simpleParallax_arrayWithoutHoles(arr) || simpleParallax_iterableToArray(arr) || simpleParallax_unsupportedIterableToArray(arr) || simpleParallax_nonIterableSpread(); }
 
@@ -574,7 +467,7 @@ var instances = [];
 var frameID;
 var resizeID;
 
-var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
+var SimpleParallax = /*#__PURE__*/function () {
   function SimpleParallax(elements, options) {
     simpleParallax_classCallCheck(this, SimpleParallax);
 
@@ -617,9 +510,7 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
       viewport.setViewportAll(this.customContainer);
       instances = [].concat(simpleParallax_toConsumableArray(this.elements.map(function (element) {
         return new parallax(element, _this.settings);
-      })), simpleParallax_toConsumableArray(instances)); // update the instance length
-      // instancesLength = instances.length;
-      // only if this is the first simpleParallax init
+      })), simpleParallax_toConsumableArray(instances)); // only if this is the first simpleParallax init
 
       if (!isInit) {
         // init the frame
@@ -743,5 +634,65 @@ var simpleParallax_SimpleParallax = /*#__PURE__*/function () {
 
 
 /***/ })
-/******/ ])["default"];
-});
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(524);
+/******/ })()
+;
