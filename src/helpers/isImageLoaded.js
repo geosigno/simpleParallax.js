@@ -1,26 +1,20 @@
 // check if media is fully loaded
-const isImageLoaded = (media) => {
+const isImageLoaded = (media, callback) => {
     // if the media is a video, return true
-    if (media.tagName.toLowerCase() !== 'img' && media.tagName.toLowerCase() !== 'picture') {
-        return true;
-    }
-
-    // check if media is set as the parameter
-    if (!media) {
-        return false;
+    if (media.tagName.toLowerCase() !== 'img') {
+        return callback();
     }
 
     // check if media has been 100% loaded
-    if (!media.complete) {
-        return false;
-    }
-
     // check if the media is displayed
-    if (typeof media.naturalWidth !== 'undefined' && media.naturalWidth === 0) {
-        return false;
+    if (!media.complete || (typeof media.naturalWidth !== 'undefined' && media.naturalWidth === 0)) {
+        return media.addEventListener('load', () => {
+            // timeout to ensure the image is fully painted into the DOM
+            setTimeout(() => callback(), 10);
+        });
     }
 
-    return true;
+    return callback();
 };
 
 export default isImageLoaded;

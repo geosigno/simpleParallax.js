@@ -1,11 +1,13 @@
 import cssTransform from '../helpers/cssTransform';
 import isImageLoaded from '../helpers/isImageLoaded';
+import getImage from '../helpers/getImage';
 import { viewport } from '../helpers/viewport';
 
 class ParallaxInstance {
     constructor(element, options) {
         // set the element & settings
-        this.element = element;
+        this.element = getImage(element);
+        if (!this.element) return;
         this.elementContainer = element;
         this.settings = options;
         this.isVisible = true;
@@ -19,28 +21,12 @@ class ParallaxInstance {
                 ? this.element.closest(this.settings.customWrapper)
                 : null;
 
-        // check if images has not been loaded yet
-        if (isImageLoaded(element)) {
-            this.init();
-        } else {
-            this.element.addEventListener('load', () => {
-                // timeout to ensure the image is fully loaded into the DOM
-                setTimeout(() => {
-                    this.init(true);
-                }, 50);
-            });
-        }
+        isImageLoaded(element, this.init);
     }
 
-    init(asyncInit) {
+    init() {
         // for some reason, <picture> are init an infinite time on windows OS
         if (this.isInit) return;
-
-        if (asyncInit) {
-            // in case the image is lazy loaded, the rangemax should be cleared
-            // so it will be updated in the next getTranslateValue()
-            this.rangeMax = null;
-        }
 
         // check if element has not been already initialized with simpleParallax
         if (this.element.closest('.simpleParallax')) return;
@@ -73,11 +59,11 @@ class ParallaxInstance {
                 // apply the transition style on the image
                 this.setTransitionCSS();
 
-                //add isInit class
+                // add isInit class
                 this.elementContainer.classList.add('simple-parallax-initialized');
             }, 10);
         } else {
-            //add isInit class
+            // add isInit class
             this.elementContainer.classList.add('simple-parallax-initialized');
         }
 
@@ -94,7 +80,7 @@ class ParallaxInstance {
         // create a .simpleParallax wrapper container
         // if there is a custom wrapper
         // override the wrapper with it
-        let wrapper = this.customWrapper || document.createElement('div');
+        const wrapper = this.customWrapper || document.createElement('div');
 
         wrapper.classList.add('simpleParallax');
         wrapper.style.overflow = 'hidden';
@@ -216,7 +202,6 @@ class ParallaxInstance {
         // calculate the % position of the element comparing to the viewport
         // rounding percentage to a 1 number float to avoid unn unnecessary calculation
         let percentage = ((viewport.positions.bottom - this.elementTop) / ((viewport.positions.height + this.elementHeight) / 100)).toFixed(1);
-
         // sometime the percentage exceeds 100 or goes below 0
         percentage = Math.min(100, Math.max(0, percentage));
 

@@ -45,19 +45,13 @@ export default class SimpleParallax {
 
     init() {
         viewport.setViewportAll(this.customContainer);
-
         instances = [...this.elements.map((element) => new ParallaxInstance(element, this.settings)), ...instances];
-
-        // update the instance length
-        // instancesLength = instances.length;
 
         // only if this is the first simpleParallax init
         if (!isInit) {
             // init the frame
             this.proceedRequestAnimationFrame();
-
             window.addEventListener('resize', this.resizeIsDone);
-
             isInit = true;
         }
     }
