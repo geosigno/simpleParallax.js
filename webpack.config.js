@@ -32,10 +32,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
-        library: 'simpleParallax',
-        libraryTarget: 'umd',
-        umdNamedDefine: true,
-        libraryExport: 'default'
+        library: 'simpleParallax'
     },
     optimization: {
         minimize: true,
