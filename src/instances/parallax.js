@@ -257,7 +257,6 @@ class ParallaxInstance {
     animate() {
         let translateValueY = 0;
         let translateValueX = 0;
-        let inlineCss;
 
         if (this.settings.orientation.includes('left') || this.settings.orientation.includes('right')) {
             // if orientation option is left or right
@@ -271,17 +270,23 @@ class ParallaxInstance {
             translateValueY = `${this.settings.orientation.includes('up') ? this.translateValue * -1 : this.translateValue}px`;
         }
 
-        // set style to apply to the element
-        if (this.settings.overflow === false) {
-            // if overflow option is set to false
-            // add the scale style
-            inlineCss = `translate3d(${translateValueX}, ${translateValueY}, 0) scale(${this.settings.scale})`;
-        } else {
-            inlineCss = `translate3d(${translateValueX}, ${translateValueY}, 0)`;
-        }
+        const transform = {
+            transform: [
+                `translate3d(${this.oldTranslateValueX}, ${this.oldTranslateValueY}, 0) scale(${this.settings.scale})`,
+                `translate3d(${translateValueX}, ${translateValueY}, 0) scale(${this.settings.scale})`
+            ]
+        };
 
-        // add style on the element using the adequate CSS transform
-        this.element.style[cssTransform] = inlineCss;
+        const options = {
+            duration: this.settings.delay,
+            easing: this.settings.transition,
+            fill: 'forwards'
+        };
+
+        this.element.animate(transform, options);
+
+        this.oldTranslateValueY = translateValueY;
+        this.oldTranslateValueX = translateValueX;
     }
 }
 
