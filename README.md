@@ -15,13 +15,13 @@ Any image will fit. Try it out!
 
 ### Old way
 
-Simply copy/paste the below snippet just before your closing `</body>` tag:
+Simply copy/paste the below snippet just before your closing `</body>` tag :
 
 ```html
 <script src="simpleParallax.js"></script>
 ```
 
-or use the below CDN link provided by [jsDelivr.com](https://www.jsdelivr.com/package/npm/simple-parallax-js):
+or use the below CDN link provided by [jsDelivr.com](https://www.jsdelivr.com/package/npm/simple-parallax-js) :
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.6.1/dist/simpleParallax.min.js"></script>
@@ -29,7 +29,7 @@ or use the below CDN link provided by [jsDelivr.com](https://www.jsdelivr.com/pa
 
 ### Via [npm/yarn](https://www.npmjs.com/package/simple-parallax-js)
 
-You can also install it via:
+You can also install it via :
 
 ```sh
 #npm
@@ -39,7 +39,7 @@ npm install simple-parallax-js
 yarn add simple-parallax-js
 ```
 
-and then import it as follows:
+and then import it as follows :
 
 ```javascript
 //ES6 import
@@ -51,13 +51,13 @@ const simpleParallax = require('simple-parallax-js');
 
 ## Initialization
 
-Giving the following HTML:
+Giving the following HTML :
 
 ```html
  <img class="thumbnail" src="image.jpg" alt="image">
 ```
 
-simply add the following JavaScript code:
+simply add the following JavaScript code :
 
 ```javascript
 const image = document.getElementsByClassName('thumbnail');
@@ -68,7 +68,7 @@ and voilà!
 
 ___
 
-You can also choose to apply the parallax on multiple images:
+You can also choose to apply the parallax on multiple images :
 
 ```javascript
 const images = document.querySelectorAll('img');
@@ -77,7 +77,7 @@ new simpleParallax(images);
 
 Once simpleparallax has been correctly initialized, it adds the ```simple-parallax-initialized``` class on the container.
 
-simpleParallax now works with video:
+simpleParallax now works with video :
 
 ```html
 <video>
@@ -103,7 +103,7 @@ customContainer | String or Node | '' |
 customWrapper | String | '' | the selector of the custom wrapper
 maxTransition | Number | 0 | it should be a percentage between 1 and 99
 
-You can apply these settings with the following JS code:
+You can apply these settings with the following JS code :
 
 ```javascript
 var images = document.querySelectorAll('.thumbnail');
@@ -144,7 +144,7 @@ The maxTransition setting should be used to stop the parallax animation after a 
 ## Methods
 
 ### refresh
-Refresh a simpleParallax instance (to recalculate all the positions): 
+Refresh a simpleParallax instance (to recalculate all the positions) : 
 
 ```javascript
 var images = document.querySelectorAll('img');
