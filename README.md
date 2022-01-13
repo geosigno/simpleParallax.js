@@ -173,7 +173,7 @@ You can find all the examples [here](https://simpleparallax.com/#examples).
 
 Even though old browsers are not supported, the page won't crash. Simply, there will be no parallax.
 
-If you want to support older browsers such as IE, you will need a polyfill for [cloest()](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill) and [Intersection Observer](https://github.com/w3c/IntersectionObserver/tree/master/polyfill). Please note that even with polyfills, the parallax effect will not seem fluid.
+If you want to support older browsers such as IE, you will need a polyfill for [closest()](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill) and [Intersection Observer](https://github.com/w3c/IntersectionObserver/tree/master/polyfill). Please note that even with polyfills, the parallax effect will not seem fluid.
 
 ## Author
 
