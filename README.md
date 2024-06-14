@@ -1,35 +1,18 @@
 ![simpleParallax logo](https://simpleparallax.b-cdn.net/images/logo.png?new=new)
 
-[![GitHub version](https://badge.fury.io/gh/geosenna%2FsimpleParallax.svg)](https://badge.fury.io/gh/geosenna%2FsimpleParallax) [![Only 32 Kb](https://badge-size.herokuapp.com/geosigno/simpleParallax.js/master/dist/simpleParallax.min.js)](https://github.com/geosigno/simpleParallax.js/blob/master/strapdown.min.js) [![](https://img.shields.io/npm/dm/simple-parallax-js)](https://www.npmjs.com/package/simple-parallax-js) [![GitHub issues](https://img.shields.io/github/issues/geosigno/simpleParallax.js.svg)](https://GitHub.com/geosigno/simpleParallax.js/issues/) [![](https://data.jsdelivr.com/v1/package/npm/simple-parallax-js/badge?style=rounded)](https://www.jsdelivr.com/package/npm/simple-parallax-js) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![GitHub version](https://badge.fury.io/gh/geosenna%2FsimpleParallax.svg)](https://badge.fury.io/gh/geosenna%2FsimpleParallax)  [![](https://img.shields.io/npm/dm/simple-parallax-js)](https://www.npmjs.com/package/simple-parallax-js) [![GitHub issues](https://img.shields.io/github/issues/geosigno/simpleParallax.js.svg)](https://GitHub.com/geosigno/simpleParallax.js/issues/) [![](https://data.jsdelivr.com/v1/package/npm/simple-parallax-js/badge?style=rounded)](https://www.jsdelivr.com/package/npm/simple-parallax-js)
 
 # simpleParallax.js
 
-simpleParallax.js is a very simple and tiny Vanilla JS library that adds parallax animations on any images.
+simpleParallax.js is a lightweight and easy-to-use React and JS library that adds parallax animations to any image.
 
-Where it may be laborious to get results through other plugins, simpleParallax.js stands out for its ease and its visual rendering. The parallax effect is directly applied to image tags, there is no need to use background images. More info on the case study [here](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471).
+While other plugins can be complex, simpleParallax.js is notable for its simplicity and impressive visual effects. The parallax effect is applied directly to image tags, eliminating the need for background images. Any image can be used. More info on the case study [here](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471).
 
-Any image will fit. Try it out!
-
+Give it a try!
 
 ## Installation
 
-### Old way
-
-Simply copy/paste the below snippet just before your closing `</body>` tag :
-
-```html
-<script src="simpleParallax.js"></script>
-```
-
-or use the below CDN link provided by [jsDelivr.com](https://www.jsdelivr.com/package/npm/simple-parallax-js) :
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.6.1/dist/simpleParallax.min.js"></script>
-```
-
-### Via [npm/yarn](https://www.npmjs.com/package/simple-parallax-js)
-
-You can also install it via :
+Install the package via npm or yarn:
 
 ```sh
 #npm
@@ -39,17 +22,34 @@ npm install simple-parallax-js
 yarn add simple-parallax-js
 ```
 
-and then import it as follows :
+Import it:
 
 ```javascript
-//ES6 import
-import simpleParallax from 'simple-parallax-js';
+//React version
+import SimpleParallax from 'simple-parallax-js';
 
-//CommonJS
-const simpleParallax = require('simple-parallax-js');
+//Vanilla Version
+import SimpleParallax from "simple-parallax-js/vanilla";
 ```
 
 ## Initialization
+
+### React
+
+Simply add the following JavaScript code:
+
+```javascript
+
+import SimpleParallax from "simple-parallax-js";
+
+const Component = () => (
+  <SimpleParallax>
+    <img src={"thumbnail.jpg"} alt={"image"} />
+  </SimpleParallax>
+)
+
+```
+### Vanilla
 
 Giving the following HTML :
 
@@ -63,10 +63,6 @@ simply add the following JavaScript code :
 const image = document.getElementsByClassName('thumbnail');
 new simpleParallax(image);
 ```
-
-and voilà!
-
-___
 
 You can also choose to apply the parallax on multiple images :
 
@@ -99,11 +95,50 @@ scale | Number | 1.3 | need to be above 1
 overflow | Boolean | false | 
 delay | Number | 0 | the delay is in second **Watch out, sometimes this delay is causing issue on iOS devices [#47](https://github.com/geosigno/simpleParallax.js/issues/47)**
 transition | String | '' | any CSS transition
-customContainer | String or Node | '' | 
-customWrapper | String | '' | the selector of the custom wrapper
 maxTransition | Number | 0 | it should be a percentage between 1 and 99
+customContainer | String or Node | '' | (Vanilla version only)
+customWrapper | String | '' | the selector of the custom wrapper (Vanilla version only)
 
 You can apply these settings with the following JS code :
+
+### React
+
+```javascript
+import SimpleParallax from "simple-parallax-js";
+
+const Component = () => (
+  <SimpleParallax 
+    delay={0}
+    orientation={"down"}
+    scale={1.3}
+    overflow
+    maxTransition={60}
+  >
+    <img src={"thumbnail.jpg"} alt={"image"} />
+  </SimpleParallax>
+)
+```
+
+### Next
+
+```javascript
+import SimpleParallax from "simple-parallax-js";
+import Image from "next/image";
+
+const Component = () => (
+  <SimpleParallax 
+    delay={0}
+    orientation={"down"}
+    scale={1.3}
+    overflow
+    maxTransition={60}
+  >
+    <Image src={"thumbnail.jpg"} alt={"image"} width={1920} height={1024} />
+  </SimpleParallax>
+)
+```
+
+### Vanilla
 
 ```javascript
 var images = document.querySelectorAll('.thumbnail');
@@ -118,28 +153,31 @@ new simpleParallax(images, {
 ```
 
 ### orientation - *String* - see [example](https://simpleparallax.com#example-orientation)
-This is the orientation (or direction) of the parallax effect. Choose *up* and when scrolling down, the image will translate from the bottom to the top (so the image will translate up). When scrolling up, the image will translate from the top to the bottom. Same logic applies for all others orientations (*right*, *down*, *left*, *up left*, *up right*, *down left* or *down right*). When 2 directions are combined (for example *down right*), the image will translate diagonally.
+The parallax effect's orientation, or direction, can be customized. If you choose *up*, the image will move from bottom to top as you scroll down, and from top to bottom as you scroll up. This same logic applies for all other orientations, including *right*, *down*, *left*, *up left*, *up right*, *down left*, and *down right*. If two directions are combined, such as *down right*, the image will move diagonally.
 
 ### scale - *Number* - see [example](https://simpleparallax.com#example-scale)
-The higher the scale is set, the more visible the parallax effect will be. In return, the image will lose in quality. To reduce the lossless effect, if the scale is set at 1.5 and your image is 500px width, do the simple math 500 * 1.5 = 750. So you can choose a 750px image to replace your 500px one, and don't see any quality leak. More information is available if you read the case study [here](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471).
+The higher the *scale* setting, the more pronounced the parallax effect becomes. However, this can cause the image quality to diminish. To mitigate this, if the *scale* is set at 1.5 and your image width is 500px, simply multiply 500 by 1.5 to get 750. You can then use a 750px image in place of your 500px one to maintain image quality. More information can be found in the case study linked [here](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471).
 
 ### overflow - *Boolean* - see [example](https://simpleparallax.com#example-overflow)
-By default, the image is scaled to apply a parallax effect without any overflow on the layout - you can check the [case study](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471) to have a better understanding. When *overflow* is set to true, the image will translate out of its natural flow (so it may overlap with your content).
+By default, the image scales to create a parallax effect without any overflow on the layout - for a better understanding, review the [case study](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471). When overflow is set to true, the image will translate beyond its natural flow, potentially overlapping your content.
 
 ### delay - *Number* - see [example](https://simpleparallax.com#example-delay-transition)
-When a *delay* is set, the translation of the image will continue during that delay when the user stops scrolling. That gives a very nice effect. The delay is in second. **Watch out, sometimes this delay is causing issue on iOS devices [#47](https://github.com/geosigno/simpleParallax.js/issues/47)**
+Setting a delay prolongs the image's translation even after the user has stopped scrolling, creating a pleasing effect. This delay is measured in seconds. **Watch out, sometimes this delay is causing issue on iOS devices [#47](https://github.com/geosigno/simpleParallax.js/issues/47)**
 
 ### transition - *String* - see [example](https://simpleparallax.com#example-delay-transition)
-The *transition* setting works closely with the *delay* setting. This setting will add any CSS transition to the delay setting. For example, you can use *ease* or *ease-in-out*.
-
-### customContainer - *String or Node*
-By default, the parallax calculation is done with the body scroll percentage. In some cases, the images may be in a container that has its own scroll area, so to have an accurate calculation, the custom container should be set.
-
-### customWrapper - *String*
-In some cases, you want to use your own wrapper instead of the one created by the plugin. If you specify your custom wrapper, the plugin will add the "simpleParallax" class along with an "overflow: hidden" style.
+The transition setting is linked with the delay setting. It applies any CSS transition to the delay setting, such as ease or ease-in-out.
 
 ### maxTransition - *Number* - see [example](https://simpleparallax.com#example-max-transition)
-The maxTransition setting should be used to stop the parallax animation after a given percentage. By default, it translates from 0% to 100% of the user viewport. You can change it here to any percentage you want.
+The maxTransition setting controls the extent of the parallax animation. By default, it translates from 0% to 100% of the user's viewport. You can adjust this to any percentage.
+
+### src - *String* - Vanilla version only
+This is the source of the image. It can be a local path or a URL.
+
+### customContainer - *String or Node* - Vanilla version only
+Parallax calculations default to the body scroll percentage. However, images may be in a container with its own scroll area. For accurate calculations, set a custom container.
+
+### customWrapper - *String* - Vanilla version only
+In some instances, you might want to use your own wrapper instead of the plugin's. Specifying a custom wrapper will add the simpleParallax class and an overflow: hidden style.
 
 ## Methods
 
