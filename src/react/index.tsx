@@ -92,10 +92,7 @@ const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
     <div
       ref={elementRef}
       style={{
-        display: "inline-block",
         overflow: overflow ? "visible" : "hidden",
-        width: "100%",
-        height: "100%",
       }}
     >
       {clonedChild}
