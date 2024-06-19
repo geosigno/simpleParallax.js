@@ -6,7 +6,7 @@ export type Orientation =
   | "up left"
   | "up right"
   | "down left"
-  | "left right";
+  | "down right";
 export interface SimpleParallaxProps {
   delay?: number;
   orientation?: Orientation;

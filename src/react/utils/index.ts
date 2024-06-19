@@ -41,7 +41,7 @@ export const getTranslateValue = (
         | 'up left'
         | 'up right'
         | 'down left'
-        | 'left right'
+        | 'down right'
 ) => {
     switch (orientation) {
         case 'up':
@@ -58,7 +58,7 @@ export const getTranslateValue = (
             return `${-value}px, ${value}px, 0`;
         case 'down left':
             return `${value}px, ${-value}px, 0`;
-        case 'left right':
+        case 'down right':
             return `${-value}px, ${-value}px, 0`;
         default:
             return `0, ${value}px, 0`;
