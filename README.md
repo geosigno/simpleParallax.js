@@ -1,6 +1,10 @@
-![simpleParallax logo](https://simpleparallax.b-cdn.net/images/logo.png?new=new)
-
-[![GitHub version](https://badge.fury.io/gh/geosenna%2FsimpleParallax.svg)](https://badge.fury.io/gh/geosenna%2FsimpleParallax)  [![](https://img.shields.io/npm/dm/simple-parallax-js)](https://www.npmjs.com/package/simple-parallax-js) [![GitHub issues](https://img.shields.io/github/issues/geosigno/simpleParallax.js.svg)](https://GitHub.com/geosigno/simpleParallax.js/issues/) [![](https://data.jsdelivr.com/v1/package/npm/simple-parallax-js/badge?style=rounded)](https://www.jsdelivr.com/package/npm/simple-parallax-js)
+<div align="center">
+<picture>
+  <source srcset="https://simpleparallax.com/logo-vertical-dark.png" media="(prefers-color-scheme: dark)">
+  <source srcset="https://simpleparallax.com/logo-vertical-light.png" media="(prefers-color-scheme: light)">
+  <img src="https://simpleparallax.com/logo-vertical-dark.png" alt="Logo" width="400" height="180" style="display:block;margin:0 auto;">
+</picture>
+</div>
 
 # simpleParallax.js
 
