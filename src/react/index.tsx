@@ -49,9 +49,6 @@ const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
       if (boundingClientRect) {
         setBoundingClientRect(boundingClientRect);
       }
-      if (!isInit) {
-        setIsInit(true);
-      }
       setViewportTop(window.scrollY);
     }
   }, [viewportTop, isVisible, imageRef]);
