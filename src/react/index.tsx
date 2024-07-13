@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import AnimationManager from "./AnimationManager";
 import useGetImageHeight from "./hooks/useGetImageHeight";
 import useGetTransitionValue from "./hooks/useGetTransitionValue";
@@ -73,17 +73,19 @@ const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
     };
   }, [updateParallax]);
 
-  const clonedChild = React.isValidElement(children)
-    ? React.cloneElement(children as React.ReactElement, {
-        style: {
-          ...((children as React.ReactElement).props.style ?? {}),
-          transform: transformCSS,
-          willChange: "transform",
-          transition: transitionCSS,
-        },
-        ref: imageRef,
-      })
-    : null;
+    const clonedChild = useMemo(() => {
+      return React.isValidElement(children)
+      ? React.cloneElement(children as React.ReactElement, {
+          style: {
+            ...((children as React.ReactElement).props.style ?? {}),
+            transform: transformCSS,
+            willChange: "transform",
+            transition: transitionCSS,
+          },
+          ref: imageRef,
+        })
+      : null;
+    }, [children, (children as React.ReactElement).props.style, transformCSS, transitionCSS])
 
   return (
     <div
