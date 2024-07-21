@@ -65,14 +65,14 @@ simply add the following JavaScript code :
 
 ```javascript
 const image = document.getElementsByClassName('thumbnail');
-new simpleParallax(image);
+new SimpleParallax(image);
 ```
 
 You can also choose to apply the parallax on multiple images :
 
 ```javascript
 const images = document.querySelectorAll('img');
-new simpleParallax(images);
+new SimpleParallax(images);
 ```
 
 Once simpleparallax has been correctly initialized, it adds the ```simple-parallax-initialized``` class on the container.
@@ -87,7 +87,7 @@ simpleParallax now works with video :
 
 ```javascript
 var video = document.getElementsByTagName('video');
-new simpleParallax(video);
+new SimpleParallax(video);
 ```
 
 ## Settings
@@ -146,7 +146,7 @@ const Component = () => (
 
 ```javascript
 var images = document.querySelectorAll('.thumbnail');
-new simpleParallax(images, {
+new SimpleParallax(images, {
     delay: 0,
     orientation: 'down',
     scale: 1.3,
@@ -190,7 +190,7 @@ Refresh a simpleParallax instance (to recalculate all the positions) :
 
 ```javascript
 var images = document.querySelectorAll('img');
-var instance = new simpleParallax(images);
+var instance = new SimpleParallax(images);
 instance.refresh();
 ```
 
@@ -201,7 +201,7 @@ Destroy a simpleParallax instance:
 
 ```javascript
 var images = document.querySelectorAll('img');
-var instance = new simpleParallax(images);
+var instance = new SimpleParallax(images);
 instance.destroy();
 ```
 
