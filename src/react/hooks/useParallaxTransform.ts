@@ -1,5 +1,7 @@
+// Updated useParallaxTransform.ts - Combines PassiveScrollManager + AnimationManager
 import { useCallback, useEffect, useState } from "react";
-import AnimationManager from "../AnimationManager";
+import AnimationManager from "../manager/AnimationManager";
+import PassiveScrollManager from "../manager/PassiveScrollManager";
 import { Orientation } from "../types";
 import useGetTransitionValue from "./useGetTransitionValue";
 import useReducedMotion from "./useReduceMotion";
@@ -30,7 +32,7 @@ export const useParallaxTransform = ({
 	imageRef,
 }: UseParallaxTransformProps) => {
 	const [isInit, setIsInit] = useState(false);
-	const [viewportTop, setViewportTop] = useState(0);
+	const [lastScrollY, setLastScrollY] = useState(0);
 	const [boundingClientRect, setBoundingClientRect] = useState<DOMRect | null>(
 		null
 	);
@@ -38,7 +40,32 @@ export const useParallaxTransform = ({
 
 	const prefersReducedMotion = useReducedMotion();
 
-	// Use the existing hook for calculating transition values
+	const updateParallax = useCallback(() => {
+		if (prefersReducedMotion || (isInit && !isVisible)) {
+			return;
+		}
+
+		const currentScrollY = PassiveScrollManager.getScrollY();
+
+		if (isInit && currentScrollY === lastScrollY) {
+			return;
+		}
+
+		const newBoundingClientRect = imageRef.current?.getBoundingClientRect();
+		if (newBoundingClientRect) {
+			setBoundingClientRect(newBoundingClientRect);
+		}
+
+		if (!isInit) {
+			setTimeout(() => {
+				setShouldApplyTransition(true);
+				setIsInit(true);
+			}, 50);
+		}
+
+		setLastScrollY(currentScrollY);
+	}, [prefersReducedMotion, isVisible, isInit, lastScrollY, imageRef]);
+
 	const transitionValue = useGetTransitionValue({
 		isLoaded,
 		imageHeight,
@@ -48,7 +75,6 @@ export const useParallaxTransform = ({
 		maxTransition,
 	});
 
-	// Direct DOM manipulation for transforms
 	const applyTransform = useCallback(
 		(transformValue: string) => {
 			if (!imageRef.current || prefersReducedMotion || !transformValue) return;
@@ -63,7 +89,6 @@ export const useParallaxTransform = ({
 		[imageRef, scale, overflow, prefersReducedMotion]
 	);
 
-	// Simplified transition management (React's useEffect handles the caching)
 	const manageTransition = useCallback(
 		(shouldApply: boolean) => {
 			if (!imageRef.current || prefersReducedMotion) return;
@@ -76,59 +101,35 @@ export const useParallaxTransform = ({
 		[imageRef, delay, transition, prefersReducedMotion]
 	);
 
-	// Optimized parallax update function
-	const updateParallax = useCallback(() => {
-		if ((!isVisible && isInit) || prefersReducedMotion) {
-			return;
+	useEffect(() => {
+		if (isVisible && !prefersReducedMotion) {
+			AnimationManager.register(updateParallax);
+		} else {
+			AnimationManager.unregister(updateParallax);
 		}
 
-		if (window.scrollY !== viewportTop || !isInit) {
-			const newBoundingClientRect = imageRef.current?.getBoundingClientRect();
-			if (newBoundingClientRect) {
-				setBoundingClientRect(newBoundingClientRect);
-			}
-			if (!isInit) {
-				// Enable transitions after first calculation
-				setTimeout(() => {
-					setShouldApplyTransition(true);
-				}, 50);
-			}
-			setViewportTop(window.scrollY);
-		}
-	}, [viewportTop, isVisible, imageRef, isInit, prefersReducedMotion]);
+		return () => {
+			AnimationManager.unregister(updateParallax);
+		};
+	}, [isVisible, prefersReducedMotion, updateParallax]);
 
-	// Apply transform when transitionValue changes
 	useEffect(() => {
 		if (transitionValue && (isVisible || !isInit)) {
 			applyTransform(transitionValue);
-			setIsInit(true);
+			if (!isInit) setIsInit(true);
 		}
 	}, [transitionValue, isVisible, isInit, applyTransform]);
 
-	// Handle initial scale for non-overflow mode
 	useEffect(() => {
 		if (!overflow && isLoaded && imageRef.current && !prefersReducedMotion) {
 			imageRef.current.style.transform = `scale(${scale})`;
 		}
 	}, [scale, overflow, isLoaded, prefersReducedMotion]);
 
-	// Manage transitions
 	useEffect(() => {
 		manageTransition(shouldApplyTransition);
 	}, [shouldApplyTransition, manageTransition]);
 
-	// Setup animation manager
-	useEffect(() => {
-		if (!prefersReducedMotion) {
-			AnimationManager.register(updateParallax);
-		}
-
-		return () => {
-			AnimationManager.unregister(updateParallax);
-		};
-	}, [updateParallax, prefersReducedMotion]);
-
-	// Cleanup on reduced motion
 	useEffect(() => {
 		if (prefersReducedMotion && imageRef.current) {
 			imageRef.current.style.transform = "";
