@@ -18,11 +18,7 @@ const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
 	const src = (children as React.ReactElement)?.props?.src;
 
 	const [imageRef, imageHeight, isLoaded] = useGetImageHeight(src);
-	const [elementRef, isVisible] = useIntersectionObserver<HTMLDivElement>({
-		root: null,
-		rootMargin: "0px",
-		threshold: Array.from(Array(101).keys(), (n) => n / 100),
-	});
+	const [elementRef, isVisible] = useIntersectionObserver<HTMLDivElement>();
 
 	useParallaxTransform({
 		scale,
