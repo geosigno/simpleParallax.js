@@ -89,17 +89,16 @@ export const useParallaxTransform = ({
 		[imageRef, scale, overflow, prefersReducedMotion]
 	);
 
-	const manageTransition = useCallback(
-		(shouldApply: boolean) => {
-			if (!imageRef.current || prefersReducedMotion) return;
+	const manageTransition = useCallback(() => {
+		if (!imageRef.current || prefersReducedMotion) return;
 
-			const transitionValue =
-				shouldApply && delay > 0 ? `transform ${delay}s ${transition}` : "";
+		// Skip transitions for Safari due to performance issues
+		const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		const transitionValue =
+			delay > 0 && !isSafari ? `all ${delay}s ${transition}` : "";
 
-			imageRef.current.style.transition = transitionValue;
-		},
-		[imageRef, delay, transition, prefersReducedMotion]
-	);
+		imageRef.current.style.transition = transitionValue;
+	}, [imageRef, delay, transition, prefersReducedMotion]);
 
 	useEffect(() => {
 		if (isVisible && !prefersReducedMotion) {
@@ -127,7 +126,9 @@ export const useParallaxTransform = ({
 	}, [scale, overflow, isLoaded, prefersReducedMotion]);
 
 	useEffect(() => {
-		manageTransition(shouldApplyTransition);
+		if (!shouldApplyTransition) return;
+
+		manageTransition();
 	}, [shouldApplyTransition, manageTransition]);
 
 	useEffect(() => {
