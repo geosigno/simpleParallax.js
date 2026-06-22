@@ -1,12 +1,5 @@
-export type Orientation =
-	| "up"
-	| "right"
-	| "down"
-	| "left"
-	| "up left"
-	| "up right"
-	| "down left"
-	| "down right";
+import { Orientation } from "../../core/types";
+
 export interface SimpleParallaxProps {
 	delay?: number;
 	orientation?: Orientation;

@@ -1,20 +1,19 @@
 import React from "react";
+import { DEFAULTS } from "../core/constants";
 import useGetImageHeight from "./hooks/useGetImageHeight";
 import useIntersectionObserver from "./hooks/useIntersectionObserver";
 import { useParallaxTransform } from "./hooks/useParallaxTransform";
 import { SimpleParallaxProps } from "./types";
 
 const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
-	delay = 0.4,
-	orientation: orientationProp = "up",
-	scale: scaleProp = 1.4,
-	overflow = false,
-	transition = "cubic-bezier(0,0,0,1)",
-	maxTransition = null,
+	delay = DEFAULTS.delay,
+	orientation = DEFAULTS.orientation,
+	scale = DEFAULTS.scale,
+	overflow = DEFAULTS.overflow,
+	transition = DEFAULTS.transition,
+	maxTransition = DEFAULTS.maxTransition,
 	children,
 }) => {
-	const orientation = orientationProp ?? "up";
-	const scale = scaleProp ?? 1.2;
 	const src = (children as React.ReactElement<{ src?: string }>)?.props?.src;
 
 	const [imageRef, imageHeight, isLoaded] = useGetImageHeight(src);
@@ -26,7 +25,7 @@ const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
 		delay,
 		transition,
 		orientation,
-		maxTransition,
+		maxTransition: maxTransition ?? 0,
 		isVisible,
 		isLoaded,
 		imageHeight,

@@ -1,9 +1,9 @@
-// Updated useParallaxTransform.ts - Combines PassiveScrollManager + AnimationManager
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { applyMaxTransition, getProgress, getRange, getTranslate } from "../../core/math";
+import { buildTransform, buildTransition } from "../../core/transform";
+import { Orientation } from "../../core/types";
 import AnimationManager from "../manager/AnimationManager";
 import PassiveScrollManager from "../manager/PassiveScrollManager";
-import { Orientation } from "../types";
-import useGetTransitionValue from "./useGetTransitionValue";
 import useReducedMotion from "./useReduceMotion";
 
 interface UseParallaxTransformProps {
@@ -12,7 +12,7 @@ interface UseParallaxTransformProps {
 	delay: number;
 	transition: string;
 	orientation: Orientation;
-	maxTransition: number | null;
+	maxTransition: number;
 	isVisible: boolean;
 	isLoaded: boolean;
 	imageHeight: number;
@@ -31,110 +31,85 @@ export const useParallaxTransform = ({
 	imageHeight,
 	imageRef,
 }: UseParallaxTransformProps) => {
-	const [isInit, setIsInit] = useState(false);
-	const [lastScrollY, setLastScrollY] = useState(0);
-	const [boundingClientRect, setBoundingClientRect] = useState<DOMRect | null>(
-		null
-	);
-	const [shouldApplyTransition, setShouldApplyTransition] = useState(false);
-
 	const prefersReducedMotion = useReducedMotion();
 
-	const updateParallax = useCallback(() => {
-		if (prefersReducedMotion || (isInit && !isVisible)) {
-			return;
-		}
+	// Valeurs par-frame en ref : aucun re-render au scroll.
+	const lastScrollY = useRef<number>(-1);
+	const hasInit = useRef<boolean>(false);
 
-		const currentScrollY = PassiveScrollManager.getScrollY();
+	// Calcule et applique le transform directement sur l'élément (dans le RAF).
+	const render = useCallback(() => {
+		const el = imageRef.current;
+		if (!el || prefersReducedMotion) return;
 
-		if (isInit && currentScrollY === lastScrollY) {
-			return;
-		}
+		const scrollY = PassiveScrollManager.getScrollY();
+		if (hasInit.current && scrollY === lastScrollY.current) return;
+		lastScrollY.current = scrollY;
 
-		const newBoundingClientRect = imageRef.current?.getBoundingClientRect();
-		if (newBoundingClientRect) {
-			setBoundingClientRect(newBoundingClientRect);
-		}
+		const rect = el.getBoundingClientRect();
+		const viewportHeight = window.innerHeight;
 
-		if (!isInit) {
+		const progress = applyMaxTransition(
+			getProgress(rect.top, viewportHeight, rect.height),
+			maxTransition
+		);
+		const range = getRange(imageHeight, scale);
+		const value = getTranslate(progress, range);
+
+		el.style.transform = buildTransform(value, orientation, scale, overflow);
+
+		// La transition n'est appliquée qu'après le premier placement
+		// pour éviter un saut visuel à l'init.
+		if (!hasInit.current) {
+			hasInit.current = true;
 			setTimeout(() => {
-				setShouldApplyTransition(true);
-				setIsInit(true);
+				if (imageRef.current) {
+					imageRef.current.style.transition = buildTransition(delay, transition);
+				}
 			}, 50);
 		}
-
-		setLastScrollY(currentScrollY);
-	}, [prefersReducedMotion, isVisible, isInit, lastScrollY, imageRef]);
-
-	const transitionValue = useGetTransitionValue({
-		isLoaded,
+	}, [
+		imageRef,
+		prefersReducedMotion,
+		maxTransition,
 		imageHeight,
 		scale,
-		boundingClientRect: boundingClientRect as DOMRect,
 		orientation,
-		maxTransition,
-	});
+		overflow,
+		delay,
+		transition,
+	]);
 
-	const applyTransform = useCallback(
-		(transformValue: string) => {
-			if (!imageRef.current || prefersReducedMotion || !transformValue) return;
-
-			let transform = `translate3d(${transformValue})`;
-			if (!overflow) {
-				transform += ` scale(${scale})`;
-			}
-
-			imageRef.current.style.transform = transform;
-		},
-		[imageRef, scale, overflow, prefersReducedMotion]
-	);
-
-	const manageTransition = useCallback(() => {
-		if (!imageRef.current || prefersReducedMotion) return;
-
-		// Skip transitions for Safari due to performance issues
-		const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-		const transitionValue =
-			delay > 0 && !isSafari ? `all ${delay}s ${transition}` : "";
-
-		imageRef.current.style.transition = transitionValue;
-	}, [imageRef, delay, transition, prefersReducedMotion]);
-
+	// Enregistre dans la boucle RAF partagée uniquement quand l'élément est visible.
 	useEffect(() => {
 		if (isVisible && !prefersReducedMotion) {
-			AnimationManager.register(updateParallax);
+			AnimationManager.register(render);
 		} else {
-			AnimationManager.unregister(updateParallax);
+			AnimationManager.unregister(render);
 		}
+		return () => AnimationManager.unregister(render);
+	}, [isVisible, prefersReducedMotion, render]);
 
-		return () => {
-			AnimationManager.unregister(updateParallax);
-		};
-	}, [isVisible, prefersReducedMotion, updateParallax]);
-
+	// Applique le scale initial dès que l'image est chargée (avant tout scroll).
 	useEffect(() => {
-		if (transitionValue && (isVisible || !isInit)) {
-			applyTransform(transitionValue);
-			if (!isInit) setIsInit(true);
+		const el = imageRef.current;
+		if (!el || prefersReducedMotion || overflow || !isLoaded) return;
+		el.style.transform = `scale(${scale})`;
+	}, [imageRef, prefersReducedMotion, overflow, isLoaded, scale]);
+
+	// Place l'image une fois au montage, même sans scroll.
+	useEffect(() => {
+		if (isLoaded && !prefersReducedMotion) {
+			render();
 		}
-	}, [transitionValue, isVisible, isInit, applyTransform]);
+	}, [isLoaded, prefersReducedMotion, render]);
 
+	// Respecte prefers-reduced-motion : nettoie le style appliqué.
 	useEffect(() => {
-		if (!overflow && isLoaded && imageRef.current && !prefersReducedMotion) {
-			imageRef.current.style.transform = `scale(${scale})`;
+		const el = imageRef.current;
+		if (prefersReducedMotion && el) {
+			el.style.transform = "";
+			el.style.transition = "";
 		}
-	}, [scale, overflow, isLoaded, prefersReducedMotion]);
-
-	useEffect(() => {
-		if (!shouldApplyTransition) return;
-
-		manageTransition();
-	}, [shouldApplyTransition, manageTransition]);
-
-	useEffect(() => {
-		if (prefersReducedMotion && imageRef.current) {
-			imageRef.current.style.transform = "";
-			imageRef.current.style.transition = "";
-		}
-	}, [prefersReducedMotion]);
+	}, [imageRef, prefersReducedMotion]);
 };

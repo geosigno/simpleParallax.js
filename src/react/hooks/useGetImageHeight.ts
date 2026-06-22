@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { isImageLoaded } from "../../shared/imageLoaded";
 
 const useGetImageHeight = (src: string | undefined) => {
 	const [imageHeight, setImageHeight] = useState(0);
@@ -20,7 +21,7 @@ const useGetImageHeight = (src: string | undefined) => {
 		const imgElement = imageRef.current;
 		if (imgElement) {
 			// If the image is already loaded (cached), directly get its height
-			if (imgElement.complete) {
+			if (isImageLoaded(imgElement)) {
 				handleImageLoad();
 			} else {
 				imgElement.addEventListener("load", handleImageLoad);
