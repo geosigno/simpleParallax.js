@@ -26,7 +26,6 @@ const useOptimizedIntersectionObserver = <T extends Element>(): [
 		return () => {
 			if (element) {
 				IntersectionObserverManager.unobserve(element);
-				IntersectionObserverManager.disconnect();
 			}
 		};
 	}, []);
