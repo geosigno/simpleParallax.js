@@ -16,15 +16,18 @@ Give it a try!
 
 ## Installation
 
-Install the package via npm or yarn:
+Install the package with your favourite package manager:
 
 ```sh
-#npm
 npm install simple-parallax-js
-
-#yarn
 yarn add simple-parallax-js
+pnpm add simple-parallax-js
+bun add simple-parallax-js
 ```
+
+For the React version, `react` and `react-dom` are peer dependencies (`>= 17`) — they use the React already installed in your project.
+
+The package is written in TypeScript and ships type definitions for **both** entry points (React and vanilla), so no extra `@types` package is needed.
 
 Import it:
 
@@ -95,10 +98,10 @@ new SimpleParallax(video);
 Setting | Type | Default | Hint
 --- | --- | --- | ---
 orientation | String | up | up - right - down - left - up left - up right - down left - down right
-scale | Number | 1.3 | need to be above 1
+scale | Number | 1.5 | need to be above 1
 overflow | Boolean | false | 
-delay | Number | 0 | the delay is in second **Watch out, sometimes this delay is causing issue on iOS devices [#47](https://github.com/geosigno/simpleParallax.js/issues/47)**
-transition | String | '' | any CSS transition
+delay | Number | 0.4 | the delay is in second **Watch out, sometimes this delay is causing issue on iOS devices [#47](https://github.com/geosigno/simpleParallax.js/issues/47)**
+transition | String | 'cubic-bezier(0,0,0,1)' | any CSS transition
 maxTransition | Number | 0 | it should be a percentage between 1 and 99
 customContainer | String or Node | '' | (Vanilla version only)
 customWrapper | String | '' | the selector of the custom wrapper (Vanilla version only)
@@ -114,7 +117,7 @@ const Component = () => (
   <SimpleParallax 
     delay={0}
     orientation={"down"}
-    scale={1.3}
+    scale={1.5}
     overflow
     maxTransition={60}
   >
@@ -133,7 +136,7 @@ const Component = () => (
   <SimpleParallax 
     delay={0}
     orientation={"down"}
-    scale={1.3}
+    scale={1.5}
     overflow
     maxTransition={60}
   >
@@ -149,7 +152,7 @@ var images = document.querySelectorAll('.thumbnail');
 new SimpleParallax(images, {
     delay: 0,
     orientation: 'down',
-    scale: 1.3,
+    scale: 1.5,
     overflow: true,
     customContainer: '.container',
     customWrapper: '.wrapper'
@@ -173,9 +176,6 @@ The transition setting is linked with the delay setting. It applies any CSS tran
 
 ### maxTransition - *Number* - see [example](https://simpleparallax.com#example-max-transition)
 The maxTransition setting controls the extent of the parallax animation. By default, it translates from 0% to 100% of the user's viewport. You can adjust this to any percentage.
-
-### src - *String* - Vanilla version only
-This is the source of the image. It can be a local path or a URL.
 
 ### customContainer - *String or Node* - Vanilla version only
 Parallax calculations default to the body scroll percentage. However, images may be in a container with its own scroll area. For accurate calculations, set a custom container.
@@ -209,13 +209,14 @@ instance.destroy();
 You can find all the examples [here](https://simpleparallax.com/#examples).
 
 ## Compatibility
-| IE | Edge | Firefox | Chrome | Safari | Opera | iOS Safari |
-|---|---|---|---|---|---|---|
-| no support | 16+ | 55+ | 58+ | 12.1+ | 45+ | 12.2+ |
 
-Even though old browsers are not supported, the page won't crash. Simply, there will be no parallax.
+Since v7, the library ships modern **ES2020** code, so it targets recent evergreen browsers:
 
-If you want to support older browsers such as IE, you will need a polyfill for [closest()](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill) and [Intersection Observer](https://github.com/w3c/IntersectionObserver/tree/master/polyfill). Please note that even with polyfills, the parallax effect will not seem fluid.
+| Edge | Firefox | Chrome | Safari | Opera | iOS Safari |
+|---|---|---|---|---|---|
+| 80+ | 75+ | 80+ | 14+ | 67+ | 14+ |
+
+On older browsers that can't parse ES2020 syntax, the script won't run (you'll need to transpile it yourself, e.g. via your bundler's target). The library also relies on the [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver) and [closest()](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest) APIs, which are available in all the browsers above.
 
 ## Author
 
