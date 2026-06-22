@@ -14,5 +14,5 @@
     "sourceMap": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "playground"]
+  "exclude": ["node_modules", "dist", "playground", "**/*.test.ts"]
 }
