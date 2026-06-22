@@ -6,14 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const elements = document.querySelectorAll('img');
     
     for (let i = 0; i < elements.length; i++) {
+        // Mêmes paramètres que le playground React pour comparer les deux versions.
         new SimpleParallax(elements[i], {
-            // You can add plugin options here
-            delay: 0.6,
+            delay: 0.4,
             orientation: 'up',
-            scale: 1.2,
+            scale: 1.5,
             transition: 'cubic-bezier(0,0,0,1)',
-            customContainer: '',
-            customWrapper: '',
           });
     }
 });
