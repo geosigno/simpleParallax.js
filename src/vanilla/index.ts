@@ -1,3 +1,8 @@
+import { DEFAULTS } from "../core/constants";
+import {
+	onReducedMotionChange,
+	prefersReducedMotion,
+} from "../shared/reducedMotion";
 import convertToArray from "./helpers/convertToArray";
 import isSupportedBrowser from "./helpers/isSupportedBrowser";
 import { viewport } from "./helpers/viewport";
@@ -5,48 +10,51 @@ import { viewport } from "./helpers/viewport";
 import ParallaxInstance from "./instances/parallax";
 
 let isInit = false;
-let instances = [];
-let frameID;
-let resizeID;
+let instances: ParallaxInstance[] = [];
+let frameID: number;
+let resizeID: ReturnType<typeof setTimeout>;
 
 export default class SimpleParallax {
-	constructor(elements, options) {
+	prefersReducedMotion = false;
+	unsubscribeReducedMotion?: () => void;
+	elements: Element[] = [];
+	settings!: ParallaxInstance["settings"];
+	customContainer?: Element;
+	lastPosition = -1;
+
+	constructor(elements: string | Element | NodeList | HTMLCollection | Element[], options?: Partial<ParallaxInstance["settings"]>) {
 		if (!elements) return;
 
 		// check if the browser support simpleParallax
 		if (!isSupportedBrowser()) return;
 
 		// Check if user prefers reduced motion
-		this.prefersReducedMotion = window.matchMedia(
-			"(prefers-reduced-motion: reduce)"
-		).matches;
+		this.prefersReducedMotion = prefersReducedMotion();
 
-		// Set up listener for changes to reduced motion preference
-		this.reducedMotionMediaQuery = window.matchMedia(
-			"(prefers-reduced-motion: reduce)"
-		);
-		this.handleReducedMotionChange = this.handleReducedMotionChange.bind(this);
-		this.reducedMotionMediaQuery.addEventListener(
-			"change",
-			this.handleReducedMotionChange
-		);
+		// React to changes of the reduced motion preference
+		this.unsubscribeReducedMotion = onReducedMotionChange((reduced) => {
+			this.prefersReducedMotion = reduced;
+
+			if (reduced) {
+				// If user now prefers reduced motion, remove all parallax effects
+				this.destroy();
+			} else {
+				// If user no longer prefers reduced motion, reinitialize
+				this.init();
+			}
+		});
 
 		// If reduced motion is preferred, don't initialize parallax effects
 		if (this.prefersReducedMotion) return;
 
 		this.elements = convertToArray(elements);
-		this.defaults = {
-			delay: 0,
-			orientation: "up",
-			scale: 1.3,
-			overflow: false,
-			transition: "cubic-bezier(0,0,0,1)",
+
+		this.settings = {
+			...DEFAULTS,
 			customContainer: "",
 			customWrapper: "",
-			maxTransition: 0,
+			...options,
 		};
-
-		this.settings = Object.assign(this.defaults, options);
 
 		if (this.settings.customContainer) {
 			[this.customContainer] = convertToArray(this.settings.customContainer);
@@ -62,30 +70,17 @@ export default class SimpleParallax {
 		this.init();
 	}
 
-	// Handle changes to reduced motion preference
-	handleReducedMotionChange(event) {
-		this.prefersReducedMotion = event.matches;
-
-		if (this.prefersReducedMotion) {
-			// If user now prefers reduced motion, remove all parallax effects
-			this.destroy();
-		} else {
-			// If user no longer prefers reduced motion, reinitialize
-			this.init();
-		}
-	}
-
 	init() {
 		// Don't initialize if reduced motion is preferred
 		if (this.prefersReducedMotion) return;
 
-		viewport.setViewportAll(this.customContainer);
+		viewport.setViewportAll(this.customContainer as HTMLElement | undefined);
 
 		instances = [
 			...this.elements.map(
 				(element) =>
 					new ParallaxInstance(
-						element,
+						element as HTMLElement,
 						this.settings,
 						this.prefersReducedMotion
 					)
@@ -113,7 +108,7 @@ export default class SimpleParallax {
 	// animation frame
 	proceedRequestAnimationFrame() {
 		// get the offset top of the viewport
-		viewport.setViewportTop(this.customContainer);
+		viewport.setViewportTop(this.customContainer as HTMLElement | undefined);
 
 		if (this.lastPosition === viewport.positions.top) {
 			// if last position if the same than the curent one
@@ -139,7 +134,7 @@ export default class SimpleParallax {
 	}
 
 	// proceed the element
-	proceedElement(instance) {
+	proceedElement(instance: ParallaxInstance) {
 		let isVisible = false;
 
 		// if this is a custom container
@@ -165,7 +160,7 @@ export default class SimpleParallax {
 
 	refresh() {
 		// re-get all the viewport positions
-		viewport.setViewportAll(this.customContainer);
+		viewport.setViewportAll(this.customContainer as HTMLElement | undefined);
 
 		instances.forEach((instance) => {
 			// re-get the current element offset
@@ -180,15 +175,10 @@ export default class SimpleParallax {
 	}
 
 	destroy() {
-		// Remove reduced motion event listener
-		if (this.reducedMotionMediaQuery) {
-			this.reducedMotionMediaQuery.removeEventListener(
-				"change",
-				this.handleReducedMotionChange
-			);
-		}
+		// Remove reduced motion listener
+		this.unsubscribeReducedMotion?.();
 
-		const instancesToDestroy = [];
+		const instancesToDestroy: ParallaxInstance[] = [];
 
 		// remove all instances that need to be destroyed from the instances array
 		instances = instances.filter((instance) => {

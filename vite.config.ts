@@ -44,7 +44,7 @@ export default defineConfig(({ command, mode }) => {
       build: {
         outDir: "dist/vanilla",
         lib: {
-          entry: path.resolve(__dirname, "src/vanilla/index.js"),
+          entry: path.resolve(__dirname, "src/vanilla/index.ts"),
           name: "SimpleParallax",
           formats: ["es", "umd"],
           fileName: (format) => `simpleParallaxVanilla.${format}.js`,

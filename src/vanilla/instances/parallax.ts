@@ -1,9 +1,30 @@
+import { applyMaxTransition, getProgress, getRange, getTranslate } from "../../core/math";
+import { buildTransform, buildTransition } from "../../core/transform";
 import cssTransform from "../helpers/cssTransform";
-import isImageLoaded from "../helpers/isImageLoaded";
+import { isImageLoaded } from "../../shared/imageLoaded";
 import { viewport } from "../helpers/viewport";
 
 class ParallaxInstance {
-	constructor(element, options, prefersReducedMotion = false) {
+	element: HTMLElement;
+	elementContainer: HTMLElement;
+	settings: import("../../core/types").ParallaxOptions & {
+		customContainer?: string | HTMLElement;
+		customWrapper?: string;
+	};
+	isVisible = true;
+	isInit = false;
+	oldTranslateValue: number = -1;
+	oldProgress?: number;
+	translateValue = 0;
+	rangeMax: number | null = null;
+	elementHeight = 0;
+	elementTop = 0;
+	elementBottom = 0;
+	prefersReducedMotion: boolean;
+	customWrapper: HTMLElement | null;
+	observer?: IntersectionObserver;
+
+	constructor(element: HTMLElement, options: ParallaxInstance["settings"], prefersReducedMotion = false) {
 		// set the element & settings
 		this.element = element;
 		this.elementContainer = element;
@@ -18,7 +39,7 @@ class ParallaxInstance {
 		this.customWrapper =
 			this.settings.customWrapper &&
 			this.element.closest(this.settings.customWrapper)
-				? this.element.closest(this.settings.customWrapper)
+				? (this.element.closest(this.settings.customWrapper) as HTMLElement)
 				: null;
 
 		// Don't initialize if reduced motion is preferred
@@ -37,7 +58,7 @@ class ParallaxInstance {
 		}
 	}
 
-	init(asyncInit) {
+	init(asyncInit?: boolean) {
 		// Don't initialize if reduced motion is preferred
 		if (this.prefersReducedMotion) return;
 
@@ -56,7 +77,7 @@ class ParallaxInstance {
 		if (this.settings.overflow === false) {
 			// if overflow option is set to false
 			// wrap the element into a div to apply overflow
-			this.wrapElement(this.element);
+			this.wrapElement();
 		}
 
 		// apply the transform style on the image
@@ -102,14 +123,14 @@ class ParallaxInstance {
 		// create a .simpleParallax wrapper container
 		// if there is a custom wrapper
 		// override the wrapper with it
-		let wrapper = this.customWrapper || document.createElement("div");
+		const wrapper: HTMLElement = this.customWrapper || document.createElement("div");
 
 		wrapper.classList.add("simpleParallax");
 		wrapper.style.overflow = "hidden";
 
 		// append the image inside the new wrapper
 		if (!this.customWrapper) {
-			elementToWrap.parentNode.insertBefore(wrapper, elementToWrap);
+			elementToWrap.parentNode!.insertBefore(wrapper, elementToWrap);
 			wrapper.appendChild(elementToWrap);
 		}
 
@@ -134,7 +155,7 @@ class ParallaxInstance {
 		if (this.settings.overflow === false) {
 			// if overflow option is set to false
 			// add scale style so the image can be translated without getting out of its container
-			this.element.style[cssTransform] = `scale(${this.settings.scale})`;
+			(this.element.style as CSSStyleDeclaration & Record<string, string>)[cssTransform] = `scale(${this.settings.scale})`;
 		}
 
 		// add will-change CSS property to improve perfomance
@@ -144,14 +165,17 @@ class ParallaxInstance {
 	// apply the transition effect
 	setTransitionCSS() {
 		// add transition option
-		this.element.style.transition = `transform ${this.settings.delay}s ${this.settings.transition}`;
+		this.element.style.transition = buildTransition(
+			this.settings.delay,
+			this.settings.transition
+		);
 	}
 
 	// remove style of the element
 	unSetStyle() {
 		// remove will change inline style
 		this.element.style.willChange = "";
-		this.element.style[cssTransform] = "";
+		(this.element.style as CSSStyleDeclaration & Record<string, string>)[cssTransform] = "";
 		this.element.style.transition = "";
 	}
 
@@ -167,7 +191,7 @@ class ParallaxInstance {
 		if (this.settings.customContainer) {
 			// we need to do some calculation to get the position from the parent rather than the viewport
 			const parentPositions =
-				this.settings.customContainer.getBoundingClientRect();
+				(this.settings.customContainer as HTMLElement).getBoundingClientRect();
 			this.elementTop =
 				positions.top - parentPositions.top + viewport.positions.top;
 		}
@@ -177,7 +201,7 @@ class ParallaxInstance {
 
 	// build the Threshold array to cater change for every pixel scrolled
 	buildThresholdList() {
-		const thresholds = [];
+		const thresholds: number[] = [];
 		for (let i = 1.0; i <= this.elementHeight; i++) {
 			const ratio = i / this.elementHeight;
 			thresholds.push(ratio);
@@ -199,7 +223,7 @@ class ParallaxInstance {
 	}
 
 	// Intersection Observer Callback to set the element at visible state or not
-	intersectionObserverCallback(entries) {
+	intersectionObserverCallback(entries: IntersectionObserverEntry[]) {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
 				this.isVisible = true;
@@ -220,60 +244,34 @@ class ParallaxInstance {
 
 	// calculate the range between image will be translated
 	getRangeMax() {
-		// get the real height of the image without scale
-		const elementImageHeight = this.element.clientHeight;
-
-		// range is calculate with the image height by the scale
-		this.rangeMax =
-			elementImageHeight * this.settings.scale - elementImageHeight;
+		// range basé sur la hauteur réelle de l'image (sans scale)
+		this.rangeMax = getRange(this.element.clientHeight, this.settings.scale);
 	}
 
 	// get the percentage and the translate value to apply on the element
 	getTranslateValue() {
-		// calculate the % position of the element comparing to the viewport
-		// rounding percentage to a 1 number float to avoid unn unnecessary calculation
-		let percentage = (
-			(viewport.positions.bottom - this.elementTop) /
-			((viewport.positions.height + this.elementHeight) / 100)
-		).toFixed(1);
+		// top viewport-relatif, dérivé du cache (pas de getBoundingClientRect par frame)
+		const top = this.elementTop - viewport.positions.top;
+		const progress = applyMaxTransition(
+			getProgress(top, viewport.positions.height, this.elementHeight),
+			this.settings.maxTransition
+		);
 
-		// sometime the percentage exceeds 100 or goes below 0
-		percentage = Math.min(100, Math.max(0, percentage));
-
-		// if a maxTransition has been set, we round the percentage to that number
-		if (
-			this.settings.maxTransition !== 0 &&
-			percentage > this.settings.maxTransition
-		) {
-			percentage = this.settings.maxTransition;
-		}
-
-		// sometime the same percentage is returned
-		// if so we don't do anything
-		if (this.oldPercentage === percentage) {
+		if (this.oldProgress === progress) {
 			return false;
 		}
 
-		// if not range max is set, recalculate it
 		if (!this.rangeMax) {
 			this.getRangeMax();
 		}
 
-		// transform this % into the max range of the element
-		// rounding translateValue to a non float int - as minimum pixel for browser to render is 1 (no 0.5)
-		this.translateValue = (
-			(percentage / 100) * this.rangeMax -
-			this.rangeMax / 2
-		).toFixed(0);
+		this.translateValue = getTranslate(progress, this.rangeMax!);
 
-		// sometime the same translate value is returned
-		// if so we don't do anything
 		if (this.oldTranslateValue === this.translateValue) {
 			return false;
 		}
 
-		// store the current percentage
-		this.oldPercentage = percentage;
+		this.oldProgress = progress;
 		this.oldTranslateValue = this.translateValue;
 
 		return true;
@@ -281,39 +279,12 @@ class ParallaxInstance {
 
 	// animate the image
 	animate() {
-		let translateValueY = 0;
-		let translateValueX = 0;
-		let inlineCss;
-
-		if (
-			this.settings.orientation.includes("left") ||
-			this.settings.orientation.includes("right")
-		) {
-			// if orientation option is left or right
-			// use horizontal axe - X axe
-			translateValueX = `${this.settings.orientation.includes("left") ? this.translateValue * -1 : this.translateValue}px`;
-		}
-
-		if (
-			this.settings.orientation.includes("up") ||
-			this.settings.orientation.includes("down")
-		) {
-			// if orientation option is up or down
-			// use vertical axe - Y axe
-			translateValueY = `${this.settings.orientation.includes("up") ? this.translateValue * -1 : this.translateValue}px`;
-		}
-
-		// set style to apply to the element
-		if (this.settings.overflow === false) {
-			// if overflow option is set to false
-			// add the scale style
-			inlineCss = `translate3d(${translateValueX}, ${translateValueY}, 0) scale(${this.settings.scale})`;
-		} else {
-			inlineCss = `translate3d(${translateValueX}, ${translateValueY}, 0)`;
-		}
-
-		// add style on the element using the adequate CSS transform
-		this.element.style[cssTransform] = inlineCss;
+		(this.element.style as CSSStyleDeclaration & Record<string, string>)[cssTransform] = buildTransform(
+			this.translateValue,
+			this.settings.orientation,
+			this.settings.scale,
+			this.settings.overflow
+		);
 	}
 }
 
