@@ -46,6 +46,9 @@ class AnimationManager {
   }
 
   private startRAF(): void {
+    if (typeof window === "undefined") {
+      return;
+    }
     const animate = () => {
       for (const callback of this.callbacks) {
         callback();

@@ -6,6 +6,9 @@ class PassiveScrollManager {
   private scrollingListener: ((isScrolling: boolean) => void) | null = null;
 
   private constructor() {
+    if (typeof window === "undefined") {
+      return;
+    }
     window.addEventListener("scroll", this.handleScroll, { passive: true });
     this.currentScrollY = window.scrollY;
   }
