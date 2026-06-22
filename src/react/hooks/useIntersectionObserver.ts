@@ -7,7 +7,9 @@ const useOptimizedIntersectionObserver = <T extends Element>(): [
 ] => {
 	const [isVisible, setIsVisible] = useState(false);
 	const elementRef = useRef<T | null>(null);
-	const callbackRef = useRef<(visible: boolean) => void>();
+	const callbackRef = useRef<((visible: boolean) => void) | undefined>(
+		undefined
+	);
 
 	useEffect(() => {
 		callbackRef.current = (visible: boolean) => {

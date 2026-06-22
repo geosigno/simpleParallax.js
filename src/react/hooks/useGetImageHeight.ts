@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const useGetImageHeight = (src: string) => {
+const useGetImageHeight = (src: string | undefined) => {
 	const [imageHeight, setImageHeight] = useState(0);
 	const [isLoaded, setIsLoaded] = useState(false);
 	const imageRef = useRef<HTMLImageElement | null>(null);

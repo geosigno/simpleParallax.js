@@ -16,7 +16,7 @@ interface UseParallaxTransformProps {
 	isVisible: boolean;
 	isLoaded: boolean;
 	imageHeight: number;
-	imageRef: React.RefObject<HTMLImageElement>;
+	imageRef: React.RefObject<HTMLImageElement | null>;
 }
 
 export const useParallaxTransform = ({

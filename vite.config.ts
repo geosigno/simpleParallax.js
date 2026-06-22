@@ -8,10 +8,8 @@ export default defineConfig(({ command, mode }) => {
     return {
       plugins: [
         react({
-          jsxRuntime: 'classic'
-        }
-          
-        ),
+          jsxRuntime: "classic",
+        }),
         dts({
           rollupTypes: true,
           include: "src/react",
@@ -21,7 +19,7 @@ export default defineConfig(({ command, mode }) => {
         outDir: "dist/react",
         lib: {
           entry: path.resolve(__dirname, "src/react/index.tsx"),
-          name: "MyReactLibrary",
+          name: "SimpleParallax",
           formats: ["es", "umd"],
           fileName: (format) => `simpleParallax.${format}.js`,
         },

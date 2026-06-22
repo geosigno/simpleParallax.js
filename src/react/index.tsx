@@ -15,7 +15,7 @@ const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
 }) => {
 	const orientation = orientationProp ?? "up";
 	const scale = scaleProp ?? 1.2;
-	const src = (children as React.ReactElement)?.props?.src;
+	const src = (children as React.ReactElement<{ src?: string }>)?.props?.src;
 
 	const [imageRef, imageHeight, isLoaded] = useGetImageHeight(src);
 	const [elementRef, isVisible] = useIntersectionObserver<HTMLDivElement>();
@@ -34,9 +34,14 @@ const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
 	});
 
 	const clonedChild = React.isValidElement(children)
-		? React.cloneElement(children as React.ReactElement, {
-				ref: imageRef,
-			})
+		? React.cloneElement(
+				children as React.ReactElement<{
+					ref?: React.Ref<HTMLImageElement>;
+				}>,
+				{
+					ref: imageRef,
+				}
+			)
 		: null;
 
 	return (
