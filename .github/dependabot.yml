@@ -1,0 +1,16 @@
+version: 2
+updates:
+  # Dépendances npm (package.json). Regroupées en une seule PR hebdo pour limiter le bruit.
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    groups:
+      dependencies:
+        patterns: ["*"]
+
+  # Actions GitHub utilisées dans les workflows.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly

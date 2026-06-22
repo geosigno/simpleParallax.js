@@ -3,16 +3,16 @@ import {
   getProgress,
   getRange,
   getTranslate,
-} from "../../core/math";
-import { buildTransform, buildTransition } from "../../core/transform";
-import { isImageLoaded } from "../../shared/image-loaded";
-import cssTransform from "../helpers/css-transform";
-import { viewport } from "../helpers/viewport";
+} from "../../core/math.js";
+import { buildTransform, buildTransition } from "../../core/transform.js";
+import { isImageLoaded } from "../../shared/image-loaded.js";
+import cssTransform from "../helpers/css-transform.js";
+import { viewport } from "../helpers/viewport.js";
 
 class ParallaxInstance {
   element: HTMLElement;
   elementContainer: HTMLElement;
-  settings: import("../../core/types").ParallaxOptions & {
+  settings: import("../../core/types.js").ParallaxOptions & {
     customContainer?: string | HTMLElement;
     customWrapper?: string;
   };

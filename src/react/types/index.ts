@@ -1,4 +1,4 @@
-import type { Orientation } from "../../core/types";
+import type { Orientation } from "../../core/types.js";
 
 export interface SimpleParallaxProps {
   children?: React.ReactNode;

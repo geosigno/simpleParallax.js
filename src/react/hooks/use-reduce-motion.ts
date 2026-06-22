@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   onReducedMotionChange,
   prefersReducedMotion,
-} from "../../shared/reduced-motion";
+} from "../../shared/reduced-motion.js";
 
 const useReducedMotion = (): boolean => {
   const [reduced, setReduced] = useState<boolean>(false);

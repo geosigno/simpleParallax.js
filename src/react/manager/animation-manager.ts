@@ -1,4 +1,4 @@
-import PassiveScrollManager from "./passive-scroll-manager";
+import PassiveScrollManager from "./passive-scroll-manager.js";
 
 class AnimationManager {
   private static instance: AnimationManager;

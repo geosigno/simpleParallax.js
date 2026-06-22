@@ -1,0 +1,41 @@
+name: Release
+
+# Se déclenche quand tu publies une Release sur GitHub (flux manuel "type zustand").
+on:
+  release:
+    types: [published]
+
+# OIDC Trusted Publishing : id-token génère un jeton éphémère + la provenance.
+# Aucun NPM_TOKEN nécessaire.
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # npm (pas bun) gère l'OIDC ; Node 24 + npm@latest garantit npm >= 11.5.1.
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: Ensure npm supports trusted publishing
+        run: npm install -g npm@latest
+
+      # `npm publish` déclenche `prepublishOnly` (build + publint + attw),
+      # puis publie avec provenance (via publishConfig) sans token grâce à l'OIDC.
+      - name: Publish to npm
+        run: npm publish

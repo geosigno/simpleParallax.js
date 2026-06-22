@@ -1,9 +1,9 @@
 import React from "react";
-import { DEFAULTS } from "../core/constants";
-import useGetImageHeight from "./hooks/use-get-image-height";
-import useIntersectionObserver from "./hooks/use-intersection-observer";
-import { useParallaxTransform } from "./hooks/use-parallax-transform";
-import type { SimpleParallaxProps } from "./types";
+import { DEFAULTS } from "../core/constants.js";
+import useGetImageHeight from "./hooks/use-get-image-height.js";
+import useIntersectionObserver from "./hooks/use-intersection-observer.js";
+import { useParallaxTransform } from "./hooks/use-parallax-transform.js";
+import type { SimpleParallaxProps } from "./types/index.js";
 
 const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
   delay = DEFAULTS.delay,

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { isImageLoaded } from "../../shared/image-loaded";
+import { isImageLoaded } from "../../shared/image-loaded.js";
 
 const useGetImageHeight = (_src: string | undefined) => {
   const [imageHeight, setImageHeight] = useState(0);

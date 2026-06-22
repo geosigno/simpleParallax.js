@@ -1,9 +1,12 @@
 {
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.3",
     "@biomejs/biome": "2.4.16",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.2",
+    "lefthook": "^2.1.9",
+    "publint": "^0.3.21",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "typescript": "^6.0.0",
@@ -25,7 +28,10 @@
     "test": "bun test",
     "typecheck": "tsc --noEmit",
     "check": "ultracite check",
-    "fix": "ultracite fix"
+    "fix": "ultracite fix",
+    "lint:pkg": "publint && attw --pack . --ignore-rules cjs-resolves-to-esm unexpected-module-syntax false-export-default no-resolution",
+    "prepare": "lefthook install",
+    "prepublishOnly": "bun run build && bun run lint:pkg"
   },
   "type": "module",
   "version": "6.3.3",
@@ -33,7 +39,7 @@
   "homepage": "https://simpleparallax.com/",
   "main": "dist/react/simpleParallax.umd.js",
   "module": "dist/react/simpleParallax.es.js",
-  "types": "dist/react/index.d.ts",
+  "types": "dist/react/src/react/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/geosigno/simpleParallax.git"
@@ -45,13 +51,22 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/react/src/react/index.d.ts",
       "import": "./dist/react/simpleParallax.es.js",
-      "require": "./dist/react/simpleParallax.umd.js",
-      "types": "./dist/react/index.d.ts"
+      "require": "./dist/react/simpleParallax.umd.js"
     },
     "./vanilla": {
+      "types": "./dist/vanilla/src/vanilla/index.d.ts",
       "import": "./dist/vanilla/simpleParallaxVanilla.es.js",
       "require": "./dist/vanilla/simpleParallaxVanilla.umd.js"
     }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }

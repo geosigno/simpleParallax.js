@@ -4,12 +4,12 @@ import {
   getProgress,
   getRange,
   getTranslate,
-} from "../../core/math";
-import { buildTransform, buildTransition } from "../../core/transform";
-import type { Orientation } from "../../core/types";
-import AnimationManager from "../manager/animation-manager";
-import PassiveScrollManager from "../manager/passive-scroll-manager";
-import useReducedMotion from "./use-reduce-motion";
+} from "../../core/math.js";
+import { buildTransform, buildTransition } from "../../core/transform.js";
+import type { Orientation } from "../../core/types.js";
+import AnimationManager from "../manager/animation-manager.js";
+import PassiveScrollManager from "../manager/passive-scroll-manager.js";
+import useReducedMotion from "./use-reduce-motion.js";
 
 interface UseParallaxTransformProps {
   delay: number;

@@ -11,8 +11,7 @@ export default defineConfig(({ mode }) => {
           jsxRuntime: "classic",
         }),
         dts({
-          rollupTypes: true,
-          include: "src/react",
+          include: ["src/react", "src/core", "src/shared"],
         }),
       ],
       build: {
@@ -42,6 +41,11 @@ export default defineConfig(({ mode }) => {
   }
   if (mode === "vanilla") {
     return {
+      plugins: [
+        dts({
+          include: ["src/vanilla", "src/core", "src/shared"],
+        }),
+      ],
       build: {
         outDir: "dist/vanilla",
         lib: {

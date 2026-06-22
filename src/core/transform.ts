@@ -1,4 +1,4 @@
-import type { Orientation } from "./types";
+import type { Orientation } from "./types.js";
 
 // Convention de signes pour une progression NON inversée (p=0 à l'entrée par le bas).
 // "up" fait monter l'image (Y négatif) quand on scrolle vers le bas.

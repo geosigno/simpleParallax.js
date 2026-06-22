@@ -1,0 +1,8 @@
+# Hooks git locaux. Installés via le script `prepare` (bun install) ou `bunx lefthook install`.
+pre-commit:
+  parallel: true
+  jobs:
+    - name: ultracite
+      run: bunx ultracite fix {staged_files}
+      glob: "*.{js,ts,jsx,tsx,json,jsonc,css}"
+      stage_fixed: true

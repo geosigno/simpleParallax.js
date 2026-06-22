@@ -4,5 +4,14 @@
     "ultracite/biome/core",
     "ultracite/biome/vitest",
     "ultracite/biome/react"
-  ]
+  ],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "master"
+  },
+  "files": {
+    "includes": ["!**/.claude"]
+  }
 }

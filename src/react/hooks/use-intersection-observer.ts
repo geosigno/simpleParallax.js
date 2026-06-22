@@ -1,5 +1,5 @@
 import { type MutableRefObject, useEffect, useRef, useState } from "react";
-import IntersectionObserverManager from "../manager/intersection-observer-manager";
+import IntersectionObserverManager from "../manager/intersection-observer-manager.js";
 
 const useOptimizedIntersectionObserver = <T extends Element>(): [
   MutableRefObject<T | null>,
