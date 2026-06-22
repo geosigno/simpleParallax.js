@@ -34,7 +34,7 @@
     "prepublishOnly": "bun run build && bun run lint:pkg"
   },
   "type": "module",
-  "version": "6.3.3",
+  "version": "7.0.0",
   "description": "simpleParallax.js is a lightweight and easy-to-use JS library that adds parallax animations to any image.",
   "homepage": "https://simpleparallax.com/",
   "main": "dist/react/simpleParallax.umd.js",
