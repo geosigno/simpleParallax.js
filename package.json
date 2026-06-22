@@ -42,12 +42,12 @@
   "types": "dist/react/src/react/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/geosigno/simpleParallax.git"
+    "url": "git+https://github.com/geosigno/simpleParallax.js.git"
   },
   "author": "Geoffrey Signorato <geoffrey.signorato@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/geosigno/simpleParallax/issues"
+    "url": "https://github.com/geosigno/simpleParallax.js/issues"
   },
   "exports": {
     ".": {
