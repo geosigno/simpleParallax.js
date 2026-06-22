@@ -1,11 +1,11 @@
-import { Orientation } from "../../core/types";
+import type { Orientation } from "../../core/types";
 
 export interface SimpleParallaxProps {
-	delay?: number;
-	orientation?: Orientation;
-	scale?: number;
-	overflow?: boolean;
-	transition?: string;
-	maxTransition?: number | null;
-	children?: React.ReactNode;
+  children?: React.ReactNode;
+  delay?: number;
+  maxTransition?: number | null;
+  orientation?: Orientation;
+  overflow?: boolean;
+  scale?: number;
+  transition?: string;
 }

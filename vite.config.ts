@@ -1,9 +1,9 @@
+import path from "node:path";
 import react from "@vitejs/plugin-react";
-import path from "path";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ mode }) => {
   if (mode === "react") {
     return {
       plugins: [
@@ -18,7 +18,7 @@ export default defineConfig(({ command, mode }) => {
       build: {
         outDir: "dist/react",
         lib: {
-          entry: path.resolve(__dirname, "src/react/index.tsx"),
+          entry: path.resolve(import.meta.dirname, "src/react/index.tsx"),
           name: "SimpleParallax",
           formats: ["es", "umd"],
           fileName: (format) => `simpleParallax.${format}.js`,
@@ -35,16 +35,17 @@ export default defineConfig(({ command, mode }) => {
       },
       resolve: {
         alias: {
-          "@": path.resolve(__dirname, "src"),
+          "@": path.resolve(import.meta.dirname, "src"),
         },
       },
     };
-  } else if (mode === "vanilla") {
+  }
+  if (mode === "vanilla") {
     return {
       build: {
         outDir: "dist/vanilla",
         lib: {
-          entry: path.resolve(__dirname, "src/vanilla/index.ts"),
+          entry: path.resolve(import.meta.dirname, "src/vanilla/index.ts"),
           name: "SimpleParallax",
           formats: ["es", "umd"],
           fileName: (format) => `simpleParallaxVanilla.${format}.js`,
@@ -55,7 +56,7 @@ export default defineConfig(({ command, mode }) => {
       },
       resolve: {
         alias: {
-          "@": path.resolve(__dirname, "src"),
+          "@": path.resolve(import.meta.dirname, "src"),
         },
       },
     };
