@@ -27,7 +27,7 @@ jobs:
 
       # npm (pas bun) gère l'OIDC ; Node 24 + npm@latest garantit npm >= 11.5.1.
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
