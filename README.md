@@ -8,9 +8,15 @@
 
 # simpleParallax.js
 
-simpleParallax.js is a lightweight and easy-to-use React and JS library that adds parallax animations to any image.
+[![npm version](https://img.shields.io/npm/v/simple-parallax-js.svg)](https://www.npmjs.com/package/simple-parallax-js)
+[![npm downloads](https://img.shields.io/npm/dm/simple-parallax-js.svg)](https://www.npmjs.com/package/simple-parallax-js)
+[![types included](https://img.shields.io/npm/types/simple-parallax-js.svg)](https://www.npmjs.com/package/simple-parallax-js)
+[![minzipped size](https://img.shields.io/bundlephobia/minzip/simple-parallax-js.svg)](https://bundlephobia.com/package/simple-parallax-js)
+[![license](https://img.shields.io/npm/l/simple-parallax-js.svg)](./LICENSE)
 
-While other plugins can be complex, simpleParallax.js is notable for its simplicity and impressive visual effects. The parallax effect is applied directly to image tags, eliminating the need for background images. Any image can be used. More info on the case study [here](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471).
+**simpleParallax.js** is a lightweight, easy-to-use **React** and vanilla-JavaScript library that adds a parallax effect to any image. It works out of the box with **React**, **Next.js**, and plain JavaScript — the effect is applied directly to your `<img>` tags, with no background images needed.
+
+While other plugins can be complex, simpleParallax.js is notable for its simplicity and impressive visual effects. Any image can be used. More info in the case study [here](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471).
 
 Give it a try!
 
