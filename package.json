@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.3",
-    "@biomejs/biome": "2.4.16",
+    "@biomejs/biome": "2.5.3",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.2",
@@ -9,8 +9,8 @@
     "publint": "^0.3.21",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "typescript": "^6.0.0",
-    "ultracite": "7.8.3",
+    "typescript": "^7.0.2",
+    "ultracite": "7.9.4",
     "vite": "^8.0.16",
     "vite-plugin-dts": "^5.0.2"
   },
