@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => {
         }),
         dts({
           include: ["src/react", "src/core", "src/shared"],
+          entryRoot: ".",
         }),
       ],
       build: {
@@ -44,6 +45,7 @@ export default defineConfig(({ mode }) => {
       plugins: [
         dts({
           include: ["src/vanilla", "src/core", "src/shared"],
+          entryRoot: ".",
         }),
       ],
       build: {
