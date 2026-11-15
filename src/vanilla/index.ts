@@ -154,7 +154,7 @@ export default class SimpleParallax {
       isVisible = instance.checkIfVisible();
       // else, use response from Intersection Observer API Callback
     } else {
-      isVisible = instance.isVisible;
+      ({ isVisible } = instance);
     }
 
     // if element not visible, stop it

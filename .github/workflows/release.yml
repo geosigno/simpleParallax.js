@@ -3,7 +3,7 @@ name: Release
 # Se déclenche quand tu publies une Release sur GitHub (flux manuel "type zustand").
 on:
   release:
-    types: [published]
+    types: [ published ]
 
 # OIDC Trusted Publishing : id-token génère un jeton éphémère + la provenance.
 # Aucun NPM_TOKEN nécessaire.

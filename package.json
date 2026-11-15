@@ -1,40 +1,5 @@
 {
-  "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.5",
-    "@biomejs/biome": "2.4.16",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@typescript/typescript6": "^6.0.2",
-    "@vitejs/plugin-react": "^6.3.0",
-    "lefthook": "^2.2.2",
-    "publint": "^0.3.25",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "typescript": "7",
-    "ultracite": "7.8.3",
-    "vite": "^8.3.8",
-    "vite-plugin-dts": "^5.1.2"
-  },
   "name": "simple-parallax-js",
-  "peerDependencies": {
-    "react": ">=17.0.0",
-    "react-dom": ">=17.0.0"
-  },
-  "scripts": {
-    "build": "bun run build:react && bun run build:vanilla",
-    "build:react": "vite build --mode react",
-    "build:vanilla": "vite build --mode vanilla",
-    "dev:react": "vite playground/react",
-    "dev:vanilla": "vite playground/vanilla --mode vanilla",
-    "test": "bun test",
-    "typecheck": "tsc --noEmit",
-    "check": "ultracite check",
-    "fix": "ultracite fix",
-    "lint:pkg": "publint && attw --pack . --ignore-rules cjs-resolves-to-esm unexpected-module-syntax false-export-default no-resolution",
-    "prepare": "lefthook install",
-    "prepublishOnly": "bun run build && bun run lint:pkg"
-  },
-  "type": "module",
   "version": "7.0.0",
   "description": "A lightweight React & vanilla JavaScript library that adds a parallax effect to any image.",
   "keywords": [
@@ -53,18 +18,17 @@
     "nextjs"
   ],
   "homepage": "https://simpleparallax.com/",
-  "main": "dist/react/simpleParallax.umd.js",
-  "module": "dist/react/simpleParallax.es.js",
-  "types": "dist/react/src/react/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/geosigno/simpleParallax.js/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/geosigno/simpleParallax.js.git"
   },
-  "author": "Geoffrey Signorato <geoffrey.signorato@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/geosigno/simpleParallax.js/issues"
-  },
+  "author": "Geoffrey Signorato <geoffrey.signorato@gmail.com>",
+  "sideEffects": false,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/react/src/react/index.d.ts",
@@ -77,10 +41,46 @@
       "require": "./dist/vanilla/simpleParallaxVanilla.umd.js"
     }
   },
+  "main": "dist/react/simpleParallax.umd.js",
+  "module": "dist/react/simpleParallax.es.js",
+  "types": "dist/react/src/react/index.d.ts",
   "files": [
     "dist"
   ],
-  "sideEffects": false,
+  "scripts": {
+    "build": "bun run build:react && bun run build:vanilla",
+    "build:react": "vite build --mode react",
+    "build:vanilla": "vite build --mode vanilla",
+    "check": "ultracite check",
+    "dev:react": "vite playground/react",
+    "dev:vanilla": "vite playground/vanilla --mode vanilla",
+    "fix": "ultracite fix",
+    "lint:pkg": "publint && attw --pack . --ignore-rules cjs-resolves-to-esm unexpected-module-syntax false-export-default no-resolution",
+    "prepare": "lefthook install",
+    "prepublishOnly": "bun run build && bun run lint:pkg",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@biomejs/biome": "2.6.7",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@typescript/typescript6": "^6.0.2",
+    "@vitejs/plugin-react": "^6.3.0",
+    "lefthook": "^2.2.2",
+    "publint": "^0.3.25",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "7",
+    "ultracite": "8.2.1",
+    "vite": "^8.3.8",
+    "vite-plugin-dts": "^5.1.2"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0"
+  },
   "publishConfig": {
     "access": "public",
     "provenance": true

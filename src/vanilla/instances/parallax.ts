@@ -225,7 +225,7 @@ class ParallaxInstance {
   // build the Threshold array to cater change for every pixel scrolled
   buildThresholdList() {
     const thresholds: number[] = [];
-    for (let i = 1.0; i <= this.elementHeight; i++) {
+    for (let i = 1.0; i <= this.elementHeight; i += 1) {
       const ratio = i / this.elementHeight;
       thresholds.push(ratio);
     }

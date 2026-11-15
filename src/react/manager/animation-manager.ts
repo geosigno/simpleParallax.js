@@ -23,7 +23,7 @@ class AnimationManager {
 
   register(callback: () => void): void {
     this.callbacks.add(callback);
-    this.visibleElementsCount++;
+    this.visibleElementsCount += 1;
     this.updateRAFState();
   }
 

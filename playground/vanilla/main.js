@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   for (const element of elements) {
     // Mêmes paramètres que le playground React pour comparer les deux versions.
+    // biome-ignore lint/correctness/noUnusedInstantiation: le constructeur applique l'effet (effet de bord voulu)
     new SimpleParallax(element, {
       delay: 0.4,
       orientation: "up",

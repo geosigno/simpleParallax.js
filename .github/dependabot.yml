@@ -7,7 +7,7 @@ updates:
       interval: weekly
     groups:
       dependencies:
-        patterns: ["*"]
+        patterns: [ "*" ]
 
   # Actions GitHub utilisées dans les workflows.
   - package-ecosystem: github-actions

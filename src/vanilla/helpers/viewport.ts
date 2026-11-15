@@ -28,4 +28,3 @@ class Viewport {
 }
 
 export const viewport = new Viewport();
-export default viewport;

@@ -13,5 +13,14 @@
   },
   "files": {
     "includes": ["!**/.claude"]
+  },
+  "linter": {
+    "rules": {
+      "suspicious": {
+        // Faux positifs : Biome 2.6 infère le littéral (`false`) pour les champs de
+        // classe initialisés puis mutés (singletons, flags), là où TS infère `boolean`.
+        "noUnnecessaryConditions": "off"
+      }
+    }
   }
 }
