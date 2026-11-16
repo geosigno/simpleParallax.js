@@ -102,6 +102,16 @@ export const useParallaxTransform = ({
     return () => AnimationManager.unregister(render);
   }, [isVisible, prefersReducedMotion, render]);
 
+  // Répercute un changement de delay / transition après l'init
+  // (la transition initiale n'est posée qu'une fois dans render).
+  useEffect(() => {
+    const el = imageRef.current;
+    if (!(el && hasInit.current) || prefersReducedMotion) {
+      return;
+    }
+    el.style.transition = buildTransition(delay, transition);
+  }, [imageRef, prefersReducedMotion, delay, transition]);
+
   // Applique le scale initial dès que l'image est chargée (avant tout scroll).
   useEffect(() => {
     const el = imageRef.current;
