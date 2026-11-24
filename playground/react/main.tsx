@@ -1,40 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import SimpleParallax from "../../src/react";
+import { createLab, type LabOptions } from "../shared/lab";
 
-// Structure identique au playground vanilla pour comparer les deux versions :
-// 5 images, mêmes paramètres, même layout.
-const images = ["one", "two", "three", "four", "five"];
+interface LabState {
+  imageCount: number;
+  options: LabOptions;
+}
 
-const App = () => (
-  <div style={{ maxWidth: "900px", margin: "0 auto", padding: "80vh 0" }}>
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(1, 1fr)",
-        gridGap: "40px",
-      }}
-    >
-      {images.map((id) => (
-        <SimpleParallax
-          delay={0.4}
-          key={id}
-          orientation="up"
-          scale={1.5}
-          transition="cubic-bezier(0,0,0,1)"
-        >
-          <img
-            alt="Parallax demo"
-            height={1728}
-            src="image.png"
-            style={{ width: "100%", height: "auto", display: "block" }}
-            width={3072}
-          />
-        </SimpleParallax>
-      ))}
-    </div>
-  </div>
-);
+// Même banc d'essai que le playground vanilla : les réglages arrivent en props.
+const App = () => {
+  const [lab, setLab] = useState<LabState | null>(null);
+
+  useEffect(
+    () =>
+      createLab({
+        engine: "react",
+        onChange: (options, imageCount) => setLab({ options, imageCount }),
+      }),
+    []
+  );
+
+  if (!lab) {
+    return null;
+  }
+
+  return (
+    <main className="stage">
+      {Array.from({ length: lab.imageCount }, (_, index) => index).map(
+        (index) => (
+          <figure className="frame" key={index}>
+            <SimpleParallax {...lab.options}>
+              <img
+                alt="Parallax demo"
+                height={1728}
+                src="image.png"
+                width={3072}
+              />
+            </SimpleParallax>
+          </figure>
+        )
+      )}
+    </main>
+  );
+};
 
 const container = document.querySelector("#root");
 if (!container) {

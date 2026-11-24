@@ -1,18 +1,18 @@
 import SimpleParallax from "../../src/vanilla/";
+import { createLab } from "../shared/lab.ts";
 
-// Ensure the DOM content is fully loaded before initializing the plugin
-document.addEventListener("DOMContentLoaded", () => {
-  // Select all elements with the class 'parallax'
-  const elements = document.querySelectorAll("img");
+const stage = document.querySelector(".stage");
+const FRAME = `<figure class="frame"><img alt="Parallax demo" src="image.png"></figure>`;
+let instance;
 
-  for (const element of elements) {
-    // Mêmes paramètres que le playground React pour comparer les deux versions.
-    // biome-ignore lint/correctness/noUnusedInstantiation: le constructeur applique l'effet (effet de bord voulu)
-    new SimpleParallax(element, {
-      delay: 0.4,
-      orientation: "up",
-      scale: 1.5,
-      transition: "cubic-bezier(0,0,0,1)",
-    });
-  }
+// Recrée l'effet à chaque changement d'un réglage du banc d'essai.
+createLab({
+  engine: "vanilla",
+  onChange: (options, imageCount) => {
+    instance?.destroy();
+    if (stage.children.length !== imageCount) {
+      stage.innerHTML = FRAME.repeat(imageCount);
+    }
+    instance = new SimpleParallax(stage.querySelectorAll("img"), options);
+  },
 });

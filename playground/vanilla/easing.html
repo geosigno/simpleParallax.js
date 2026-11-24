@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Easing demo</title>
+    <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+    }
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    /* 3 colonnes côte à côte sur desktop, empilées sur mobile */
+    .demo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      max-width: 1400px;
+      padding: 60vh 16px;
+      margin: 0 auto;
+    }
+    .column {
+      display: grid;
+      gap: 24px;
+      align-content: start;
+    }
+    h2 {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      padding: 8px 12px;
+      margin: 0;
+      font-size: 16px;
+      color: #fff;
+      background: #111;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="demo">
+      <section class="column" data-easing="smooth">
+        <h2>smooth</h2>
+        <img alt="Parallax demo, smooth easing" src="image.png">
+        <img alt="Parallax demo, smooth easing" src="image.png">
+        <img alt="Parallax demo, smooth easing" src="image.png">
+      </section>
+      <section class="column" data-easing="spring">
+        <h2>spring</h2>
+        <img alt="Parallax demo, spring easing" src="image.png">
+        <img alt="Parallax demo, spring easing" src="image.png">
+        <img alt="Parallax demo, spring easing" src="image.png">
+      </section>
+      <section class="column" data-easing="bounce">
+        <h2>bounce</h2>
+        <img alt="Parallax demo, bounce easing" src="image.png">
+        <img alt="Parallax demo, bounce easing" src="image.png">
+        <img alt="Parallax demo, bounce easing" src="image.png">
+      </section>
+    </div>
+    <script type="module">
+    import SimpleParallax from "../../src/vanilla/";
+
+    for (const column of document.querySelectorAll("[data-easing]")) {
+      // biome-ignore lint/correctness/noUnusedInstantiation: le constructeur applique l'effet
+      new SimpleParallax(column.querySelectorAll("img"), {
+        delay: 0.4,
+        easing: column.dataset.easing,
+      });
+    }
+    </script>
+  </body>
+</html>

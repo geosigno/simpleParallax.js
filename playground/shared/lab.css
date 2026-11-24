@@ -1,0 +1,377 @@
+/* Banc d'essai : papier millimétré, encres de l'enregistreur à plumes. */
+:root {
+  --lab-paper: #eef1f4;
+  --lab-grid: #d5dce4;
+  --lab-grid-strong: #b3bfcc;
+  --lab-ink: #101828;
+  --lab-ink-soft: #55607a;
+  --lab-pen-target: #e5484d;
+  --lab-pen-value: #2f5bea;
+  --lab-warn: #f2a900;
+  --lab-bench-width: 288px;
+  --lab-recorder-height: 148px;
+  --lab-label:
+    "Avenir Next Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --lab-data: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+body {
+  margin: 0;
+  color: var(--lab-ink);
+  background: #fff;
+}
+
+/* --- Scène : les images testées ---------------------------------------- */
+.stage {
+  display: grid;
+  gap: 40px;
+  max-width: 900px;
+  padding: 70vh 24px calc(70vh + var(--lab-recorder-height));
+  margin: 0 auto;
+  margin-left: max(
+    var(--lab-bench-width),
+    calc((100% + var(--lab-bench-width) - 948px) / 2)
+  );
+}
+
+.frame {
+  position: relative;
+  margin: 0;
+}
+
+.frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.frame.is-traced::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  outline: 2px solid var(--lab-pen-value);
+  outline-offset: 3px;
+  content: "";
+}
+
+.lab {
+  font: 13px / 1.4 var(--lab-data);
+}
+
+/* --- Établi : réglages et outils ---------------------------------------- */
+.lab-bench {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 3;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: var(--lab-bench-width);
+  padding: 20px 20px 24px;
+  overflow-y: auto;
+  font: 13px / 1.4 var(--lab-data);
+  background: var(--lab-paper);
+  border-right: 1px solid var(--lab-grid-strong);
+}
+
+.lab-kicker,
+.lab-label,
+.lab-easing legend,
+.lab-readouts dt {
+  margin: 0;
+  font: 600 11px / 1 var(--lab-label);
+  color: var(--lab-ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.lab-head h1 {
+  margin: 6px 0 0;
+  font: 700 34px / 0.95 var(--lab-label);
+  letter-spacing: -0.01em;
+}
+
+.lab-controls {
+  display: grid;
+  gap: 14px;
+}
+
+.lab-easing {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.lab-easing legend {
+  padding: 0 0 8px;
+}
+
+.lab-easing input {
+  position: absolute;
+  opacity: 0;
+}
+
+.lab-easing span {
+  display: block;
+  padding: 8px 0;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid var(--lab-grid-strong);
+}
+
+.lab-easing input:checked + span {
+  color: #fff;
+  background: var(--lab-ink);
+  border-color: var(--lab-ink);
+}
+
+.lab-easing input:focus-visible + span,
+.lab button:focus-visible,
+.lab select:focus-visible,
+.lab input:focus-visible {
+  outline: 2px solid var(--lab-pen-value);
+  outline-offset: 2px;
+}
+
+.lab-field {
+  display: grid;
+  gap: 4px;
+}
+
+.lab-field output {
+  font-weight: 700;
+  color: var(--lab-pen-value);
+}
+
+.lab-field input[type="range"] {
+  width: 100%;
+  margin: 0;
+}
+
+.lab select {
+  padding: 6px 8px;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid var(--lab-grid-strong);
+  border-radius: 0;
+}
+
+.lab-check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.lab-check input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.lab-tools {
+  display: grid;
+  gap: 6px;
+}
+
+.lab-tools .lab-label {
+  padding-bottom: 2px;
+}
+
+.lab button {
+  padding: 9px 10px;
+  font: inherit;
+  color: var(--lab-ink);
+  text-align: left;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid var(--lab-ink);
+  border-radius: 0;
+}
+
+.lab button:hover,
+.lab button[aria-pressed="true"] {
+  color: #fff;
+  background: var(--lab-ink);
+}
+
+.lab-snippet {
+  padding: 12px;
+  margin: 0;
+  font: 12px / 1.5 var(--lab-data);
+  color: var(--lab-ink-soft);
+  border: 1px dashed var(--lab-grid-strong);
+}
+
+/* --- Enregistreur : tracé cible / image sur papier millimétré ---------- */
+.lab-recorder {
+  position: fixed;
+  inset: auto 0 0 var(--lab-bench-width);
+  z-index: 2;
+  box-sizing: border-box;
+  display: grid;
+  grid-template: "chart readouts" 1fr "legend readouts" auto / 1fr auto;
+  height: var(--lab-recorder-height);
+  font: 12px / 1.3 var(--lab-data);
+  background:
+    linear-gradient(var(--lab-grid) 1px, transparent 1px) 0 0 / 100% 16px,
+    linear-gradient(90deg, var(--lab-grid) 1px, transparent 1px) 0 0 / 16px 100%,
+    var(--lab-paper);
+  border-top: 1px solid var(--lab-grid-strong);
+}
+
+.lab-recorder canvas {
+  grid-area: chart;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.lab-readouts {
+  display: grid;
+  grid-area: readouts;
+  grid-template-columns: repeat(2, auto);
+  gap: 8px 18px;
+  align-content: center;
+  padding: 0 18px;
+  margin: 0;
+  background: var(--lab-paper);
+  border-left: 1px solid var(--lab-grid-strong);
+}
+
+.lab-readouts dd {
+  min-width: 5.5em;
+  margin: 3px 0 0;
+  font: 700 15px / 1 var(--lab-data);
+  font-variant-numeric: tabular-nums;
+}
+
+.lab-legend {
+  display: flex;
+  grid-area: legend;
+  gap: 16px;
+  padding: 4px 12px 6px;
+  margin: 0;
+  color: var(--lab-ink-soft);
+}
+
+.lab-legend span::before {
+  display: inline-block;
+  width: 14px;
+  height: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  content: "";
+  background: currentcolor;
+}
+
+.lab-pen-target::before {
+  color: var(--lab-pen-target);
+}
+
+.lab-pen-value::before {
+  color: var(--lab-pen-value);
+}
+
+.lab-pen-frame::before {
+  color: var(--lab-grid-strong);
+}
+
+.lab-notice {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 16px;
+  margin: 0;
+  font-weight: 700;
+  text-align: center;
+  background: var(--lab-warn);
+}
+
+.lab-notice[hidden] {
+  display: none;
+}
+
+.lab-toggle {
+  display: none;
+}
+
+/* --- Mobile : l'établi devient un volet, l'enregistreur se compacte ---- */
+@media (max-width: 820px) {
+  :root {
+    --lab-recorder-height: 124px;
+  }
+
+  .stage {
+    padding-inline: 0;
+    margin-left: auto;
+  }
+
+  .lab-bench {
+    inset: 0 0 var(--lab-recorder-height) 0;
+    visibility: hidden;
+    width: auto;
+    border-right: 0;
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 0.15s,
+      transform 0.15s,
+      visibility 0.15s;
+  }
+
+  .lab.is-open .lab-bench {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+
+  .lab-recorder {
+    left: 0;
+    grid-template: "chart" 1fr "readouts" auto / 1fr;
+  }
+
+  .lab-readouts {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0 8px;
+    padding: 6px 10px 8px;
+    border-top: 1px solid var(--lab-grid-strong);
+    border-left: 0;
+  }
+
+  .lab-readouts dt {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+  }
+
+  .lab-readouts dd {
+    min-width: 0;
+    font-size: 12px;
+  }
+
+  .lab-legend {
+    display: none;
+  }
+
+  .lab .lab-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 4;
+    display: block;
+    color: #fff;
+    background: var(--lab-ink);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-bench {
+    transition: none;
+  }
+}

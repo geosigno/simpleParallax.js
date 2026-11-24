@@ -1,34 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Vanilla JS App</title>
-
+    <title>simpleParallax · banc d'essai vanilla</title>
     <script src="main.js" type="module"></script>
-    <style>
-    img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-    .parallax {
-      display: grid;
-      grid-template-columns: repeat(1, 1fr);
-      grid-gap: 40px;
-      max-width: 900px;
-      padding: 80vh 0;
-      margin: 0 auto;
-    }
-    </style>
   </head>
   <body>
-    <div class="parallax">
-      <img alt="Parallax demo" src="image.png">
-      <img alt="Parallax demo" src="image.png">
-      <img alt="Parallax demo" src="image.png">
-      <img alt="Parallax demo" src="image.png">
-      <img alt="Parallax demo" src="image.png">
-    </div>
+    <main class="stage"></main>
   </body>
 </html>
