@@ -8,11 +8,15 @@ export type Orientation =
   | "down left"
   | "down right";
 
+export type Easing = "smooth" | "spring" | "bounce";
+
 export interface ParallaxOptions {
   delay: number;
+  easing: Easing;
   maxTransition: number;
   orientation: Orientation;
   overflow: boolean;
   scale: number;
-  transition: string;
+  /** @deprecated Sans effet : le lissage est réglé par `delay` et `easing`. */
+  transition?: string;
 }

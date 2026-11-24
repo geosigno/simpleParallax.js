@@ -4,7 +4,8 @@ import {
   getRange,
   getTranslate,
 } from "../../core/math.js";
-import { buildTransform, buildTransition } from "../../core/transform.js";
+import { advance, isSettled } from "../../core/motion.js";
+import { buildTransform } from "../../core/transform.js";
 import { isImageLoaded } from "../../shared/image-loaded.js";
 import cssTransform from "../helpers/css-transform.js";
 import { viewport } from "../helpers/viewport.js";
@@ -16,18 +17,14 @@ class ParallaxInstance {
     customContainer?: string | HTMLElement;
     customWrapper?: string;
   };
-  isVisible = true;
   isInit = false;
-  oldTranslateValue = -1;
-  oldProgress?: number;
   translateValue = 0;
+  motion = { value: 0, velocity: 0 };
   rangeMax: number | null = null;
   elementHeight = 0;
   elementTop = 0;
-  elementBottom = 0;
   prefersReducedMotion: boolean;
   customWrapper: HTMLElement | null;
-  observer?: IntersectionObserver;
 
   constructor(
     element: HTMLElement,
@@ -38,9 +35,7 @@ class ParallaxInstance {
     this.element = element;
     this.elementContainer = element;
     this.settings = options;
-    this.isVisible = true;
     this.isInit = false;
-    this.oldTranslateValue = -1;
     this.prefersReducedMotion = prefersReducedMotion;
 
     this.init = this.init.bind(this);
@@ -103,29 +98,14 @@ class ParallaxInstance {
     // get the current element offset
     this.getElementOffset();
 
-    // init the Intesection Observer
-    this.intersectionObserver();
-
     // get its translated value
     this.getTranslateValue();
 
     // apply its translation even if not visible for the first init
-    this.animate();
+    this.snap();
 
-    // if a delay has been set
-    if (this.settings.delay > 0) {
-      // apply a timeout to avoid buggy effect
-      setTimeout(() => {
-        // apply the transition style on the image
-        this.setTransitionCSS();
-
-        //add isInit class
-        this.elementContainer.classList.add("simple-parallax-initialized");
-      }, 10);
-    } else {
-      //add isInit class
-      this.elementContainer.classList.add("simple-parallax-initialized");
-    }
+    //add isInit class
+    this.elementContainer.classList.add("simple-parallax-initialized");
 
     // for some reason, <picture> are init an infinite time on windows OS
     this.isInit = true;
@@ -180,15 +160,10 @@ class ParallaxInstance {
 
     // add will-change CSS property to improve perfomance
     this.element.style.willChange = "transform";
-  }
 
-  // apply the transition effect
-  setTransitionCSS() {
-    // add transition option
-    this.element.style.transition = buildTransition(
-      this.settings.delay,
-      this.settings.transition
-    );
+    // le moteur écrit le transform à chaque frame : une transition CSS héritée
+    // d'une feuille de style le ferait saccader
+    this.element.style.transition = "none";
   }
 
   // remove style of the element
@@ -218,47 +193,6 @@ class ParallaxInstance {
       this.elementTop =
         positions.top - parentPositions.top + viewport.positions.top;
     }
-    // get offset bottom
-    this.elementBottom = this.elementHeight + this.elementTop;
-  }
-
-  // build the Threshold array to cater change for every pixel scrolled
-  buildThresholdList() {
-    const thresholds: number[] = [];
-    for (let i = 1.0; i <= this.elementHeight; i += 1) {
-      const ratio = i / this.elementHeight;
-      thresholds.push(ratio);
-    }
-    return thresholds;
-  }
-
-  // create the Intersection Observer
-  intersectionObserver() {
-    const options = {
-      root: null,
-      threshold: this.buildThresholdList(),
-    };
-    this.observer = new IntersectionObserver(
-      this.intersectionObserverCallback.bind(this),
-      options
-    );
-    this.observer.observe(this.element);
-  }
-
-  // Intersection Observer Callback to set the element at visible state or not
-  intersectionObserverCallback(entries: IntersectionObserverEntry[]) {
-    for (const entry of entries) {
-      this.isVisible = entry.isIntersecting;
-    }
-  }
-
-  // check if the current element is visible in the Viewport
-  // for browser that not support Intersection Observer API
-  checkIfVisible() {
-    return (
-      this.elementBottom > viewport.positions.top &&
-      this.elementTop < viewport.positions.bottom
-    );
   }
 
   // calculate the range between image will be translated
@@ -267,7 +201,7 @@ class ParallaxInstance {
     this.rangeMax = getRange(this.element.clientHeight, this.settings.scale);
   }
 
-  // get the percentage and the translate value to apply on the element
+  // calcule la cible (translateValue) à partir de la position de scroll
   getTranslateValue() {
     // top viewport-relatif, dérivé du cache (pas de getBoundingClientRect par frame)
     const top = this.elementTop - viewport.positions.top;
@@ -276,24 +210,34 @@ class ParallaxInstance {
       this.settings.maxTransition
     );
 
-    if (this.oldProgress === progress) {
-      return false;
-    }
-
     if (!this.rangeMax) {
       this.getRangeMax();
     }
 
     this.translateValue = getTranslate(progress, this.rangeMax ?? 0);
+  }
 
-    if (this.oldTranslateValue === this.translateValue) {
-      return false;
-    }
+  // rapproche la valeur affichée de la cible ; false si elle n'a pas bougé
+  step(dt: number) {
+    return advance(
+      this.motion,
+      this.translateValue,
+      this.settings,
+      this.rangeMax ?? 0,
+      dt
+    );
+  }
 
-    this.oldProgress = progress;
-    this.oldTranslateValue = this.translateValue;
+  // vrai quand l'image est posée sur sa cible
+  isSettled() {
+    return isSettled(this.motion, this.translateValue);
+  }
 
-    return true;
+  // place l'image directement sur sa cible, sans glissement
+  snap() {
+    this.motion.value = this.translateValue;
+    this.motion.velocity = 0;
+    this.animate();
   }
 
   // animate the image
@@ -301,7 +245,7 @@ class ParallaxInstance {
     (this.element.style as CSSStyleDeclaration & Record<string, string>)[
       cssTransform
     ] = buildTransform(
-      this.translateValue,
+      this.motion.value,
       this.settings.orientation,
       this.settings.scale,
       this.settings.overflow

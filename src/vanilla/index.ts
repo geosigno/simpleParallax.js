@@ -13,6 +13,10 @@ let isInit = false;
 let instances: ParallaxInstance[] = [];
 let frameID: number;
 let resizeID: ReturnType<typeof setTimeout>;
+let lastFrameTime = 0;
+// position de scroll de la frame précédente, et image encore en mouvement ?
+let lastTop = -1;
+let isAnimating = false;
 
 export default class SimpleParallax {
   prefersReducedMotion = false;
@@ -20,7 +24,6 @@ export default class SimpleParallax {
   elements: Element[] = [];
   settings!: ParallaxInstance["settings"];
   customContainer?: Element;
-  lastPosition = -1;
 
   constructor(
     elements: string | Element | NodeList | HTMLCollection | Element[],
@@ -69,8 +72,6 @@ export default class SimpleParallax {
       [this.customContainer] = convertToArray(this.settings.customContainer);
     }
 
-    this.lastPosition = -1;
-
     this.resizeIsDone = this.resizeIsDone.bind(this);
     this.refresh = this.refresh.bind(this);
     this.proceedRequestAnimationFrame =
@@ -117,58 +118,34 @@ export default class SimpleParallax {
   }
 
   // animation frame
-  proceedRequestAnimationFrame() {
+  proceedRequestAnimationFrame(now = performance.now()) {
+    const dt = now - lastFrameTime;
+    lastFrameTime = now;
+
     // get the offset top of the viewport
-    viewport.setViewportTop(this.customContainer as HTMLElement | undefined);
+    const { top } = viewport.setViewportTop(
+      this.customContainer as HTMLElement | undefined
+    );
 
-    if (this.lastPosition === viewport.positions.top) {
-      // if last position if the same than the curent one
-      // callback the animationFrame and exit the current loop
-      frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
+    // au repos (pas de scroll, toutes les images posées) : rien à faire
+    if (top !== lastTop || isAnimating) {
+      lastTop = top;
+      isAnimating = false;
 
-      return;
-    }
+      // met à jour la cible de chaque image puis la rapproche de celle-ci, même
+      // hors écran, pour qu'elle termine son mouvement
+      for (const instance of instances) {
+        instance.getTranslateValue();
 
-    // get the offset bottom of the viewport
-    viewport.setViewportBottom();
-
-    // proceed with the current element
-    for (const instance of instances) {
-      this.proceedElement(instance);
+        if (instance.step(dt)) {
+          instance.animate();
+        }
+        isAnimating ||= !instance.isSettled();
+      }
     }
 
     // callback the animationFrame
     frameID = window.requestAnimationFrame(this.proceedRequestAnimationFrame);
-
-    // store the last position
-    this.lastPosition = viewport.positions.top;
-  }
-
-  // proceed the element
-  proceedElement(instance: ParallaxInstance) {
-    let isVisible = false;
-
-    // if this is a custom container
-    // use old function to check if element visible
-    if (this.customContainer) {
-      isVisible = instance.checkIfVisible();
-      // else, use response from Intersection Observer API Callback
-    } else {
-      ({ isVisible } = instance);
-    }
-
-    // if element not visible, stop it
-    if (!isVisible) {
-      return;
-    }
-
-    // if percentage is equal to the last one, no need to continue
-    if (!instance.getTranslateValue()) {
-      return;
-    }
-
-    // animate the image
-    instance.animate();
   }
 
   refresh() {
@@ -183,8 +160,8 @@ export default class SimpleParallax {
       instance.getRangeMax();
     }
 
-    // force the request animation frame to fired
-    this.lastPosition = -1;
+    // force le recalcul des cibles à la prochaine frame
+    lastTop = -1;
   }
 
   destroy() {
@@ -220,7 +197,7 @@ export default class SimpleParallax {
       window.cancelAnimationFrame(frameID);
 
       // detach the resize event
-      window.removeEventListener("resize", this.refresh);
+      window.removeEventListener("resize", this.resizeIsDone);
 
       // Reset isInit
       isInit = false;

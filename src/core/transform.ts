@@ -3,9 +3,11 @@ import type { Orientation } from "./types.js";
 // Convention de signes pour une progression NON inversée (p=0 à l'entrée par le bas).
 // "up" fait monter l'image (Y négatif) quand on scrolle vers le bas.
 export const getTranslate3d = (
-  value: number,
+  rawValue: number,
   orientation: Orientation
 ): string => {
+  // au centième de pixel : sous-pixel fluide sans décimales inutiles
+  const value = Math.round(rawValue * 100) / 100;
   switch (orientation) {
     case "up":
       return `0, ${-value}px, 0`;
@@ -37,8 +39,3 @@ export const buildTransform = (
   const translate3d = `translate3d(${getTranslate3d(value, orientation)})`;
   return overflow ? translate3d : `${translate3d} scale(${scale})`;
 };
-
-// Construit la valeur CSS `transition`. Vide si delay <= 0.
-// On ne transitionne que `transform` (seule propriété animée) plutôt que `all`.
-export const buildTransition = (delay: number, transition: string): string =>
-  delay > 0 ? `transform ${delay}s ${transition}` : "";

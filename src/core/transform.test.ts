@@ -1,5 +1,5 @@
 import { describe, expect, test as it } from "bun:test";
-import { buildTransform, buildTransition, getTranslate3d } from "./transform";
+import { buildTransform, getTranslate3d } from "./transform";
 
 describe("getTranslate3d", () => {
   it("up fait monter (Y négatif)", () => {
@@ -30,16 +30,5 @@ describe("buildTransform", () => {
     expect(buildTransform(75, "up", 1.3, true)).toBe(
       "translate3d(0, -75px, 0)"
     );
-  });
-});
-
-describe("buildTransition", () => {
-  it("string transform quand delay > 0", () => {
-    expect(buildTransition(0.4, "cubic-bezier(0,0,0,1)")).toBe(
-      "transform 0.4s cubic-bezier(0,0,0,1)"
-    );
-  });
-  it("vide quand delay <= 0", () => {
-    expect(buildTransition(0, "ease")).toBe("");
   });
 });

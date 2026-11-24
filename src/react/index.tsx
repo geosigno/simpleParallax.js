@@ -7,10 +7,10 @@ import type { SimpleParallaxProps } from "./types/index.js";
 
 const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
   delay = DEFAULTS.delay,
+  easing = DEFAULTS.easing,
   orientation = DEFAULTS.orientation,
   scale = DEFAULTS.scale,
   overflow = DEFAULTS.overflow,
-  transition = DEFAULTS.transition,
   maxTransition = DEFAULTS.maxTransition,
   children,
 }) => {
@@ -23,7 +23,7 @@ const SimpleParallax: React.FunctionComponent<SimpleParallaxProps> = ({
     scale,
     overflow,
     delay,
-    transition,
+    easing,
     orientation,
     maxTransition: maxTransition ?? 0,
     isVisible,

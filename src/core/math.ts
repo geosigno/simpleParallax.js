@@ -30,6 +30,6 @@ export const applyMaxTransition = (
 export const getRange = (elementHeight: number, scale: number): number =>
   elementHeight * (scale - 1);
 
-// Valeur de translation en pixels, 0 au centre, arrondie à l'entier.
+// Valeur de translation en pixels, 0 au centre.
 export const getTranslate = (p: number, range: number): number =>
-  Math.round((p - 0.5) * range);
+  (p - 0.5) * range;

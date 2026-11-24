@@ -1,18 +1,14 @@
-import PassiveScrollManager from "./passive-scroll-manager.js";
+// Tâche exécutée à chaque frame, en deux temps pour ne pas alterner lectures et
+// écritures du DOM entre images (chaque alternance force un recalcul de style).
+interface FrameTask {
+  measure: (scrollY: number) => void;
+  update: (dt: number) => void;
+}
 
 class AnimationManager {
   private static instance: AnimationManager;
-  private readonly callbacks: Set<() => void> = new Set();
+  private readonly tasks: Set<FrameTask> = new Set();
   private animationFrameId: number | null = null;
-  private visibleElementsCount = 0;
-  private isScrolling = false;
-
-  private constructor() {
-    PassiveScrollManager.onScrollingChange((isScrolling) => {
-      this.isScrolling = isScrolling;
-      this.updateRAFState();
-    });
-  }
 
   static getInstance(): AnimationManager {
     if (!AnimationManager.instance) {
@@ -21,22 +17,19 @@ class AnimationManager {
     return AnimationManager.instance;
   }
 
-  register(callback: () => void): void {
-    this.callbacks.add(callback);
-    this.visibleElementsCount += 1;
+  register(task: FrameTask): void {
+    this.tasks.add(task);
     this.updateRAFState();
   }
 
-  unregister(callback: () => void): void {
-    if (this.callbacks.has(callback)) {
-      this.callbacks.delete(callback);
-      this.visibleElementsCount = Math.max(0, this.visibleElementsCount - 1);
-      this.updateRAFState();
-    }
+  unregister(task: FrameTask): void {
+    this.tasks.delete(task);
+    this.updateRAFState();
   }
 
+  // La boucle ne tourne que s'il reste une image à animer.
   private updateRAFState(): void {
-    const shouldRun = this.isScrolling && this.visibleElementsCount > 0;
+    const shouldRun = this.tasks.size > 0;
 
     if (shouldRun && this.animationFrameId === null) {
       this.startRAF();
@@ -49,12 +42,19 @@ class AnimationManager {
     if (typeof window === "undefined") {
       return;
     }
-    const animate = () => {
-      for (const callback of this.callbacks) {
-        callback();
-      }
-
+    let lastTime = performance.now();
+    const animate = (now: number) => {
+      const dt = now - lastTime;
+      lastTime = now;
       this.animationFrameId = requestAnimationFrame(animate);
+
+      const { scrollY } = window;
+      for (const task of this.tasks) {
+        task.measure(scrollY);
+      }
+      for (const task of this.tasks) {
+        task.update(dt);
+      }
     };
     this.animationFrameId = requestAnimationFrame(animate);
   }

@@ -1,18 +1,19 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
   applyMaxTransition,
   getProgress,
   getRange,
   getTranslate,
 } from "../../core/math.js";
-import { buildTransform, buildTransition } from "../../core/transform.js";
-import type { Orientation } from "../../core/types.js";
+import { advance, isSettled } from "../../core/motion.js";
+import { buildTransform } from "../../core/transform.js";
+import type { Easing, Orientation } from "../../core/types.js";
 import AnimationManager from "../manager/animation-manager.js";
-import PassiveScrollManager from "../manager/passive-scroll-manager.js";
 import useReducedMotion from "./use-reduce-motion.js";
 
 interface UseParallaxTransformProps {
   delay: number;
+  easing: Easing;
   imageHeight: number;
   imageRef: React.RefObject<HTMLImageElement | null>;
   isLoaded: boolean;
@@ -21,14 +22,13 @@ interface UseParallaxTransformProps {
   orientation: Orientation;
   overflow: boolean;
   scale: number;
-  transition: string;
 }
 
 export const useParallaxTransform = ({
   scale,
   overflow,
   delay,
-  transition,
+  easing,
   orientation,
   maxTransition,
   isVisible,
@@ -37,96 +37,102 @@ export const useParallaxTransform = ({
   imageRef,
 }: UseParallaxTransformProps) => {
   const prefersReducedMotion = useReducedMotion();
+  const range = getRange(imageHeight, scale);
 
   // Valeurs par-frame en ref : aucun re-render au scroll.
   const lastScrollY = useRef<number>(-1);
   const hasInit = useRef<boolean>(false);
+  const target = useRef<number>(0);
+  const motion = useRef({ value: 0, velocity: 0 });
+  const isVisibleRef = useRef(isVisible);
 
-  // Calcule et applique le transform directement sur l'élément (dans le RAF).
-  const render = useCallback(() => {
-    const el = imageRef.current;
-    if (!el || prefersReducedMotion) {
-      return;
-    }
+  // Lecture : le scroll fixe la cible. On mesure le wrapper, pas l'image, qui
+  // est déjà décalée par son transform.
+  const measure = useCallback(
+    (scrollY = window.scrollY) => {
+      const wrapper = imageRef.current?.parentElement;
+      if (!wrapper || scrollY === lastScrollY.current) {
+        return;
+      }
+      lastScrollY.current = scrollY;
+      const rect = wrapper.getBoundingClientRect();
+      const progress = applyMaxTransition(
+        getProgress(rect.top, window.innerHeight, rect.height),
+        maxTransition
+      );
+      target.current = getTranslate(progress, range);
+    },
+    [imageRef, maxTransition, range]
+  );
 
-    const scrollY = PassiveScrollManager.getScrollY();
-    if (hasInit.current && scrollY === lastScrollY.current) {
-      return;
-    }
-    lastScrollY.current = scrollY;
+  // Écriture : la valeur affichée se rapproche de la cible (inertie = delay).
+  const update = useCallback(
+    (dt = 0) => {
+      const el = imageRef.current;
+      if (!el) {
+        return;
+      }
 
-    const rect = el.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
+      if (!hasInit.current) {
+        // premier placement direct, sans glissement depuis 0
+        hasInit.current = true;
+        motion.current = { value: target.current, velocity: 0 };
+      } else if (
+        !advance(motion.current, target.current, { delay, easing }, range, dt)
+      ) {
+        return;
+      }
 
-    const progress = applyMaxTransition(
-      getProgress(rect.top, viewportHeight, rect.height),
-      maxTransition
-    );
-    const range = getRange(imageHeight, scale);
-    const value = getTranslate(progress, range);
+      // une transition CSS héritée ferait saccader l'écriture par frame
+      el.style.transition = "none";
+      el.style.transform = buildTransform(
+        motion.current.value,
+        orientation,
+        scale,
+        overflow
+      );
+    },
+    [imageRef, range, scale, orientation, overflow, delay, easing]
+  );
 
-    el.style.transform = buildTransform(value, orientation, scale, overflow);
-
-    // La transition n'est appliquée qu'après le premier placement
-    // pour éviter un saut visuel à l'init.
-    if (!hasInit.current) {
-      hasInit.current = true;
-      setTimeout(() => {
-        if (imageRef.current) {
-          imageRef.current.style.transition = buildTransition(
-            delay,
-            transition
-          );
+  // Tâche de la boucle RAF partagée. Hors écran, l'image y reste le temps de
+  // terminer son mouvement, puis se désinscrit : au retour, elle est à sa place.
+  const task = useMemo(
+    () => ({
+      measure,
+      update: (dt: number) => {
+        update(dt);
+        if (
+          !isVisibleRef.current &&
+          isSettled(motion.current, target.current)
+        ) {
+          AnimationManager.unregister(task);
         }
-      }, 50);
-    }
-  }, [
-    imageRef,
-    prefersReducedMotion,
-    maxTransition,
-    imageHeight,
-    scale,
-    orientation,
-    overflow,
-    delay,
-    transition,
-  ]);
+      },
+    }),
+    [measure, update]
+  );
 
-  // Enregistre dans la boucle RAF partagée uniquement quand l'élément est visible.
   useEffect(() => {
-    if (isVisible && !prefersReducedMotion) {
-      AnimationManager.register(render);
-    } else {
-      AnimationManager.unregister(render);
+    isVisibleRef.current = isVisible;
+    if (prefersReducedMotion) {
+      AnimationManager.unregister(task);
+    } else if (isVisible) {
+      AnimationManager.register(task);
     }
-    return () => AnimationManager.unregister(render);
-  }, [isVisible, prefersReducedMotion, render]);
+  }, [isVisible, prefersReducedMotion, task]);
 
-  // Répercute un changement de delay / transition après l'init
-  // (la transition initiale n'est posée qu'une fois dans render).
-  useEffect(() => {
-    const el = imageRef.current;
-    if (!(el && hasInit.current) || prefersReducedMotion) {
-      return;
-    }
-    el.style.transition = buildTransition(delay, transition);
-  }, [imageRef, prefersReducedMotion, delay, transition]);
+  useEffect(() => () => AnimationManager.unregister(task), [task]);
 
-  // Applique le scale initial dès que l'image est chargée (avant tout scroll).
-  useEffect(() => {
-    const el = imageRef.current;
-    if (!el || prefersReducedMotion || overflow || !isLoaded) {
-      return;
-    }
-    el.style.transform = `scale(${scale})`;
-  }, [imageRef, prefersReducedMotion, overflow, isLoaded, scale]);
-
-  // Place l'image une fois au montage, même sans scroll.
+  // Recalcule la cible au montage et à chaque changement de paramètre,
+  // même sans scroll.
   useEffect(() => {
     if (isLoaded && !prefersReducedMotion) {
-      render();
+      lastScrollY.current = -1;
+      measure();
+      update();
     }
-  }, [isLoaded, prefersReducedMotion, render]);
+  }, [isLoaded, prefersReducedMotion, measure, update]);
 
   // Respecte prefers-reduced-motion : nettoie le style appliqué.
   useEffect(() => {
