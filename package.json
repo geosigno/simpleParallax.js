@@ -1,6 +1,6 @@
 {
   "name": "simple-parallax-js",
-  "version": "7.0.1",
+  "version": "8.0.0",
   "description": "A lightweight React & vanilla JavaScript library that adds a parallax effect to any image.",
   "keywords": [
     "react",

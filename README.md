@@ -106,8 +106,9 @@ Setting | Type | Default | Hint
 orientation | String | up | up - right - down - left - up left - up right - down left - down right
 scale | Number | 1.5 | need to be above 1
 overflow | Boolean | false | 
-delay | Number | 0.4 | the delay is in second **Watch out, sometimes this delay is causing issue on iOS devices [#47](https://github.com/geosigno/simpleParallax.js/issues/47)**
-transition | String | 'cubic-bezier(0,0,0,1)' | any CSS transition
+delay | Number | 0.4 | in seconds, the time the image takes to catch up with the scroll (0 = no smoothing)
+easing | String | smooth | smooth - spring - bounce
+transition | String | | deprecated, no longer has any effect
 maxTransition | Number | 0 | it should be a percentage between 1 and 99
 customContainer | String or Node | '' | (Vanilla version only)
 customWrapper | String | '' | the selector of the custom wrapper (Vanilla version only)
@@ -175,10 +176,19 @@ The higher the *scale* setting, the more pronounced the parallax effect becomes.
 By default, the image scales to create a parallax effect without any overflow on the layout - for a better understanding, review the [case study](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471). When overflow is set to true, the image will translate beyond its natural flow, potentially overlapping your content.
 
 ### delay - *Number* - see [example](https://simpleparallax.com#example-delay-transition)
-Setting a delay prolongs the image's translation even after the user has stopped scrolling, creating a pleasing effect. This delay is measured in seconds. **Watch out, sometimes this delay is causing issue on iOS devices [#47](https://github.com/geosigno/simpleParallax.js/issues/47)**
+Setting a delay prolongs the image's translation even after the user has stopped scrolling, creating a pleasing effect. This delay is measured in seconds: it is roughly the time the image takes to catch up with the scroll. With a delay of 0, the image follows the scroll exactly, with no smoothing.
+
+The smoothing is computed by the plugin on every frame rather than with a CSS transition, so it stays fluid with a mouse wheel and on touch devices. For that reason the plugin sets `transition: none` on the image: do not rely on a CSS transition of your own on its `transform`.
+
+### easing - *String*
+The easing setting defines how the image catches up with the scroll during the delay. It has no effect when the delay is 0.
+
+- `smooth` (default): starts fast and slows down progressively.
+- `spring`: starts and ends gently, without overshooting.
+- `bounce`: slightly overshoots the target before coming back. The faster the scroll, the more visible the bounce.
 
 ### transition - *String* - see [example](https://simpleparallax.com#example-delay-transition)
-The transition setting is linked with the delay setting. It applies any CSS transition to the delay setting, such as ease or ease-in-out.
+Deprecated: this setting is still accepted but no longer has any effect. Use the delay and easing settings instead.
 
 ### maxTransition - *Number* - see [example](https://simpleparallax.com#example-max-transition)
 The maxTransition setting controls the extent of the parallax animation. By default, it translates from 0% to 100% of the user's viewport. You can adjust this to any percentage.
