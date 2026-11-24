@@ -108,7 +108,6 @@ scale | Number | 1.5 | need to be above 1
 overflow | Boolean | false | 
 delay | Number | 0.4 | in seconds, the time the image takes to catch up with the scroll (0 = no smoothing)
 easing | String | smooth | smooth - spring - bounce
-transition | String | | deprecated, no longer has any effect
 maxTransition | Number | 0 | it should be a percentage between 1 and 99
 customContainer | String or Node | '' | (Vanilla version only)
 customWrapper | String | '' | the selector of the custom wrapper (Vanilla version only)
@@ -186,9 +185,6 @@ The easing setting defines how the image catches up with the scroll during the d
 - `smooth` (default): starts fast and slows down progressively.
 - `spring`: starts and ends gently, without overshooting.
 - `bounce`: slightly overshoots the target before coming back. The faster the scroll, the more visible the bounce.
-
-### transition - *String* - see [example](https://simpleparallax.com#example-delay-transition)
-Deprecated: this setting is still accepted but no longer has any effect. Use the delay and easing settings instead.
 
 ### maxTransition - *Number* - see [example](https://simpleparallax.com#example-max-transition)
 The maxTransition setting controls the extent of the parallax animation. By default, it translates from 0% to 100% of the user's viewport. You can adjust this to any percentage.

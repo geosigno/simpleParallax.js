@@ -8,6 +8,4 @@ export interface SimpleParallaxProps {
   orientation?: Orientation;
   overflow?: boolean;
   scale?: number;
-  /** @deprecated Sans effet : le lissage est réglé par `delay` et `easing`. */
-  transition?: string;
 }
