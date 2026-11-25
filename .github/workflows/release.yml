@@ -51,19 +51,26 @@ jobs:
             npm publish --tag "$tag"
           fi
 
-      # Rebuild the website so it shows the new release. It reads the version from npm,
-      # so wait until npm serves it first. Skipped for a prerelease, or without the secret.
+      # Rebuild the website so it shows the new release, once npm serves it. Secrets:
+      # SITE_DEPLOY_HOOK_URL, a Vercel deploy hook or the GitHub API URL that dispatches the
+      # website's workflow; SITE_DEPLOY_HOOK_TOKEN, only for the latter, a token allowed to
+      # run that workflow. Skipped without the URL.
       - name: Rebuild the website
         env:
           SITE_DEPLOY_HOOK_URL: ${{ secrets.SITE_DEPLOY_HOOK_URL }}
+          SITE_DEPLOY_HOOK_TOKEN: ${{ secrets.SITE_DEPLOY_HOOK_TOKEN }}
         run: |
+          if [ -z "$SITE_DEPLOY_HOOK_URL" ]; then echo "no SITE_DEPLOY_HOOK_URL secret"; exit 0; fi
           name=$(node -p "require('./package.json').name")
           version=$(node -p "require('./package.json').version")
-          case "$version" in *-*) echo "prerelease: website left alone"; exit 0 ;; esac
-          if [ -z "$SITE_DEPLOY_HOOK_URL" ]; then echo "no SITE_DEPLOY_HOOK_URL secret"; exit 0; fi
           for attempt in $(seq 1 30); do
-            [ "$(npm view "$name" dist-tags.latest)" = "$version" ] && break
+            npm view "$name@$version" version > /dev/null 2>&1 && break
             sleep 10
           done
-          curl -fsS -X POST "$SITE_DEPLOY_HOOK_URL" > /dev/null
+          auth=()
+          if [ -n "$SITE_DEPLOY_HOOK_TOKEN" ]; then
+            auth=(-H "Authorization: Bearer $SITE_DEPLOY_HOOK_TOKEN" -H "Accept: application/vnd.github+json")
+          fi
+          # The body is the branch a dispatched GitHub workflow runs on; Vercel ignores it.
+          curl -fsS -X POST "${auth[@]}" -H "Content-Type: application/json" -d '{"ref":"main"}' "$SITE_DEPLOY_HOOK_URL" > /dev/null
           echo "website rebuild requested"
