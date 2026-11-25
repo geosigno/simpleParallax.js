@@ -4,7 +4,6 @@ import {
   prefersReducedMotion,
 } from "../shared/reduced-motion.js";
 import convertToArray from "./helpers/convert-to-array.js";
-import isSupportedBrowser from "./helpers/is-supported-browser.js";
 import { viewport } from "./helpers/viewport.js";
 
 import ParallaxInstance from "./instances/parallax.js";
@@ -30,11 +29,6 @@ export default class SimpleParallax {
     options?: Partial<ParallaxInstance["settings"]>
   ) {
     if (!elements) {
-      return;
-    }
-
-    // check if the browser support simpleParallax
-    if (!isSupportedBrowser()) {
       return;
     }
 
