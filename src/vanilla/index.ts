@@ -64,6 +64,8 @@ export default class SimpleParallax {
 
     if (this.settings.customContainer) {
       [this.customContainer] = convertToArray(this.settings.customContainer);
+      // the instances measure against the element, not the selector it came from
+      this.settings.customContainer = this.customContainer as HTMLElement;
     }
 
     this.resizeIsDone = this.resizeIsDone.bind(this);
