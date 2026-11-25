@@ -161,8 +161,8 @@ class ParallaxInstance {
     // add will-change CSS property to improve perfomance
     this.element.style.willChange = "transform";
 
-    // le moteur écrit le transform à chaque frame : une transition CSS héritée
-    // d'une feuille de style le ferait saccader
+    // the engine writes the transform on every frame: a CSS transition inherited
+    // from a stylesheet would make it stutter
     this.element.style.transition = "none";
   }
 
@@ -197,13 +197,13 @@ class ParallaxInstance {
 
   // calculate the range between image will be translated
   getRangeMax() {
-    // range basé sur la hauteur réelle de l'image (sans scale)
+    // range based on the image's real height (without the scale)
     this.rangeMax = getRange(this.element.clientHeight, this.settings.scale);
   }
 
-  // calcule la cible (translateValue) à partir de la position de scroll
+  // computes the target (translateValue) from the scroll position
   getTranslateValue() {
-    // top viewport-relatif, dérivé du cache (pas de getBoundingClientRect par frame)
+    // viewport-relative top, derived from the cache (no getBoundingClientRect per frame)
     const top = this.elementTop - viewport.positions.top;
     const progress = applyMaxTransition(
       getProgress(top, viewport.positions.height, this.elementHeight),
@@ -217,7 +217,7 @@ class ParallaxInstance {
     this.translateValue = getTranslate(progress, this.rangeMax ?? 0);
   }
 
-  // rapproche la valeur affichée de la cible ; false si elle n'a pas bougé
+  // moves the displayed value towards the target; false if it did not change
   step(dt: number) {
     return advance(
       this.motion,
@@ -228,12 +228,12 @@ class ParallaxInstance {
     );
   }
 
-  // vrai quand l'image est posée sur sa cible
+  // true when the image rests on its target
   isSettled() {
     return isSettled(this.motion, this.translateValue);
   }
 
-  // place l'image directement sur sa cible, sans glissement
+  // puts the image straight on its target, without sliding
   snap() {
     this.motion.value = this.translateValue;
     this.motion.velocity = 0;

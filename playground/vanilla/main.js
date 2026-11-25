@@ -5,7 +5,7 @@ const stage = document.querySelector(".stage");
 const FRAME = `<figure class="frame"><img alt="Parallax demo" src="image.png"></figure>`;
 let instance;
 
-// Recrée l'effet à chaque changement d'un réglage du banc d'essai.
+// Recreates the effect on every change of a test bench setting.
 createLab({
   engine: "vanilla",
   onChange: (options, imageCount) => {

@@ -5,12 +5,12 @@ on:
     branches: [ master ]
   pull_request:
 
-# Annule un run en cours si un nouveau commit arrive sur la même branche/PR.
+# Cancel a running job when a new commit lands on the same branch or PR.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Permissions minimales : la CI n'a besoin que de lire le code.
+# Least privilege: the CI only needs to read the code.
 permissions:
   contents: read
 

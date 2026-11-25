@@ -1,12 +1,12 @@
 import type { Orientation } from "./types.js";
 
-// Convention de signes pour une progression NON inversée (p=0 à l'entrée par le bas).
-// "up" fait monter l'image (Y négatif) quand on scrolle vers le bas.
+// Sign convention for a NON-inverted progress (p=0 when entering from the bottom).
+// "up" moves the image up (negative Y) when scrolling down.
 export const getTranslate3d = (
   rawValue: number,
   orientation: Orientation
 ): string => {
-  // au centième de pixel : sous-pixel fluide sans décimales inutiles
+  // to a hundredth of a pixel: smooth sub-pixel motion without useless decimals
   const value = Math.round(rawValue * 100) / 100;
   switch (orientation) {
     case "up":

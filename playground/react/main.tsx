@@ -8,7 +8,7 @@ interface LabState {
   options: LabOptions;
 }
 
-// Même banc d'essai que le playground vanilla : les réglages arrivent en props.
+// Same test bench as the vanilla playground: the settings arrive as props.
 const App = () => {
   const [lab, setLab] = useState<LabState | null>(null);
 

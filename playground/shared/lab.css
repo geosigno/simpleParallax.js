@@ -1,4 +1,4 @@
-/* Banc d'essai : papier millimétré, encres de l'enregistreur à plumes. */
+/* Test bench: graph paper and pen-recorder inks. */
 :root {
   --lab-paper: #eef1f4;
   --lab-grid: #d5dce4;
@@ -21,7 +21,7 @@ body {
   background: #fff;
 }
 
-/* --- Scène : les images testées ---------------------------------------- */
+/* --- Stage: the images under test --------------------------------------- */
 .stage {
   display: grid;
   gap: 40px;
@@ -59,7 +59,7 @@ body {
   font: 13px / 1.4 var(--lab-data);
 }
 
-/* --- Établi : réglages et outils ---------------------------------------- */
+/* --- Workbench: settings and tools ------------------------------------- */
 .lab-bench {
   position: fixed;
   inset: 0 auto 0 0;
@@ -208,7 +208,7 @@ body {
   border: 1px dashed var(--lab-grid-strong);
 }
 
-/* --- Enregistreur : tracé cible / image sur papier millimétré ---------- */
+/* --- Recorder: target / image trace on graph paper ---------------------- */
 .lab-recorder {
   position: fixed;
   inset: auto 0 0 var(--lab-bench-width);
@@ -302,7 +302,7 @@ body {
   display: none;
 }
 
-/* --- Mobile : l'établi devient un volet, l'enregistreur se compacte ---- */
+/* --- Mobile: the workbench becomes a drawer, the recorder shrinks ------- */
 @media (max-width: 820px) {
   :root {
     --lab-recorder-height: 124px;

@@ -11,7 +11,7 @@ class IntersectionObserverManager {
     return IntersectionObserverManager.instance;
   }
 
-  // Crée l'observer à la première utilisation côté navigateur (SSR-safe).
+  // Creates the observer on first use, in the browser only (SSR-safe).
   private ensureObserver(): void {
     if (this.observer || typeof window === "undefined") {
       return;

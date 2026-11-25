@@ -1,6 +1,6 @@
 version: 2
 updates:
-  # Dépendances npm (package.json). Regroupées en une seule PR hebdo pour limiter le bruit.
+  # npm dependencies (package.json), grouped into a single weekly PR to limit the noise.
   - package-ecosystem: npm
     directory: "/"
     schedule:
@@ -9,7 +9,7 @@ updates:
       dependencies:
         patterns: [ "*" ]
 
-  # Actions GitHub utilisées dans les workflows.
+  # GitHub Actions used by the workflows.
   - package-ecosystem: github-actions
     directory: "/"
     schedule:

@@ -1,29 +1,29 @@
-// Moteur d'animation : rapproche à chaque frame la valeur affichée d'une image
-// de la cible fixée par le scroll. Aucune dépendance au DOM.
+// Animation engine: on every frame, moves an image's displayed value towards
+// the target set by the scroll. No dependency on the DOM.
 import { clamp } from "./math.js";
 import type { ParallaxOptions } from "./types.js";
 
-// Valeur affichée d'une image et sa vitesse (px/s, utilisée par les ressorts).
+// Displayed value of an image and its velocity (px/s, used by the springs).
 export interface Motion {
   value: number;
   velocity: number;
 }
 
-// Réglés pour que ~98 % du trajet soit parcouru au bout de `delay` secondes.
+// Tuned so that ~98% of the way is covered after `delay` seconds.
 const SMOOTH_RATIO = 4;
 const SPRING_RATIO = 6;
-// En dessous de ces seuils (px, px/s), l'image se pose sur sa cible.
+// Below these thresholds (px, px/s), the image settles on its target.
 const SETTLE_DISTANCE = 0.05;
 const SETTLE_VELOCITY = 1;
-// Amortissement du rebond : 1 = aucun dépassement, plus bas = rebond plus marqué.
-// Il dépend de l'élan : rebond franc après un scroll rapide, discret après un lent.
+// Bounce damping: 1 = no overshoot, lower = a stronger bounce.
+// It depends on the momentum: a clear bounce after a fast scroll, a subtle one after a slow one.
 const BOUNCE_DAMPING_FAST = 0.54;
 const BOUNCE_DAMPING_SLOW = 0.77;
-// Élan (en part de l'amplitude) à partir duquel le rebond est maximal.
+// Momentum (as a share of the range) from which the bounce is at its strongest.
 const BOUNCE_FULL_MOMENTUM = 0.1;
 
-// Ressort sous-amorti : dépasse la cible puis y revient. Le dépassement est
-// borné à l'amplitude pour ne jamais découvrir le bord de l'image.
+// Underdamped spring: overshoots the target, then comes back. The overshoot is
+// capped to the range so the image's edge is never revealed.
 const bounce = (
   motion: Motion,
   target: number,
@@ -33,7 +33,7 @@ const bounce = (
 ): void => {
   const omega = SPRING_RATIO / delay;
   const offset = motion.value - target;
-  // élan en px : écart à la cible et vitesse combinés
+  // momentum in px: distance to the target and velocity combined
   const momentum = Math.hypot(offset, motion.velocity / omega);
   const intensity =
     range > 0 ? Math.min(momentum / (range * BOUNCE_FULL_MOMENTUM), 1) : 1;
@@ -58,15 +58,15 @@ const bounce = (
       (frequency * offset + damping * swing) * sin);
 };
 
-// Vrai quand l'image est posée sur sa cible, à l'arrêt.
+// True when the image rests on its target, not moving.
 export const isSettled = (motion: Motion, target: number): boolean =>
   motion.value === target && motion.velocity === 0;
 
-// Rapproche `motion` de `target` pendant dt (ms), indépendamment de la cadence.
-// Retourne false si la valeur n'a pas bougé (rien à redessiner).
-// - smooth : parcourt une fraction de la distance restante (départ vif, fin douce)
-// - spring : ressort sans rebond (départ doux, fin douce)
-// - bounce : ressort avec rebond (dépasse légèrement la cible puis revient)
+// Moves `motion` towards `target` over dt (ms), whatever the frame rate.
+// Returns false if the value did not change (nothing to redraw).
+// - smooth: covers a fraction of the remaining distance (quick start, soft end)
+// - spring: spring without overshoot (soft start, soft end)
+// - bounce: spring with overshoot (goes slightly past the target, then back)
 export const advance = (
   motion: Motion,
   target: number,
@@ -74,7 +74,7 @@ export const advance = (
   range: number,
   dt: number
 ): boolean => {
-  // image posée sur sa cible : rien à calculer (cas de loin le plus fréquent)
+  // image resting on its target: nothing to compute (by far the most common case)
   if (isSettled(motion, target)) {
     return false;
   }
@@ -97,7 +97,7 @@ export const advance = (
       previous + distance * (1 - Math.exp((-SMOOTH_RATIO * seconds) / delay));
   }
 
-  // écart et vitesse imperceptibles : l'image se pose sur sa cible
+  // distance and velocity too small to see: the image settles on its target
   const isAtRest =
     Math.abs(target - motion.value) < SETTLE_DISTANCE &&
     Math.abs(motion.velocity) < SETTLE_VELOCITY;

@@ -14,7 +14,7 @@
       width: 100%;
       height: auto;
     }
-    /* 3 colonnes côte à côte sur desktop, empilées sur mobile */
+    /* 3 columns side by side on desktop, stacked on mobile */
     .demo {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -65,7 +65,7 @@
     import SimpleParallax from "../../src/vanilla/";
 
     for (const column of document.querySelectorAll("[data-easing]")) {
-      // biome-ignore lint/correctness/noUnusedInstantiation: le constructeur applique l'effet
+      // biome-ignore lint/correctness/noUnusedInstantiation: the constructor applies the effect
       new SimpleParallax(column.querySelectorAll("img"), {
         delay: 0.4,
         easing: column.dataset.easing,

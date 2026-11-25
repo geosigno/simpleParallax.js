@@ -1,5 +1,5 @@
-// Helpers navigateur (agnostiques du framework) autour de la préférence
-// "prefers-reduced-motion". Consommés par la version vanilla ET react.
+// Framework-agnostic browser helpers around the
+// "prefers-reduced-motion" preference. Used by both the vanilla and React versions.
 
 export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -8,11 +8,11 @@ const getMediaQuery = (): MediaQueryList | null =>
     ? null
     : window.matchMedia(REDUCED_MOTION_QUERY);
 
-// État courant de la préférence (false en SSR).
+// Current state of the preference (false during SSR).
 export const prefersReducedMotion = (): boolean =>
   getMediaQuery()?.matches ?? false;
 
-// S'abonne aux changements de la préférence ; retourne une fonction de désabonnement.
+// Subscribes to changes of the preference; returns an unsubscribe function.
 export const onReducedMotionChange = (
   listener: (prefersReduced: boolean) => void
 ): (() => void) => {

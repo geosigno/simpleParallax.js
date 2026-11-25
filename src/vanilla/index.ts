@@ -13,7 +13,7 @@ let instances: ParallaxInstance[] = [];
 let frameID: number;
 let resizeID: ReturnType<typeof setTimeout>;
 let lastFrameTime = 0;
-// position de scroll de la frame précédente, et image encore en mouvement ?
+// scroll position of the previous frame, and is an image still moving?
 let lastTop = -1;
 let isAnimating = false;
 
@@ -121,13 +121,13 @@ export default class SimpleParallax {
       this.customContainer as HTMLElement | undefined
     );
 
-    // au repos (pas de scroll, toutes les images posées) : rien à faire
+    // at rest (no scroll, every image settled): nothing to do
     if (top !== lastTop || isAnimating) {
       lastTop = top;
       isAnimating = false;
 
-      // met à jour la cible de chaque image puis la rapproche de celle-ci, même
-      // hors écran, pour qu'elle termine son mouvement
+      // updates each image's target, then moves the image towards it, even
+      // off screen, so that it finishes its motion
       for (const instance of instances) {
         instance.getTranslateValue();
 
@@ -154,7 +154,7 @@ export default class SimpleParallax {
       instance.getRangeMax();
     }
 
-    // force le recalcul des cibles à la prochaine frame
+    // forces the targets to be recomputed on the next frame
     lastTop = -1;
   }
 

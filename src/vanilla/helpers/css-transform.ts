@@ -1,4 +1,4 @@
-// Détecte la propriété CSS transform supportée (avec préfixes legacy).
+// Detects the supported CSS transform property (with legacy prefixes).
 const cssTransform = (): string => {
   const prefixes =
     "transform webkitTransform mozTransform oTransform msTransform".split(" ");

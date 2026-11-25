@@ -17,8 +17,8 @@
   "linter": {
     "rules": {
       "suspicious": {
-        // Faux positifs : Biome 2.6 infère le littéral (`false`) pour les champs de
-        // classe initialisés puis mutés (singletons, flags), là où TS infère `boolean`.
+        // False positives: Biome 2.6 infers the literal (`false`) for class fields
+        // that are initialized then mutated (singletons, flags), where TS infers `boolean`.
         "noUnnecessaryConditions": "off"
       }
     }

@@ -1,5 +1,5 @@
-// Tâche exécutée à chaque frame, en deux temps pour ne pas alterner lectures et
-// écritures du DOM entre images (chaque alternance force un recalcul de style).
+// Task run on every frame, in two passes so DOM reads and writes are not
+// interleaved between images (each switch forces a style recalculation).
 interface FrameTask {
   measure: (scrollY: number) => void;
   update: (dt: number) => void;
@@ -27,7 +27,7 @@ class AnimationManager {
     this.updateRAFState();
   }
 
-  // La boucle ne tourne que s'il reste une image à animer.
+  // The loop only runs while there is an image left to animate.
   private updateRAFState(): void {
     const shouldRun = this.tasks.size > 0;
 

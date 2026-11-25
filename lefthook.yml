@@ -1,4 +1,4 @@
-# Hooks git locaux. Installés via le script `prepare` (bun install) ou `bunx lefthook install`.
+# Local git hooks, installed by the `prepare` script (bun install) or `bunx lefthook install`.
 pre-commit:
   parallel: true
   jobs:

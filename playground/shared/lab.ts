@@ -1,5 +1,5 @@
-// Banc d'essai commun aux playgrounds vanilla et React : panneau de réglages,
-// outils de scroll reproductibles et enregistreur du mouvement en direct.
+// Test bench shared by the vanilla and React playgrounds: settings panel,
+// reproducible scroll tools and a live motion recorder.
 import "./lab.css";
 import { DEFAULTS } from "../../src/core/constants";
 import {
@@ -26,7 +26,7 @@ interface LabConfig {
 
 interface Sample {
   dt: number;
-  // première mesure d'une nouvelle image tracée : le tracé repart de là
+  // first measure of a newly traced image: the trace starts again from here
   isBreak: boolean;
   target: number;
   value: number;
@@ -52,12 +52,12 @@ const WHEEL_NOTCH = 100;
 const WHEEL_NOTCHES = 12;
 const WHEEL_INTERVAL = 110;
 const AUTO_SPEED = 600;
-// une frame est comptée « lente » au-delà de 1,5 × la durée habituelle
+// a frame counts as slow beyond 1.5 × the usual duration
 const SLOW_FRAME_RATIO = 1.5;
 const FRAME_BAR_HEIGHT = 18;
 const FRAME_BAR_SCALE = 34;
-// Encres du tracé : mêmes valeurs que les variables de lab.css. Écrites en dur
-// parce que Safari ne les restitue pas au canvas via getComputedStyle.
+// Trace inks: same values as the lab.css variables. Hard-coded
+// because Safari does not hand them to the canvas through getComputedStyle.
 const INK = {
   frame: "#b3bfcc",
   target: "#e5484d",
@@ -151,8 +151,8 @@ const template = (engine: string) => `
   <button aria-controls="lab-bench" aria-expanded="false" class="lab-toggle" type="button">Réglages</button>
 `;
 
-// Valeur de translation lue sur l'image, dans la convention du moteur
-// (positive quand l'image a dépassé le centre).
+// Translation read on the image, in the engine's convention
+// (positive once the image is past the centre).
 const readValue = (image: HTMLElement, orientation: Orientation): number => {
   const groups = TRANSLATE_PATTERN.exec(image.style.transform)?.groups;
   if (!groups) {
@@ -196,7 +196,7 @@ export const createLab = ({ engine, onChange }: LabConfig): (() => void) => {
 
   let current: LabOptions = { ...DEFAULTS };
 
-  // --- Réglages -----------------------------------------------------------
+  // --- Settings -----------------------------------------------------------
   const apply = () => {
     const data = new FormData(form);
     current = {
@@ -211,7 +211,7 @@ export const createLab = ({ engine, onChange }: LabConfig): (() => void) => {
       output.textContent = String(data.get(output.dataset.for ?? ""));
     }
     snippet.textContent = JSON.stringify(current, null, 2);
-    // nouveau réglage, nouvelle mesure
+    // new setting, new measure
     slowFrames = 0;
     onChange(current, Number(data.get("imageCount")));
   };
@@ -274,7 +274,7 @@ export const createLab = ({ engine, onChange }: LabConfig): (() => void) => {
   let lastScrollY = window.scrollY;
   let speed = 0;
 
-  // l'image tracée est celle la plus proche du centre de l'écran
+  // the traced image is the one closest to the centre of the screen
   const pickTraced = () => {
     const center = window.innerHeight / 2;
     let closest: HTMLElement | null = null;
@@ -340,7 +340,7 @@ export const createLab = ({ engine, onChange }: LabConfig): (() => void) => {
     const toX = (index: number) =>
       width - (samples.length - index) * PIXELS_PER_SAMPLE;
 
-    // durée de chaque frame, en bas du graphe
+    // duration of each frame, at the bottom of the graph
     for (const [index, sample] of samples.entries()) {
       const isSlow = sample.dt > usualFrame * SLOW_FRAME_RATIO;
       const bar = Math.min(sample.dt / FRAME_BAR_SCALE, 1) * FRAME_BAR_HEIGHT;
@@ -390,7 +390,7 @@ export const createLab = ({ engine, onChange }: LabConfig): (() => void) => {
     lastFrame = now;
     framesSinceReadout += 1;
     worstFrame = Math.max(worstFrame, dt);
-    // moyenne glissante de la durée d'une frame, pour repérer les lentes
+    // moving average of the frame duration, to spot the slow ones
     usualFrame = usualFrame === 0 ? dt : usualFrame * 0.95 + dt * 0.05;
     if (dt > usualFrame * SLOW_FRAME_RATIO) {
       slowFrames += 1;

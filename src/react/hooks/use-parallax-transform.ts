@@ -39,15 +39,15 @@ export const useParallaxTransform = ({
   const prefersReducedMotion = useReducedMotion();
   const range = getRange(imageHeight, scale);
 
-  // Valeurs par-frame en ref : aucun re-render au scroll.
+  // Per-frame values live in refs: no re-render while scrolling.
   const lastScrollY = useRef<number>(-1);
   const hasInit = useRef<boolean>(false);
   const target = useRef<number>(0);
   const motion = useRef({ value: 0, velocity: 0 });
   const isVisibleRef = useRef(isVisible);
 
-  // Lecture : le scroll fixe la cible. On mesure le wrapper, pas l'image, qui
-  // est déjà décalée par son transform.
+  // Read: the scroll sets the target. The wrapper is measured, not the image,
+  // which is already shifted by its transform.
   const measure = useCallback(
     (scrollY = window.scrollY) => {
       const wrapper = imageRef.current?.parentElement;
@@ -65,7 +65,7 @@ export const useParallaxTransform = ({
     [imageRef, maxTransition, range]
   );
 
-  // Écriture : la valeur affichée se rapproche de la cible (inertie = delay).
+  // Write: the displayed value moves towards the target (inertia = delay).
   const update = useCallback(
     (dt = 0) => {
       const el = imageRef.current;
@@ -74,7 +74,7 @@ export const useParallaxTransform = ({
       }
 
       if (!hasInit.current) {
-        // premier placement direct, sans glissement depuis 0
+        // first placement is direct, with no slide from 0
         hasInit.current = true;
         motion.current = { value: target.current, velocity: 0 };
       } else if (
@@ -83,7 +83,7 @@ export const useParallaxTransform = ({
         return;
       }
 
-      // une transition CSS héritée ferait saccader l'écriture par frame
+      // an inherited CSS transition would make the per-frame write stutter
       el.style.transition = "none";
       el.style.transform = buildTransform(
         motion.current.value,
@@ -95,8 +95,8 @@ export const useParallaxTransform = ({
     [imageRef, range, scale, orientation, overflow, delay, easing]
   );
 
-  // Tâche de la boucle RAF partagée. Hors écran, l'image y reste le temps de
-  // terminer son mouvement, puis se désinscrit : au retour, elle est à sa place.
+  // Task of the shared RAF loop. Off screen, the image stays in it long enough to
+  // finish its motion, then unregisters: when it comes back, it is in place.
   const task = useMemo(
     () => ({
       measure,
@@ -124,8 +124,8 @@ export const useParallaxTransform = ({
 
   useEffect(() => () => AnimationManager.unregister(task), [task]);
 
-  // Recalcule la cible au montage et à chaque changement de paramètre,
-  // même sans scroll.
+  // Recomputes the target on mount and on every setting change,
+  // even without a scroll.
   useEffect(() => {
     if (isLoaded && !prefersReducedMotion) {
       lastScrollY.current = -1;
@@ -134,7 +134,7 @@ export const useParallaxTransform = ({
     }
   }, [isLoaded, prefersReducedMotion, measure, update]);
 
-  // Respecte prefers-reduced-motion : nettoie le style appliqué.
+  // Honours prefers-reduced-motion: clears the applied style.
   useEffect(() => {
     const el = imageRef.current;
     if (prefersReducedMotion && el) {

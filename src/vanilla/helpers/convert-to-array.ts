@@ -1,4 +1,4 @@
-// Normalise l'entrée en tableau de nœuds.
+// Normalizes the input into an array of nodes.
 const convertToArray = (
   elements: string | Element | NodeList | HTMLCollection | Element[]
 ): Element[] => {
