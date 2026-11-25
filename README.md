@@ -1,8 +1,8 @@
 <div align="center">
 <picture>
-  <source srcset="https://simpleparallax.com/logo-vertical-dark.png" media="(prefers-color-scheme: dark)">
-  <source srcset="https://simpleparallax.com/logo-vertical-light.png" media="(prefers-color-scheme: light)">
-  <img src="https://simpleparallax.com/logo-vertical-dark.png" alt="Logo" width="400" height="180" style="display:block;margin:0 auto;">
+  <source srcset="https://simpleparallax.com/logo/logo-dark.svg" media="(prefers-color-scheme: dark)">
+  <source srcset="https://simpleparallax.com/logo/logo-light.svg" media="(prefers-color-scheme: light)">
+  <img src="https://simpleparallax.com/logo/logo-light.svg" alt="simpleParallax.js" width="391" height="64">
 </picture>
 </div>
 
