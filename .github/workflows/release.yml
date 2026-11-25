@@ -27,7 +27,7 @@ jobs:
 
       # npm (not bun) handles OIDC; Node 24 + npm@latest guarantees npm >= 11.5.1.
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
@@ -50,3 +50,20 @@ jobs:
             tag=$(node -p "require('./package.json').version.split('-')[1]?.split('.')[0] ?? 'latest'")
             npm publish --tag "$tag"
           fi
+
+      # Rebuild the website so it shows the new release. It reads the version from npm,
+      # so wait until npm serves it first. Skipped for a prerelease, or without the secret.
+      - name: Rebuild the website
+        env:
+          SITE_DEPLOY_HOOK_URL: ${{ secrets.SITE_DEPLOY_HOOK_URL }}
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          case "$version" in *-*) echo "prerelease: website left alone"; exit 0 ;; esac
+          if [ -z "$SITE_DEPLOY_HOOK_URL" ]; then echo "no SITE_DEPLOY_HOOK_URL secret"; exit 0; fi
+          for attempt in $(seq 1 30); do
+            [ "$(npm view "$name" dist-tags.latest)" = "$version" ] && break
+            sleep 10
+          done
+          curl -fsS -X POST "$SITE_DEPLOY_HOOK_URL" > /dev/null
+          echo "website rebuild requested"
