@@ -86,19 +86,6 @@ new SimpleParallax(images);
 
 Once simpleparallax has been correctly initialized, it adds the ```simple-parallax-initialized``` class on the container.
 
-simpleParallax now works with video :
-
-```html
-<video>
-  <source src="video.mp4" type="video/mp4">
-</video>
-```
-
-```javascript
-var video = document.getElementsByTagName('video');
-new SimpleParallax(video);
-```
-
 ## Settings
 
 Setting | Type | Default | Hint
@@ -134,7 +121,11 @@ const Component = () => (
 
 ### Next
 
+In the App Router, use it inside a Client Component:
+
 ```javascript
+"use client";
+
 import SimpleParallax from "simple-parallax-js";
 import Image from "next/image";
 
@@ -174,19 +165,19 @@ The higher the *scale* setting, the more pronounced the parallax effect becomes.
 ### overflow - *Boolean* - see [example](https://simpleparallax.com#example-overflow)
 By default, the image scales to create a parallax effect without any overflow on the layout - for a better understanding, review the [case study](https://medium.com/@geoffrey.signorato/case-study-create-a-parallax-effect-directly-on-img-tags-with-javascript-35b8daf81471). When overflow is set to true, the image will translate beyond its natural flow, potentially overlapping your content.
 
-### delay - *Number* - see [example](https://simpleparallax.com#example-delay-transition)
+### delay - *Number* - see [example](https://simpleparallax.com#example-delay)
 Setting a delay prolongs the image's translation even after the user has stopped scrolling, creating a pleasing effect. This delay is measured in seconds: it is roughly the time the image takes to catch up with the scroll. With a delay of 0, the image follows the scroll exactly, with no smoothing.
 
 The smoothing is computed by the plugin on every frame rather than with a CSS transition, so it stays fluid with a mouse wheel and on touch devices. For that reason the plugin sets `transition: none` on the image: do not rely on a CSS transition of your own on its `transform`.
 
-### easing - *String*
+### easing - *String* - see [example](https://simpleparallax.com#example-delay)
 The easing setting defines how the image catches up with the scroll during the delay. It has no effect when the delay is 0.
 
 - `smooth` (default): starts fast and slows down progressively.
 - `spring`: starts and ends gently, without overshooting.
 - `bounce`: slightly overshoots the target before coming back. The faster the scroll, the more visible the bounce.
 
-### maxTransition - *Number* - see [example](https://simpleparallax.com#example-max-transition)
+### maxTransition - *Number* - see [example](https://simpleparallax.com#example-maxTransition)
 The maxTransition setting controls the extent of the parallax animation. By default, it translates from 0% to 100% of the user's viewport. You can adjust this to any percentage.
 
 ### customContainer - *String or Node* - Vanilla version only
@@ -196,6 +187,8 @@ Parallax calculations default to the body scroll percentage. However, images may
 In some instances, you might want to use your own wrapper instead of the plugin's. Specifying a custom wrapper will add the simpleParallax class and an overflow: hidden style.
 
 ## Methods
+
+The methods are available in the Vanilla version only.
 
 ### refresh
 Refresh a simpleParallax instance (to recalculate all the positions) : 
@@ -220,15 +213,13 @@ instance.destroy();
 ## Examples
 You can find all the examples [here](https://simpleparallax.com/#examples).
 
+## Accessibility
+
+The parallax effect is turned off when the user prefers reduced motion (`prefers-reduced-motion: reduce`).
+
 ## Compatibility
 
-Since v7, the library ships modern **ES2020** code, so it targets recent evergreen browsers:
-
-| Edge | Firefox | Chrome | Safari | Opera | iOS Safari |
-|---|---|---|---|---|---|
-| 80+ | 75+ | 80+ | 14+ | 67+ | 14+ |
-
-On older browsers that can't parse ES2020 syntax, the script won't run (you'll need to transpile it yourself, e.g. via your bundler's target). The library also relies on the [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver) and [closest()](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest) APIs, which are available in all the browsers above.
+simpleParallax.js works in all modern browsers: the latest versions of Chrome, Edge, Firefox, Safari and Opera, on desktop and mobile. The library ships modern **ES2020** code; if you need to support older browsers, transpile it with your bundler.
 
 ## Author
 
