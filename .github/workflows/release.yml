@@ -20,7 +20,7 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: latest
+          bun-version: 1.4.5
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
@@ -37,5 +37,16 @@ jobs:
 
       # `npm publish` runs `prepublishOnly` (build + publint + attw),
       # then publishes with provenance (publishConfig), without a token thanks to OIDC.
+      # The first version of a package is published by hand (trusted publishing needs the
+      # package to exist): do nothing if this version is already on npm.
       - name: Publish to npm
-        run: npm publish
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if npm view "$name@$version" version > /dev/null 2>&1; then
+            echo "$name@$version is already on npm"
+          else
+            # npm refuses a prerelease without a tag: 1.0.0-alpha.1 goes to "alpha", 1.0.0 to "latest".
+            tag=$(node -p "require('./package.json').version.split('-')[1]?.split('.')[0] ?? 'latest'")
+            npm publish --tag "$tag"
+          fi
