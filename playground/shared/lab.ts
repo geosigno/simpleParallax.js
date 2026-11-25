@@ -69,7 +69,7 @@ const TRANSLATE_PATTERN = /translate3d\((?<x>-?[\d.]+)px, (?<y>-?[\d.]+)px/u;
 const pick = <T extends Element>(root: ParentNode, selector: string): T => {
   const element = root.querySelector<T>(selector);
   if (!element) {
-    throw new Error(`Élément introuvable : ${selector}`);
+    throw new Error(`Element not found: ${selector}`);
   }
   return element;
 };
@@ -86,7 +86,7 @@ const template = (engine: string) => `
   <aside class="lab-bench" id="lab-bench">
     <header class="lab-head">
       <p class="lab-kicker">simpleParallax · ${engine}</p>
-      <h1>Banc d'essai</h1>
+      <h1>Test bench</h1>
     </header>
     <form class="lab-controls">
       <fieldset class="lab-easing">
@@ -125,30 +125,30 @@ const template = (engine: string) => `
       </label>
     </form>
     <div class="lab-tools">
-      <p class="lab-label">Scroll reproductible</p>
-      <button data-tool="jump" type="button">Saut de ${JUMP_DISTANCE} px</button>
-      <button data-tool="wheel" type="button">Molette simulée</button>
-      <button aria-pressed="false" data-tool="auto" type="button">Défilement auto</button>
+      <p class="lab-label">Reproducible scroll</p>
+      <button data-tool="jump" type="button">Jump ${JUMP_DISTANCE} px</button>
+      <button data-tool="wheel" type="button">Simulated wheel</button>
+      <button aria-pressed="false" data-tool="auto" type="button">Auto scroll</button>
     </div>
     <pre class="lab-snippet"></pre>
   </aside>
-  <section class="lab-recorder" aria-label="Enregistreur de mouvement">
+  <section class="lab-recorder" aria-label="Motion recorder">
     <canvas></canvas>
     <dl class="lab-readouts">
       <div><dt>fps</dt><dd data-readout="fps">–</dd></div>
-      <div><dt>pire frame</dt><dd data-readout="worst">–</dd></div>
-      <div><dt>frames lentes</dt><dd data-readout="slow">0</dd></div>
+      <div><dt>worst frame</dt><dd data-readout="worst">–</dd></div>
+      <div><dt>slow frames</dt><dd data-readout="slow">0</dd></div>
       <div><dt>scroll</dt><dd data-readout="speed">–</dd></div>
-      <div><dt>retard</dt><dd data-readout="lag">–</dd></div>
+      <div><dt>lag</dt><dd data-readout="lag">–</dd></div>
     </dl>
     <p class="lab-legend">
-      <span class="lab-pen-target">cible</span>
-      <span class="lab-pen-value">image affichée</span>
-      <span class="lab-pen-frame">durée des frames</span>
+      <span class="lab-pen-target">target</span>
+      <span class="lab-pen-value">displayed image</span>
+      <span class="lab-pen-frame">frame duration</span>
     </p>
-    <p class="lab-notice" hidden>Mouvement réduit activé sur cet appareil : l'effet est désactivé.</p>
+    <p class="lab-notice" hidden>Reduced motion is on for this device: the effect is turned off.</p>
   </section>
-  <button aria-controls="lab-bench" aria-expanded="false" class="lab-toggle" type="button">Réglages</button>
+  <button aria-controls="lab-bench" aria-expanded="false" class="lab-toggle" type="button">Settings</button>
 `;
 
 // Translation read on the image, in the engine's convention
@@ -220,7 +220,7 @@ export const createLab = ({ engine, onChange }: LabConfig): (() => void) => {
   toggle.addEventListener("click", () => {
     const isOpen = root.classList.toggle("is-open");
     toggle.setAttribute("aria-expanded", String(isOpen));
-    toggle.textContent = isOpen ? "Fermer" : "Réglages";
+    toggle.textContent = isOpen ? "Close" : "Settings";
   });
 
   // --- Outils de scroll ---------------------------------------------------

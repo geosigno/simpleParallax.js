@@ -7,20 +7,20 @@ const fakeElement = (
 ): Element => ({ tagName, ...props }) as unknown as Element;
 
 describe("isImageLoaded", () => {
-  it("élément non-image considéré chargé", () => {
+  it("a non-image element counts as loaded", () => {
     expect(isImageLoaded(fakeElement("DIV"))).toBe(true);
   });
-  it("img complète avec naturalWidth > 0 = chargée", () => {
+  it("complete img with naturalWidth > 0 = loaded", () => {
     expect(
       isImageLoaded(fakeElement("IMG", { complete: true, naturalWidth: 800 }))
     ).toBe(true);
   });
-  it("img non complète = non chargée", () => {
+  it("incomplete img = not loaded", () => {
     expect(
       isImageLoaded(fakeElement("IMG", { complete: false, naturalWidth: 800 }))
     ).toBe(false);
   });
-  it("img complète mais naturalWidth 0 (cassée) = non chargée", () => {
+  it("complete img but naturalWidth 0 (broken) = not loaded", () => {
     expect(
       isImageLoaded(fakeElement("IMG", { complete: true, naturalWidth: 0 }))
     ).toBe(false);

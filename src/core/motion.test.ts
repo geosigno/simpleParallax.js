@@ -10,10 +10,10 @@ describe("advance", () => {
     return motion.value;
   };
 
-  it("delay 0 : rejoint la cible immédiatement", () => {
+  it("delay 0: reaches the target at once", () => {
     expect(run("smooth", 0, 16)).toBe(100);
   });
-  it("chaque easing avance sans dépasser puis se pose sur la cible", () => {
+  it("each easing moves forward without overshooting, then settles on the target", () => {
     for (const easing of ["smooth", "spring"] as const) {
       const early = run(easing, 0.4, 100);
       expect(early).toBeGreaterThan(0);
@@ -21,7 +21,7 @@ describe("advance", () => {
       expect(run(easing, 0.4, 2000)).toBe(100);
     }
   });
-  it("bounce : dépasse la cible puis s'y pose", () => {
+  it("bounce: overshoots the target, then settles on it", () => {
     const motion = { value: -40, velocity: 0 };
     let highest = motion.value;
     for (let elapsed = 0; elapsed < 3000; elapsed += 16) {
@@ -32,7 +32,7 @@ describe("advance", () => {
     expect(highest).toBeLessThanOrEqual(50);
     expect(motion.value).toBe(20);
   });
-  it("indépendant de la cadence : 1 × 160 ms = 10 × 16 ms", () => {
+  it("independent of the frame rate: 1 × 160 ms = 10 × 16 ms", () => {
     for (const easing of ["smooth", "spring", "bounce"] as const) {
       const once = { value: -40, velocity: 0 };
       const stepped = { value: -40, velocity: 0 };
@@ -43,7 +43,7 @@ describe("advance", () => {
       expect(stepped.value).toBeCloseTo(once.value, 6);
     }
   });
-  it("retourne false quand rien ne bouge", () => {
+  it("returns false when nothing moves", () => {
     const motion = { value: 100, velocity: 0 };
     expect(
       advance(motion, 100, { delay: 0.4, easing: "smooth" }, 100, 16)
